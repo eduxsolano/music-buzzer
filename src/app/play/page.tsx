@@ -22,12 +22,20 @@ const BUTTON_LABELS: Record<ReturnType<typeof buttonState>, string> = {
   eliminated: 'Fuera de esta canción',
 }
 
+// The host may broadcast STATE far more often than once per rejoin window (e.g.
+// every 50ms while a song plays), so this must not re-announce on every message —
+// that would flood the shared channel every other phone in the room listens to.
+const REJOIN_INTERVAL_MS = 2_000
+
 function PlayScreen() {
   const room = (useSearchParams().get('sala') ?? '').toUpperCase()
   const [identity, setIdentity] = useState<{ playerId: string; name: string | null } | null>(null)
   const [draftName, setDraftName] = useState('')
   const [state, setState] = useState<PublicState | null>(null)
   const channelRef = useRef<Channel | null>(null)
+  // 0 so the very first re-announce (e.g. right after reconnecting) is never
+  // delayed — only the repeats afterward are throttled.
+  const lastRejoinRef = useRef(0)
 
   useEffect(() => {
     // localStorage is only available client-side; reading it in an effect
@@ -60,10 +68,17 @@ function PlayScreen() {
   }, [room, identity?.playerId, identity?.name])
 
   // Self-healing: if the host does not know us (it restarted, or our JOIN was
-  // lost), announce ourselves again on every state we are missing from.
+  // lost), announce ourselves again while we are missing from its state. This
+  // must not depend on the host being well-behaved about broadcast rate, so
+  // retries are throttled to REJOIN_INTERVAL_MS regardless of how often STATE
+  // arrives — otherwise a host broadcasting at, say, 20Hz would turn a single
+  // missing player into 20 JOIN publishes a second on a channel every other
+  // phone in the room is listening to.
   useEffect(() => {
     if (!state || !identity?.name) return
     if (state.players.some((p) => p.id === identity.playerId)) return
+    if (Date.now() - lastRejoinRef.current < REJOIN_INTERVAL_MS) return
+    lastRejoinRef.current = Date.now()
     void channelRef.current?.publish({
       type: 'JOIN',
       playerId: identity.playerId,
