@@ -94,6 +94,8 @@ describe('judging a wrong answer', () => {
     let state = gameWith(['ana', 'beto'])
     state = reduce(state, { type: 'BUZZ', playerId: 'ana' })
     state = reduce(state, { type: 'JUDGE', correct: false })
+    state = reduce(state, { type: 'BUZZ', playerId: 'beto' })
+    state = reduce(state, { type: 'JUDGE', correct: false })
     state = reduce(state, { type: 'NEXT_ROUND' })
     state = reduce(state, { type: 'BUZZ', playerId: 'ana' })
     state = reduce(state, { type: 'JUDGE', correct: false })
@@ -112,6 +114,8 @@ describe('judging a wrong answer', () => {
   test('an eliminated player is available again on the next song', () => {
     let state = gameWith(['ana', 'beto'])
     state = reduce(state, { type: 'BUZZ', playerId: 'ana' })
+    state = reduce(state, { type: 'JUDGE', correct: false })
+    state = reduce(state, { type: 'BUZZ', playerId: 'beto' })
     state = reduce(state, { type: 'JUDGE', correct: false })
     state = reduce(state, { type: 'NEXT_ROUND' })
     expect(state.lockedOut).toEqual([])
