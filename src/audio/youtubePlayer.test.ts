@@ -70,7 +70,7 @@ describe('double-buffered player', () => {
     const p = player()
     await p.play('vid1', 12)
     a.calls.length = 0
-    await p.play('vid1', 12) // el tramo siguiente reinicia la canción
+    await p.play('vid1', 12) // the next tier restarts the song
     expect(a.calls).toEqual(['unmute', 'seek:12', 'play'])
   })
 

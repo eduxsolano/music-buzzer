@@ -12,7 +12,7 @@ export interface YouTubePlayer {
 
 export type PlayerFactory = () => [YouTubePlayer, YouTubePlayer]
 
-interface Buffer {
+interface PlayerBuffer {
   player: YouTubePlayer
   videoId: string | null
 }
@@ -23,7 +23,7 @@ interface Buffer {
  */
 export function createDoubleBufferedPlayer(factory: PlayerFactory): AudioPlayer {
   const [first, second] = factory()
-  const buffers: [Buffer, Buffer] = [
+  const buffers: [PlayerBuffer, PlayerBuffer] = [
     { player: first, videoId: null },
     { player: second, videoId: null },
   ]
