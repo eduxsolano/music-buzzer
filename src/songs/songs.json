@@ -44,7 +44,7 @@
     "videoId": "kPa7bsKwL-c",
     "title": "Die With A Smile",
     "artist": "Lady Gaga, Bruno Mars",
-    "year": 0,
+    "year": 2025,
     "startSeconds": 30
   },
   {
@@ -76,7 +76,7 @@
     "videoId": "hNrwlzBeFN8",
     "title": "What I Want (feat. Tate McRae)",
     "artist": "Morgan Wallen",
-    "year": 0,
+    "year": 2025,
     "startSeconds": 30
   },
   {
@@ -100,7 +100,7 @@
     "videoId": "lY5V4hSLWY8",
     "title": "Risk It All",
     "artist": "Bruno Mars",
-    "year": 0,
+    "year": 2026,
     "startSeconds": 30
   },
   {
@@ -164,7 +164,7 @@
     "videoId": "yNa8jP4zoJo",
     "title": "Madwoman",
     "artist": "Laufey",
-    "year": 0,
+    "year": 2026,
     "startSeconds": 30
   },
   {
@@ -172,7 +172,7 @@
     "videoId": "SOJpE1KMUbo",
     "title": "Raindance (ft. Tems)",
     "artist": "Dave",
-    "year": 0,
+    "year": 2025,
     "startSeconds": 30
   },
   {
@@ -204,7 +204,7 @@
     "videoId": "JWr6m8xXqhk",
     "title": "the one",
     "artist": "Gabriel Jacoby",
-    "year": 0,
+    "year": 2025,
     "startSeconds": 30
   },
   {
@@ -212,7 +212,7 @@
     "videoId": "jBKJbedSrA0",
     "title": "girl, get up.",
     "artist": "Doechii, SZA",
-    "year": 0,
+    "year": 2025,
     "startSeconds": 30
   },
   {
@@ -260,7 +260,7 @@
     "videoId": "rtwpk9rb1Dc",
     "title": "SHE DID IT AGAIN ft. Zara Larsson",
     "artist": "Tyla",
-    "year": 0,
+    "year": 2026,
     "startSeconds": 30
   },
   {
@@ -300,7 +300,7 @@
     "videoId": "-KjOMY_zxrA",
     "title": "Cold feat. Post Malone",
     "artist": "BigXthaPlug",
-    "year": 0,
+    "year": 2025,
     "startSeconds": 30
   },
   {
@@ -412,7 +412,7 @@
     "videoId": "82-jTNka3uc",
     "title": "hate that i made you love me",
     "artist": "Ariana Grande",
-    "year": 0,
+    "year": 2026,
     "startSeconds": 30
   },
   {
@@ -476,7 +476,7 @@
     "videoId": "sNY_2TEmzho",
     "title": "luther",
     "artist": "Kendrick Lamar, SZA",
-    "year": 0,
+    "year": 2025,
     "startSeconds": 30
   },
   {
@@ -508,7 +508,7 @@
     "videoId": "HtVcltkn3HI",
     "title": "'Click Clack Symphony.' feat. Hans Zimmer",
     "artist": "RAYE",
-    "year": 0,
+    "year": 2026,
     "startSeconds": 30
   },
   {
@@ -524,7 +524,7 @@
     "videoId": "Kjof9tYTqD0",
     "title": "It Depends ft. Bryson Tiller",
     "artist": "Chris Brown",
-    "year": 0,
+    "year": 2025,
     "startSeconds": 30
   },
   {
@@ -596,7 +596,7 @@
     "videoId": "htToA3wcFl4",
     "title": "SOMEBODY LOVES ME",
     "artist": "PARTYNEXTDOOR, Drake",
-    "year": 0,
+    "year": 2025,
     "startSeconds": 30
   },
   {
@@ -628,7 +628,7 @@
     "videoId": "rwlFWWGaZ5Y",
     "title": "Revolving door",
     "artist": "Tate McRae",
-    "year": 0,
+    "year": 2025,
     "startSeconds": 30
   },
   {
@@ -692,7 +692,7 @@
     "videoId": "cF1Na4AIecM",
     "title": "Please Please Please",
     "artist": "Sabrina Carpenter",
-    "year": 0,
+    "year": 2024,
     "startSeconds": 30
   },
   {
@@ -724,7 +724,7 @@
     "videoId": "mANvg9R1xeI",
     "title": "wgft (feat. Burna Boy)",
     "artist": "Gunna",
-    "year": 0,
+    "year": 2025,
     "startSeconds": 30
   },
   {
@@ -732,7 +732,7 @@
     "videoId": "pDddlvCfTiw",
     "title": "BAND4BAND",
     "artist": "CENTRAL CEE FT. LIL BABY",
-    "year": 0,
+    "year": 2024,
     "startSeconds": 30
   },
   {
@@ -780,7 +780,7 @@
     "videoId": "k-k2_Liofy8",
     "title": "Messy",
     "artist": "Lola Young",
-    "year": 0,
+    "year": 2024,
     "startSeconds": 30
   },
   {
@@ -788,7 +788,7 @@
     "videoId": "Z3aduh5fxCo",
     "title": "Show Me Love",
     "artist": "WizTheMc, bees & honey",
-    "year": 0,
+    "year": 2025,
     "startSeconds": 30
   },
   {
@@ -820,7 +820,7 @@
     "videoId": "cswfR85D7jM",
     "title": "Love Me Not",
     "artist": "Ravyn Lenae",
-    "year": 0,
+    "year": 2024,
     "startSeconds": 30
   },
   {
@@ -853,6 +853,526 @@
     "title": "Leverage",
     "artist": "NoCap",
     "year": 0,
+    "startSeconds": 30
+  },
+  {
+    "id": "myles-smith-stargazing",
+    "videoId": "tKml80alH3Y",
+    "title": "Stargazing",
+    "artist": "Myles Smith",
+    "year": 2024,
+    "startSeconds": 30
+  },
+  {
+    "id": "olivia-rodrigo-stupid-song",
+    "videoId": "Rt9tW3cMLhI",
+    "title": "stupid song",
+    "artist": "Olivia Rodrigo",
+    "year": 2026,
+    "startSeconds": 30
+  },
+  {
+    "id": "ed-sheeran-sapphire",
+    "videoId": "JgDNFQ2RaLQ",
+    "title": "Sapphire",
+    "artist": "Ed Sheeran",
+    "year": 2025,
+    "startSeconds": 30
+  },
+  {
+    "id": "malcolm-todd-earrings",
+    "videoId": "r9Etc8HcMFA",
+    "title": "Earrings",
+    "artist": "Malcolm Todd",
+    "year": 2024,
+    "startSeconds": 30
+  },
+  {
+    "id": "latin-city-justin-bieber-nicki-minaj-beauty-and-a-beat",
+    "videoId": "J9abt3xpdDU",
+    "title": "Justin Bieber, Nicki Minaj – Beauty And A Beat",
+    "artist": "Latin City",
+    "year": 0,
+    "startSeconds": 30
+  },
+  {
+    "id": "katy-perry-the-one-that-got-away",
+    "videoId": "5vZcZRutaos",
+    "title": "The One That Got Away",
+    "artist": "Katy Perry",
+    "year": 0,
+    "startSeconds": 30
+  },
+  {
+    "id": "alex-warren-fever-dream",
+    "videoId": "hkUSnrHQJHg",
+    "title": "FEVER DREAM",
+    "artist": "Alex Warren",
+    "year": 2026,
+    "startSeconds": 30
+  },
+  {
+    "id": "taylor-swift-i-knew-it-i-knew-you-from-toy-story-5",
+    "videoId": "hDU4GB1PTxc",
+    "title": "I Knew It, I Knew You (from Toy Story 5)",
+    "artist": "Taylor Swift",
+    "year": 0,
+    "startSeconds": 30
+  },
+  {
+    "id": "kendrick-lamar-luther",
+    "videoId": "HfWLgELllZs",
+    "title": "luther",
+    "artist": "Kendrick Lamar",
+    "year": 2025,
+    "startSeconds": 30
+  },
+  {
+    "id": "billie-jean-michael-jackson",
+    "videoId": "QRidtXn0u7k",
+    "title": "Michael Jackson",
+    "artist": "Billie Jean",
+    "year": 0,
+    "startSeconds": 30
+  },
+  {
+    "id": "popcaan-wine-jiggle",
+    "videoId": "iJg7NmMtm4Q",
+    "title": "Wine & Jiggle",
+    "artist": "Popcaan",
+    "year": 0,
+    "startSeconds": 30
+  },
+  {
+    "id": "raye-where-is-my-husband",
+    "videoId": "rK5TyISxZ_M",
+    "title": "WHERE IS MY HUSBAND!",
+    "artist": "RAYE",
+    "year": 2025,
+    "startSeconds": 30
+  },
+  {
+    "id": "lil-uzi-vert-what-you-saying",
+    "videoId": "s_TUESTU7_4",
+    "title": "What You Saying -",
+    "artist": "Lil Uzi Vert",
+    "year": 0,
+    "startSeconds": 30
+  },
+  {
+    "id": "temper-city-self-aware",
+    "videoId": "mh4AQkw4Jjc",
+    "title": "Self Aware",
+    "artist": "Temper City",
+    "year": 2026,
+    "startSeconds": 30
+  },
+  {
+    "id": "taylor-swift-elizabeth-taylor",
+    "videoId": "WqbJT_vC0rs",
+    "title": "Elizabeth Taylor",
+    "artist": "Taylor Swift",
+    "year": 2025,
+    "startSeconds": 30
+  },
+  {
+    "id": "olivia-rodrigo-the-cure",
+    "videoId": "B402rKl4bUg",
+    "title": "the cure",
+    "artist": "Olivia Rodrigo",
+    "year": 2026,
+    "startSeconds": 30
+  },
+  {
+    "id": "onerepublic-need-your-love",
+    "videoId": "_pDTiszST3E",
+    "title": "Need Your Love",
+    "artist": "OneRepublic",
+    "year": 2026,
+    "startSeconds": 30
+  },
+  {
+    "id": "michael-jackson-chicago",
+    "videoId": "-VGuP4wAyPE",
+    "title": "Chicago",
+    "artist": "Michael Jackson",
+    "year": 2014,
+    "startSeconds": 30
+  },
+  {
+    "id": "david-guetta-teddy-swims-tones-and-i-gone-gone-gone",
+    "videoId": "8iT9DRe3cHE",
+    "title": "Gone Gone Gone",
+    "artist": "David Guetta, Teddy Swims, Tones and I",
+    "year": 0,
+    "startSeconds": 30
+  },
+  {
+    "id": "hybe-labels-katseye-pinky-up-official-mv",
+    "videoId": "7F1ET2XHQfk",
+    "title": "KATSEYE (캣츠아이) \"PINKY UP\" Official MV",
+    "artist": "HYBE LABELS",
+    "year": 0,
+    "startSeconds": 30
+  },
+  {
+    "id": "shakira-burna-boy-dai-dai",
+    "videoId": "fcnDmrtj6Sk",
+    "title": "Dai Dai",
+    "artist": "Shakira, Burna Boy",
+    "year": 0,
+    "startSeconds": 30
+  },
+  {
+    "id": "lady-gaga-the-dead-dance",
+    "videoId": "xGaZBfJOyAc",
+    "title": "The Dead Dance",
+    "artist": "Lady Gaga",
+    "year": 2025,
+    "startSeconds": 30
+  },
+  {
+    "id": "charli-xcx-ss26",
+    "videoId": "twLhSqabby0",
+    "title": "SS26",
+    "artist": "Charli xcx",
+    "year": 2026,
+    "startSeconds": 30
+  },
+  {
+    "id": "anyma-lisa-bad-angel-with-lisa",
+    "videoId": "dKmPEhJ4wjY",
+    "title": "Bad Angel (with LISA)",
+    "artist": "Anyma, LISA",
+    "year": 0,
+    "startSeconds": 30
+  },
+  {
+    "id": "miley-cyrus-flowers",
+    "videoId": "G7KNmW9a75Y",
+    "title": "Flowers",
+    "artist": "Miley Cyrus",
+    "year": 2023,
+    "startSeconds": 30
+  },
+  {
+    "id": "f3miii-noble",
+    "videoId": "Pz-SZlU4C10",
+    "title": "NOBLE",
+    "artist": "F3miii",
+    "year": 2025,
+    "startSeconds": 30
+  },
+  {
+    "id": "tyla-x-wizkid-dynamite",
+    "videoId": "CQIYbytAyVQ",
+    "title": "DYNAMITE",
+    "artist": "Tyla x Wizkid",
+    "year": 0,
+    "startSeconds": 30
+  },
+  {
+    "id": "doja-cat-jealous-type",
+    "videoId": "lv1MwS56aCo",
+    "title": "Jealous Type",
+    "artist": "Doja Cat",
+    "year": 2025,
+    "startSeconds": 30
+  },
+  {
+    "id": "bigxthaplug-all-the-way-feat-bailey-zimmerman",
+    "videoId": "7kyHvPNbugk",
+    "title": "All The Way feat. Bailey Zimmerman",
+    "artist": "BigXthaPlug",
+    "year": 2025,
+    "startSeconds": 30
+  },
+  {
+    "id": "noah-kahan-stick-season",
+    "videoId": "kEqefSD9Vc4",
+    "title": "Stick Season",
+    "artist": "Noah Kahan",
+    "year": 2022,
+    "startSeconds": 30
+  },
+  {
+    "id": "sienna-spiro-the-visitor",
+    "videoId": "LiYb4WGbp5Y",
+    "title": "The Visitor",
+    "artist": "SIENNA SPIRO",
+    "year": 2026,
+    "startSeconds": 30
+  },
+  {
+    "id": "ella-langley-be-her",
+    "videoId": "Dg47eNL_Usw",
+    "title": "Be Her",
+    "artist": "Ella Langley",
+    "year": 2026,
+    "startSeconds": 30
+  },
+  {
+    "id": "damiano-david-tyla-nile-rodgers-talk-to-me",
+    "videoId": "PLTJeyrvdaA",
+    "title": "Talk to Me",
+    "artist": "Damiano David, Tyla, Nile Rodgers",
+    "year": 2025,
+    "startSeconds": 30
+  },
+  {
+    "id": "ariana-grande-we-can-t-be-friends-wait-for-your-love",
+    "videoId": "KNtJGQkC-WI",
+    "title": "we can't be friends (wait for your love)",
+    "artist": "Ariana Grande",
+    "year": 2024,
+    "startSeconds": 30
+  },
+  {
+    "id": "anotr-ft-54-ultra-talk-to-you-no-art",
+    "videoId": "ajUMhpotf8k",
+    "title": "Talk To You [No Art]",
+    "artist": "ANOTR ft. 54 Ultra",
+    "year": 0,
+    "startSeconds": 30
+  },
+  {
+    "id": "miley-cyrus-end-of-the-world",
+    "videoId": "CXBFU97X61I",
+    "title": "End of the World",
+    "artist": "Miley Cyrus",
+    "year": 2025,
+    "startSeconds": 30
+  },
+  {
+    "id": "don-toliver-yeat-rendezvous",
+    "videoId": "_yHlFQqFLS0",
+    "title": "Rendezvous",
+    "artist": "Don Toliver & Yeat",
+    "year": 2026,
+    "startSeconds": 30
+  },
+  {
+    "id": "charli-xcx-party-4-u",
+    "videoId": "agu22bqGHto",
+    "title": "party 4 u",
+    "artist": "Charli xcx",
+    "year": 0,
+    "startSeconds": 30
+  },
+  {
+    "id": "connie-francis-pretty-little-baby",
+    "videoId": "LTsR3LfhdxI",
+    "title": "Pretty Little Baby",
+    "artist": "Connie Francis",
+    "year": 0,
+    "startSeconds": 30
+  },
+  {
+    "id": "ed-sheeran-a-little-more",
+    "videoId": "O_0Wn73AnC8",
+    "title": "A Little More",
+    "artist": "Ed Sheeran",
+    "year": 2025,
+    "startSeconds": 30
+  },
+  {
+    "id": "rose-messy-from-f1-the-movie",
+    "videoId": "ia2Ph61bYzc",
+    "title": "Messy (From F1® The Movie)",
+    "artist": "ROSÉ",
+    "year": 0,
+    "startSeconds": 30
+  },
+  {
+    "id": "taylor-swift-cruel-summer",
+    "videoId": "JLJcHbYSlB8",
+    "title": "Cruel Summer",
+    "artist": "Taylor Swift",
+    "year": 2019,
+    "startSeconds": 30
+  },
+  {
+    "id": "morgan-wallen-tate-mcrae-what-i-want",
+    "videoId": "Y6jyPJ8QJK8",
+    "title": "What I Want",
+    "artist": "Morgan Wallen, Tate McRae",
+    "year": 2025,
+    "startSeconds": 30
+  },
+  {
+    "id": "teddy-swims-lose-control-2",
+    "videoId": "FkOpwodhROI",
+    "title": "Lose Control",
+    "artist": "Teddy Swims",
+    "year": 2023,
+    "startSeconds": 30
+  },
+  {
+    "id": "teddy-swims-the-door",
+    "videoId": "VSXT4a2kRHA",
+    "title": "The Door",
+    "artist": "Teddy Swims",
+    "year": 2023,
+    "startSeconds": 30
+  },
+  {
+    "id": "chappell-roan-hot-to-go",
+    "videoId": "xaPNR-_Cfn0",
+    "title": "HOT TO GO!",
+    "artist": "Chappell Roan",
+    "year": 2023,
+    "startSeconds": 30
+  },
+  {
+    "id": "sza-30-for-30-feat-kendrick-lamar",
+    "videoId": "NEnephbahLA",
+    "title": "30 For 30 feat. Kendrick Lamar",
+    "artist": "SZA",
+    "year": 0,
+    "startSeconds": 30
+  },
+  {
+    "id": "taylor-swift-opalite-2",
+    "videoId": "1FVF-9KQiPo",
+    "title": "Opalite",
+    "artist": "Taylor Swift",
+    "year": 2025,
+    "startSeconds": 30
+  },
+  {
+    "id": "sabrina-carpenter-busy-woman",
+    "videoId": "3m6NBnqLc-g",
+    "title": "Busy Woman",
+    "artist": "Sabrina Carpenter",
+    "year": 2024,
+    "startSeconds": 30
+  },
+  {
+    "id": "tate-mcrae-sports-car",
+    "videoId": "7InTkBxPtK4",
+    "title": "Sports car",
+    "artist": "Tate McRae",
+    "year": 2025,
+    "startSeconds": 30
+  },
+  {
+    "id": "tyla-water",
+    "videoId": "XoiOOiuH8iI",
+    "title": "Water",
+    "artist": "Tyla",
+    "year": 2023,
+    "startSeconds": 30
+  },
+  {
+    "id": "bebe-rexha-david-guetta-sad-girls",
+    "videoId": "P8UqZ5IF-QE",
+    "title": "Sad Girls",
+    "artist": "Bebe Rexha & David Guetta",
+    "year": 2026,
+    "startSeconds": 30
+  },
+  {
+    "id": "rema-selena-gomez-calm-down",
+    "videoId": "WcIcVapfqXw",
+    "title": "Calm Down",
+    "artist": "Rema, Selena Gomez",
+    "year": 2022,
+    "startSeconds": 30
+  },
+  {
+    "id": "hozier-too-sweet",
+    "videoId": "aezstCBHOPQ",
+    "title": "Too Sweet",
+    "artist": "Hozier",
+    "year": 2024,
+    "startSeconds": 30
+  },
+  {
+    "id": "post-malone-i-had-some-help-feat-morgan-wallen",
+    "videoId": "4QIZE708gJ4",
+    "title": "I Had Some Help (feat. Morgan Wallen)",
+    "artist": "Post Malone",
+    "year": 2024,
+    "startSeconds": 30
+  },
+  {
+    "id": "sombr-homewrecker",
+    "videoId": "mQezde_qeXw",
+    "title": "Homewrecker",
+    "artist": "sombr",
+    "year": 2026,
+    "startSeconds": 30
+  },
+  {
+    "id": "lady-gaga-doechii-runway",
+    "videoId": "XXIX2WnfbpE",
+    "title": "RUNWAY",
+    "artist": "Lady Gaga, Doechii",
+    "year": 2026,
+    "startSeconds": 30
+  },
+  {
+    "id": "martin-garrix-ed-sheeran-repeat-it",
+    "videoId": "Sf9NZF5qBak",
+    "title": "Repeat It",
+    "artist": "Martin Garrix & Ed Sheeran",
+    "year": 2026,
+    "startSeconds": 30
+  },
+  {
+    "id": "ariana-grande-hate-that-i-made-you-love-me-2",
+    "videoId": "v1t4MTqdfyI",
+    "title": "hate that i made you love me",
+    "artist": "Ariana Grande",
+    "year": 2026,
+    "startSeconds": 30
+  },
+  {
+    "id": "gabriel-jacoby-baby",
+    "videoId": "LOlzbrt7hUw",
+    "title": "baby",
+    "artist": "Gabriel Jacoby",
+    "year": 2025,
+    "startSeconds": 30
+  },
+  {
+    "id": "the-046-downtown-dreamin-prod-sefru",
+    "videoId": "zFHo7CN46G0",
+    "title": "DOWNTOWN DREAMIN' (Prod. Sefru)",
+    "artist": "The 046",
+    "year": 0,
+    "startSeconds": 30
+  },
+  {
+    "id": "lil-don-young-boss-move-lil-don-young-boss",
+    "videoId": "wC17LiykXhk",
+    "title": "MOVE | Lil Don Young Boss",
+    "artist": "Lil Don Young Boss",
+    "year": 0,
+    "startSeconds": 30
+  },
+  {
+    "id": "kids-that-fly-too-many-people",
+    "videoId": "qUjVo8b_FGc",
+    "title": "Too Many People",
+    "artist": "Kids That Fly",
+    "year": 0,
+    "startSeconds": 30
+  },
+  {
+    "id": "diamond-man-n-the-m-n",
+    "videoId": "LQNCppLdVsc",
+    "title": "MAN ØN THE MØØN",
+    "artist": "diamond*",
+    "year": 2026,
+    "startSeconds": 30
+  },
+  {
+    "id": "diamond-f-urs-feat-young-thug",
+    "videoId": "j7ibEQsZXTM",
+    "title": "FØURS (feat. Young Thug)",
+    "artist": "diamond*",
+    "year": 2026,
     "startSeconds": 30
   }
 ]
