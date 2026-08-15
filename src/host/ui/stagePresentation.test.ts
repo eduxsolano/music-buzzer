@@ -1,16 +1,25 @@
 import { describe, expect, it } from 'vitest'
-import type { Phase } from '@/game/types'
+import type { Phase, Player } from '@/game/types'
 import {
+  finalNote,
+  finalStanding,
   heroSizeClass,
+  joinNames,
   launchLabel,
   moodFor,
   playersConnectedLabel,
+  pointsLabel,
+  revealDetail,
   revealHeadline,
   roundLabel,
   tierClockFor,
   tierProgress,
   waitingNote,
 } from '@/host/ui/stagePresentation'
+
+function player(name: string, score: number): Player {
+  return { id: name.toLowerCase(), name, score }
+}
 
 describe('moodFor', () => {
   it('is cool and quiet while the song plays', () => {
@@ -178,5 +187,75 @@ describe('lobby and round copy', () => {
 
   it('numbers the round', () => {
     expect(roundLabel(3, 20)).toBe('Canción 3 de 20')
+  })
+})
+
+describe('revealDetail', () => {
+  it('says who the points went to, so the rail does not have to be read backwards', () => {
+    expect(revealDetail('correct', 'Marta')).toBe('Los puntos son para Marta')
+    expect(revealDetail('correct', null)).toBe('Respuesta correcta')
+  })
+
+  it('explains a round nobody won', () => {
+    expect(revealDetail('allWrong', null)).toBe('Todos quedaron fuera de esta canción')
+    expect(revealDetail('timeout', null)).toBe('Se acabó el tiempo y nadie pulsó')
+    expect(revealDetail('skipped', null)).toBe('Sin puntos para nadie')
+  })
+})
+
+describe('finalStanding', () => {
+  it('crowns a clear winner', () => {
+    expect(finalStanding([player('Ana', 12), player('Beto', 7)])).toEqual({
+      kind: 'winner',
+      name: 'Ana',
+      score: 12,
+    })
+  })
+
+  // The television used to name whoever sorted first, which in a room of six
+  // people who have been counting all night is the one mistake nobody forgets.
+  it('refuses to pick one of several people who are level', () => {
+    expect(finalStanding([player('Ana', 9), player('Beto', 9), player('Carla', 4)])).toEqual({
+      kind: 'tie',
+      names: ['Ana', 'Beto'],
+      score: 9,
+    })
+  })
+
+  it('reads a tie at zero, and a tie below it, as a tie all the same', () => {
+    expect(finalStanding([player('Ana', 0), player('Beto', 0)]).kind).toBe('tie')
+    expect(finalStanding([player('Ana', -2), player('Beto', -2)]).kind).toBe('tie')
+  })
+
+  it('says nobody rather than inventing a winner for an empty game', () => {
+    expect(finalStanding([])).toEqual({ kind: 'nobody' })
+  })
+})
+
+describe('final copy', () => {
+  it('names everybody in the tie', () => {
+    expect(finalNote({ kind: 'tie', names: ['Ana', 'Beto'], score: 9 })).toBe('Ana y Beto · 9 puntos')
+    expect(finalNote({ kind: 'tie', names: ['Ana', 'Beto', 'Carla'], score: 1 })).toBe(
+      'Ana, Beto y Carla · 1 punto',
+    )
+  })
+
+  it('keeps the winner screen to a score', () => {
+    expect(finalNote({ kind: 'winner', name: 'Ana', score: 12 })).toBe('12 puntos')
+    expect(finalNote({ kind: 'nobody' })).toBe('Sin jugadores')
+  })
+
+  it('pluralises around one, including below zero', () => {
+    expect(pointsLabel(1)).toBe('1 punto')
+    expect(pointsLabel(-1)).toBe('-1 punto')
+    expect(pointsLabel(0)).toBe('0 puntos')
+    expect(pointsLabel(2)).toBe('2 puntos')
+  })
+
+  it('lists names the way they would be said out loud', () => {
+    expect(joinNames([])).toBe('')
+    expect(joinNames(['Ana'])).toBe('Ana')
+    expect(joinNames(['Ana', 'Beto'])).toBe('Ana y Beto')
+    expect(joinNames(['Ana', 'Beto', 'Carla'])).toBe('Ana, Beto y Carla')
   })
 })

@@ -1,10 +1,11 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useRef, useState, type ReactElement } from 'react'
+import { useEffect, useMemo, useRef, type ReactElement } from 'react'
 import type { GameEvent, GameState, Song } from '@/game/types'
 import { Scoreboard } from '@/host/ui/Scoreboard'
 import { TierMeter } from '@/host/ui/TierMeter'
 import { KeyboardFallback } from '@/host/ui/KeyboardFallback'
+import { PairingPanel } from '@/host/ui/PairingPanel'
 import { LobbyPanel } from '@/host/ui/phases/LobbyPanel'
 import { WaitingPanel } from '@/host/ui/phases/WaitingPanel'
 import { PlayingPanel } from '@/host/ui/phases/PlayingPanel'
@@ -13,18 +14,23 @@ import { RevealedPanel } from '@/host/ui/phases/RevealedPanel'
 import { FinishedPanel } from '@/host/ui/phases/FinishedPanel'
 import type { HostView } from '@/host/ui/hostView'
 import { moodFor, tierClockFor, type Judgement } from '@/host/ui/stagePresentation'
-import { playCue, unlockGameSounds } from '@/sounds/gameSounds'
-
-/** How long the room stays green or red before the game moves on. */
-const JUDGEMENT_FLASH_MS = 900
+import { playCue } from '@/sounds/gameSounds'
 
 export interface HostGameApi {
   room: string
+  /** The pairing secret for the host's phone. Null only before the page settles. */
+  controlToken: string | null
+  panelPaired: boolean
   state: GameState
   song: Song | null
   audioReady: boolean
   channelError: string | null
+  /** The green or red beat the room is being shown, if any. */
+  judgement: Judgement | null
+  canUndo: boolean
   dispatch: (event: GameEvent) => void
+  judge: (correct: boolean) => void
+  undo: () => void
   startGame: () => void
   newGame: () => void
 }
@@ -41,33 +47,22 @@ export interface HostGameApi {
  * `globals.css`. Nothing else has to move.
  */
 export function HostStage({ game }: { game: HostGameApi }) {
-  const { room, state, song, audioReady, channelError, dispatch, startGame, newGame } = game
-  const [judgement, setJudgement] = useState<Judgement | null>(null)
-
-  // The flash is a beat, not a state: a ❌ drops the game straight back into
-  // `playing`, so without this the room would never see the red.
-  useEffect(() => {
-    if (!judgement) return
-    const id = setTimeout(() => setJudgement(null), JUDGEMENT_FLASH_MS)
-    return () => clearTimeout(id)
-  }, [judgement])
-
-  const start = useCallback(() => {
-    // The one guaranteed user gesture on this page. Web Audio refuses to make
-    // a sound before one, so the context is created here rather than on load.
-    unlockGameSounds()
-    startGame()
-  }, [startGame])
-
-  const judge = useCallback(
-    (correct: boolean) => {
-      unlockGameSounds()
-      playCue(correct ? 'correct' : 'wrong')
-      setJudgement(correct ? 'correct' : 'wrong')
-      dispatch({ type: 'JUDGE', correct })
-    },
-    [dispatch],
-  )
+  const {
+    room,
+    controlToken,
+    panelPaired,
+    state,
+    song,
+    audioReady,
+    channelError,
+    judgement,
+    canUndo,
+    dispatch,
+    judge,
+    undo,
+    startGame,
+    newGame,
+  } = game
 
   // The buzzer cue belongs to the room, not to the phone: it fires here, on
   // the speaker, in the silence the cut music just left behind. Comparing
@@ -84,15 +79,23 @@ export function HostStage({ game }: { game: HostGameApi }) {
     [state.players],
   )
 
+  // Read at render rather than passed in: the page renders nothing until the
+  // room exists, which only happens in an effect, so this always runs in the
+  // browser and can never differ from what the server rendered.
+  const origin = typeof window === 'undefined' ? '' : window.location.origin
+
   const view: HostView = {
     room,
+    origin,
     state,
     song,
     audioReady,
     scoreboard,
+    canUndo,
     dispatch,
-    startGame: start,
+    startGame,
     judge,
+    undo,
     newGame,
   }
 
@@ -111,11 +114,21 @@ export function HostStage({ game }: { game: HostGameApi }) {
           <span className="chip">
             Sala <strong style={{ letterSpacing: '0.18em', color: 'var(--text-hi)' }}>{room}</strong>
           </span>
-          {channelError ? (
-            <span className="chip" style={{ borderColor: 'var(--red)', color: 'var(--red)' }}>
-              {channelError}
-            </span>
-          ) : null}
+          <div className="flex items-center gap-3">
+            {channelError ? (
+              <span className="chip" style={{ borderColor: 'var(--red)', color: 'var(--red)' }}>
+                {channelError}
+              </span>
+            ) : null}
+            {controlToken ? (
+              <PairingPanel
+                origin={origin}
+                token={controlToken}
+                paired={panelPaired}
+                showByDefault={phase.kind === 'lobby'}
+              />
+            ) : null}
+          </div>
         </header>
 
         {phaseStage(view)}

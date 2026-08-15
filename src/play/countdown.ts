@@ -34,6 +34,36 @@ export function displayedRemainingMs(
  * that bug once — it read full whenever no tier was running — so the rule is
  * written down and tested here instead of living in a component.
  */
+/** Where the last-seconds warning fires. Three is enough to decide, not enough to relax. */
+export const PULSE_AT_MS = 3_000
+
+/** One short pulse. A pattern would be a phone asking for attention it has not earned. */
+export const PULSE_MS = 40
+
+/**
+ * Whether the phone should buzz once, right now.
+ *
+ * Six phones in a small room all vibrating every tier is noise, so this is
+ * deliberately narrow: one pulse, only while a tier is actually sounding, only
+ * on a phone whose owner can still do something about it, and never twice for
+ * the same run of the clock — the caller holds `alreadyPulsed` and clears it
+ * when the tier stops.
+ *
+ * A tier that resumes with less than three seconds left (the tail of a tier
+ * somebody was judged wrong on) fires immediately, which is correct: three
+ * seconds is what is left, and that is what the pulse means.
+ */
+export function shouldPulse(
+  remainingMs: number | null,
+  running: boolean,
+  armed: boolean,
+  alreadyPulsed: boolean,
+): boolean {
+  if (!running || !armed || alreadyPulsed) return false
+  if (remainingMs === null) return false
+  return remainingMs <= PULSE_AT_MS
+}
+
 export function ringFraction(
   remainingMs: number | null,
   tierDurationMs: number | null,

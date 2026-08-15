@@ -9,7 +9,7 @@ import { createSupabaseChannel } from '@/realtime/supabaseChannel'
 import { buttonState, loadIdentity, saveName } from '@/play/playerIdentity'
 import { BUTTON_PRESENTATION } from '@/play/buttonPresentation'
 import { BuzzerRing } from '@/play/BuzzerRing'
-import { displayedRemainingMs, ringFraction } from '@/play/countdown'
+import { PULSE_MS, displayedRemainingMs, ringFraction, shouldPulse } from '@/play/countdown'
 import { playCue, unlockGameSounds } from '@/sounds/gameSounds'
 import { Confetti } from '@/ui/Confetti'
 
@@ -135,6 +135,25 @@ function PlayScreen() {
   // elapsed span can come out negative; `displayedRemainingMs` clamps it and
   // the phone simply shows the full remainder until the first redraw.
   const remainingMs = displayedRemainingMs(sentRemainingMs, now - (received?.at ?? 0), running)
+
+  // Three seconds left, one short pulse, in the pocket or in the hand. The
+  // phone already knows the time — it has been running this countdown itself
+  // since the last message — so this costs the shared channel nothing.
+  //
+  // The flag is cleared whenever the clock stops rather than when a tier
+  // changes, because that is the honest boundary: every run of the clock
+  // earns exactly one pulse, including the tail of a tier picked back up
+  // after a wrong answer.
+  const pulsedRef = useRef(false)
+  useEffect(() => {
+    if (!running) {
+      pulsedRef.current = false
+      return
+    }
+    if (!shouldPulse(remainingMs, running, status === 'armed', pulsedRef.current)) return
+    pulsedRef.current = true
+    navigator.vibrate?.(PULSE_MS)
+  }, [running, remainingMs, status])
 
   const buzz = useCallback(() => {
     if (status !== 'armed' || !identity) return

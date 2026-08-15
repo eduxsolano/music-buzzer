@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'vitest'
 import { SAVE_VERSION, clearGame, loadGame, saveGame } from '@/host/persistence'
 import { initialState, reduce } from '@/game/reducer'
+import { createControlToken } from '@/host/pairing'
 
 class MemoryStorage implements Storage {
   private data = new Map<string, string>()
@@ -32,9 +33,44 @@ describe('host persistence', () => {
     state = reduce(state, { type: 'BUZZ', playerId: 'p1' })
     state = reduce(state, { type: 'JUDGE', correct: true })
 
-    saveGame(storage, 'KZTR', state)
+    saveGame(storage, { room: 'KZTR', controlToken: null, state })
 
-    expect(loadGame(storage)).toEqual({ room: 'KZTR', state })
+    expect(loadGame(storage)).toEqual({ room: 'KZTR', controlToken: null, state })
+  })
+
+  test('a reload keeps the host paired to their own phone', () => {
+    const storage = new MemoryStorage()
+    const controlToken = createControlToken()
+    saveGame(storage, { room: 'KZTR', controlToken, state: initialState() })
+
+    expect(loadGame(storage)?.controlToken).toBe(controlToken)
+  })
+
+  test('a save from before pairing existed is still a game, just an unpaired one', () => {
+    const storage = new MemoryStorage()
+    storage.setItem(
+      'hitster:host',
+      JSON.stringify({ version: SAVE_VERSION, room: 'KZTR', state: initialState() }),
+    )
+
+    const loaded = loadGame(storage)
+    expect(loaded?.state).toEqual(initialState())
+    expect(loaded?.controlToken).toBeNull()
+  })
+
+  test('refuses a pairing token that is not one this build could have minted', () => {
+    const storage = new MemoryStorage()
+    storage.setItem(
+      'hitster:host',
+      JSON.stringify({
+        version: SAVE_VERSION,
+        room: 'KZTR',
+        controlToken: 'KZTR',
+        state: initialState(),
+      }),
+    )
+
+    expect(loadGame(storage)?.controlToken).toBeNull()
   })
 
   test('returns null when there is nothing saved', () => {
@@ -49,7 +85,7 @@ describe('host persistence', () => {
 
   test('clearing wipes the saved game, so a new party starts fresh', () => {
     const storage = new MemoryStorage()
-    saveGame(storage, 'KZTR', initialState())
+    saveGame(storage, { room: 'KZTR', controlToken: null, state: initialState() })
     clearGame(storage)
     expect(loadGame(storage)).toBeNull()
   })

@@ -2,23 +2,37 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { DEFAULT_ROUNDS } from '@/game/config'
-import { currentSong, initialState, reduce } from '@/game/reducer'
+import { currentSong, initialState } from '@/game/reducer'
 import { toPublicState, withCountdown } from '@/game/publicState'
 import { createRoomCode, shuffle } from '@/game/random'
-import type { GameEvent, GameState, Song } from '@/game/types'
+import type { GameEvent, Song } from '@/game/types'
 import type { AudioPlayer } from '@/audio/audioPlayer'
 import type { Channel } from '@/realtime/channel'
 import { parsePlayerMessage } from '@/realtime/messages'
 import { createSupabaseChannel } from '@/realtime/supabaseChannel'
 import { clearGame, loadGame, saveGame } from '@/host/persistence'
 import { audioActionFor, snapshot, type AudioSnapshot } from '@/host/audioTransitions'
+import { initialSession, step, undoJudgement, type HostSession } from '@/host/undo'
+import { createControlToken } from '@/host/pairing'
+import { useControlChannel } from '@/host/useControlChannel'
+import { toControlState } from '@/control/controlState'
+import type { ControlAction } from '@/control/controlMessages'
+import type { Judgement } from '@/host/ui/stagePresentation'
+import { playCue, unlockGameSounds } from '@/sounds/gameSounds'
 
 const TICK_MS = 50
 const CHANNEL_ERROR_MESSAGE = 'No hay conexión con Supabase. Revisa las variables de entorno.'
+/** How long the room stays green or red before the game moves on. */
+const JUDGEMENT_FLASH_MS = 900
 
 export function useHostGame(songs: Song[]) {
   const [room, setRoom] = useState<string | null>(null)
-  const [state, setState] = useState<GameState>(initialState)
+  // The pairing secret for the host's own phone. Minted on the television and
+  // never published on the public channel — see `src/host/pairing.ts`.
+  const [controlToken, setControlToken] = useState<string | null>(null)
+  const [session, setSession] = useState<HostSession>(() => initialSession(initialState()))
+  const state = session.game
+  const [judgement, setJudgement] = useState<Judgement | null>(null)
   // Starting before the iframes exist would play a silent round.
   const [audioReady, setAudioReady] = useState(false)
   const [channelError, setChannelError] = useState<string | null>(null)
@@ -39,9 +53,13 @@ export function useHostGame(songs: Song[]) {
     if (saved) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setRoom(saved.room)
-      setState(saved.state)
+      setSession(initialSession(saved.state))
+      // A save written before pairing existed has no token; mint one rather
+      // than leaving the host with no way to reach their own phone.
+      setControlToken(saved.controlToken ?? createControlToken())
     } else {
       setRoom(createRoomCode(Math.random))
+      setControlToken(createControlToken())
     }
   }, [])
 
@@ -55,9 +73,36 @@ export function useHostGame(songs: Song[]) {
     setPendingDeck(shuffle(songs.map((s) => s.id), Math.random))
   }, [room, state.phase.kind, songs, pendingDeck])
 
+  // Every event goes through `step`, which is `reduce` plus the one thing the
+  // reducer must not know about: whether the last judgement can still be taken
+  // back. See `src/host/undo.ts`.
   const dispatch = useCallback((event: GameEvent) => {
-    setState((previous) => reduce(previous, event))
+    setSession((previous) => step(previous, event))
   }, [])
+
+  const undo = useCallback(() => setSession(undoJudgement), [])
+  const canUndo = session.undo !== null
+
+  // The flash is a beat, not a state: a ❌ drops the game straight back into
+  // `waiting`, so without this the room would never see the red. It lives
+  // here, next to the dispatch, because the panel judges over the private
+  // channel and its ✅ has to light the television exactly like the
+  // television's own button does.
+  useEffect(() => {
+    if (!judgement) return
+    const id = setTimeout(() => setJudgement(null), JUDGEMENT_FLASH_MS)
+    return () => clearTimeout(id)
+  }, [judgement])
+
+  const judge = useCallback(
+    (correct: boolean) => {
+      unlockGameSounds()
+      playCue(correct ? 'correct' : 'wrong')
+      setJudgement(correct ? 'correct' : 'wrong')
+      dispatch({ type: 'JUDGE', correct })
+    },
+    [dispatch],
+  )
 
   // Persist on every change: cheap, local, and it's the safety net against an
   // accidental reload mid-party, so every tick genuinely wants to hit it.
@@ -95,7 +140,7 @@ export function useHostGame(songs: Song[]) {
   const forceNextPublishRef = useRef(false)
   useEffect(() => {
     if (!room) return
-    saveGame(window.localStorage, room, state)
+    saveGame(window.localStorage, { room, controlToken, state })
 
     // Effects run in declaration order, and the channel-creation effect below
     // is declared after this one. On the very first render where `room`
@@ -116,7 +161,7 @@ export function useHostGame(songs: Song[]) {
     lastPublishedRef.current = serialized
     forceNextPublishRef.current = false
     void channel.publish({ type: 'STATE', state: withCountdown(publicState, state.phase) })
-  }, [room, state])
+  }, [room, controlToken, state])
 
   // Listen to the phones. The host decides the winner by arrival order:
   // the reducer ignores every BUZZ after the first.
@@ -236,5 +281,60 @@ export function useHostGame(songs: Song[]) {
     window.location.reload()
   }, [])
 
-  return { room, state, song, audioReady, channelError, dispatch, startGame, attachAudio, newGame }
+  const startGameWithSound = useCallback(() => {
+    // The one guaranteed user gesture on this page. Web Audio refuses to make
+    // a sound before one, so the context is created here rather than on load.
+    unlockGameSounds()
+    startGame()
+  }, [startGame])
+
+  // What the host's phone is told. Recomputed on every tick like the public
+  // projection, and like it, holding nothing that changes on a tick — so the
+  // equality throttle inside `useControlChannel` sends one message per real
+  // change, not twenty a second.
+  const controlState = useMemo(
+    () => (room ? toControlState(state, song, room, canUndo) : null),
+    [room, state, song, canUndo],
+  )
+
+  const onControlAction = useCallback(
+    (action: ControlAction) => {
+      switch (action.type) {
+        case 'JUDGE':
+          // Straight through the television's own judge path, so a ✅ from the
+          // phone flashes the room and plays the cue exactly as the button
+          // beside the laptop does.
+          judge(action.correct)
+          return
+        case 'UNDO':
+          undo()
+          return
+        case 'LAUNCH_TIER':
+        case 'SKIP_SONG':
+        case 'NEXT_ROUND':
+          dispatch({ type: action.type })
+      }
+    },
+    [judge, undo, dispatch],
+  )
+
+  const { paired } = useControlChannel(controlToken, controlState, onControlAction)
+
+  return {
+    room,
+    controlToken,
+    panelPaired: paired,
+    state,
+    song,
+    audioReady,
+    channelError,
+    judgement,
+    canUndo,
+    dispatch,
+    judge,
+    undo,
+    startGame: startGameWithSound,
+    attachAudio,
+    newGame,
+  }
 }

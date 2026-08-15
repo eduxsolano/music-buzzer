@@ -17,7 +17,24 @@ function client() {
  * `self: false` keeps a sender from receiving its own messages back.
  */
 export function createSupabaseChannel(room: string): Channel {
-  const channel = client().channel(`sala:${room}`, {
+  return channelNamed(`sala:${room}`)
+}
+
+/**
+ * The private line between the television and the host's phone.
+ *
+ * A Supabase channel is a shared room: everybody subscribed to `sala:KZTR`
+ * receives everything published on it, so the song title cannot travel there.
+ * This channel is named after a 128-bit secret instead (see
+ * `src/host/pairing.ts`), which is what makes it unreachable from a room code
+ * — the two names have nothing in common.
+ */
+export function createControlChannel(token: string): Channel {
+  return channelNamed(`panel:${token}`)
+}
+
+function channelNamed(name: string): Channel {
+  const channel = client().channel(name, {
     config: { broadcast: { self: false } },
   })
 

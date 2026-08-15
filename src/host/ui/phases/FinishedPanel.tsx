@@ -2,32 +2,34 @@
 
 import { Hero, StagePanel } from '@/host/ui/StagePanel'
 import type { HostView } from '@/host/ui/hostView'
-import { heroSizeClass } from '@/host/ui/stagePresentation'
+import { finalNote, finalStanding, heroSizeClass } from '@/host/ui/stagePresentation'
 import { Confetti } from '@/ui/Confetti'
 
-/** The end of the night: one name, in gold, paper falling, and a way to start again. */
+/**
+ * The end of the night: one name in gold, paper falling, and a way to start
+ * again — unless several people are level, in which case the screen says so
+ * and names them. Crowning whoever happened to sort first is the kind of
+ * mistake a room notices immediately and never lets go of; there is no
+ * tie-break round, and the game does not pretend there is one.
+ */
 export function FinishedPanel({ view }: { view: HostView }) {
-  const winner = view.scoreboard[0]
-  const tied = winner ? view.scoreboard.filter((p) => p.score === winner.score) : []
-  const name = tied.length > 1 ? 'Empate' : (winner?.name ?? 'Nadie')
+  const standing = finalStanding(view.scoreboard)
+  const hero =
+    standing.kind === 'winner' ? standing.name : standing.kind === 'tie' ? 'Empate' : 'Nadie'
 
   return (
     <>
-      {/* Only when somebody actually won: an empty game or a walkover gets the
-          gold screen, not a celebration. */}
-      {winner ? <Confetti /> : null}
+      {/* Only when somebody actually played: an empty game gets the gold
+          screen, not a celebration. A tie is still worth celebrating. */}
+      {standing.kind === 'nobody' ? null : <Confetti />}
       <StagePanel
-        kicker="Fin de la partida"
+        kicker={standing.kind === 'tie' ? 'Nadie se lleva la partida' : 'Fin de la partida'}
         hero={
-          <Hero sizeClass={heroSizeClass(name)} animation="slam">
-            {name}
+          <Hero sizeClass={heroSizeClass(hero)} animation="slam">
+            {hero}
           </Hero>
         }
-        note={
-          winner
-            ? `${winner.score} ${Math.abs(winner.score) === 1 ? 'punto' : 'puntos'}`
-            : 'Sin jugadores'
-        }
+        note={finalNote(standing)}
         actions={
           <button
             onClick={view.newGame}

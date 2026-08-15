@@ -5,6 +5,7 @@ import { pointsForTier } from '@/game/tiers'
 import type { Phase } from '@/game/types'
 import { Hero, StagePanel } from '@/host/ui/StagePanel'
 import { TierCountdown } from '@/host/ui/TierCountdown'
+import { UndoButton } from '@/host/ui/UndoButton'
 import type { HostView } from '@/host/ui/hostView'
 import { launchLabel, roundLabel, waitingNote } from '@/host/ui/stagePresentation'
 
@@ -59,6 +60,9 @@ export function WaitingPanel({
           >
             Saltar canción
           </button>
+          {/* The screen a mistaken ❌ lands on, so this is where the host looks
+              the instant they realise. */}
+          <UndoButton view={view} />
         </>
       }
     />

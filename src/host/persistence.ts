@@ -1,7 +1,19 @@
 import type { Tier } from '@/game/tiers'
 import type { GameState, Phase, Player, RevealOutcome, Stakes } from '@/game/types'
+import { isControlToken } from '@/host/pairing'
 
 const KEY = 'hitster:host'
+
+export interface SavedGame {
+  room: string
+  /**
+   * The secret naming the channel the host's phone is paired on. Persisted so
+   * a reload of the television does not silently orphan a paired panel — the
+   * phone would keep listening on a channel nothing published to any more.
+   */
+  controlToken: string | null
+  state: GameState
+}
 
 /**
  * Bump this whenever `GameState`'s persisted shape changes (a phase gains or
@@ -14,8 +26,8 @@ const KEY = 'hitster:host'
  */
 export const SAVE_VERSION = 1
 
-export function saveGame(storage: Storage, room: string, state: GameState): void {
-  storage.setItem(KEY, JSON.stringify({ version: SAVE_VERSION, room, state }))
+export function saveGame(storage: Storage, save: SavedGame): void {
+  storage.setItem(KEY, JSON.stringify({ version: SAVE_VERSION, ...save }))
 }
 
 function asRecord(raw: unknown): Record<string, unknown> | null {
@@ -137,16 +149,23 @@ function parseGameState(raw: unknown): GameState | null {
  * `localStorage` deserves the same suspicion as the network: it holds data
  * written by a different version of this program.
  */
-export function loadGame(storage: Storage): { room: string; state: GameState } | null {
+export function loadGame(storage: Storage): SavedGame | null {
   const raw = storage.getItem(KEY)
   if (!raw) return null
   try {
-    const parsed = JSON.parse(raw) as { version?: unknown; room?: unknown; state?: unknown }
+    const parsed = JSON.parse(raw) as Record<string, unknown>
     if (parsed.version !== SAVE_VERSION) return null
     if (typeof parsed.room !== 'string') return null
     const state = parseGameState(parsed.state)
     if (!state) return null
-    return { room: parsed.room, state }
+    // The pairing token is the one field that may legitimately be absent: it
+    // was added after this format shipped, and a save without it is a game
+    // that never had a panel. Missing or malformed simply means "unpaired",
+    // which the host answers by minting a fresh token — so an additive field
+    // costs nobody their game, and no version bump is needed to discard a save
+    // that is otherwise perfectly readable.
+    const controlToken = isControlToken(parsed.controlToken) ? parsed.controlToken : null
+    return { room: parsed.room, controlToken, state }
   } catch {
     return null
   }

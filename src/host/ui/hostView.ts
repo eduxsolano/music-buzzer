@@ -9,15 +9,21 @@ import type { GameEvent, GameState, Player, Song } from '@/game/types'
  */
 export interface HostView {
   room: string
+  /** Where this page is served from, so links and QRs point at the right host. */
+  origin: string
   state: GameState
   song: Song | null
   audioReady: boolean
   /** Players sorted by score, highest first. */
   scoreboard: Player[]
+  /** True while the last judgement can still be taken back. */
+  canUndo: boolean
   dispatch: (event: GameEvent) => void
   startGame: () => void
   /** Judges the current buzz and flashes the room green or red. */
   judge: (correct: boolean) => void
+  /** Restores the state from immediately before the last judgement. */
+  undo: () => void
   newGame: () => void
 }
 

@@ -13,16 +13,13 @@ const songs = parseSongs(rawSongs)
  * but wiring: the game lives in `useHostGame`, the screen in `HostStage`.
  */
 export default function HostPage() {
-  const { room, state, song, audioReady, channelError, dispatch, startGame, attachAudio, newGame } =
-    useHostGame(songs)
+  const { attachAudio, room, ...game } = useHostGame(songs)
   if (!room) return null
 
   return (
     <>
       <YouTubeStage onReady={attachAudio} />
-      <HostStage
-        game={{ room, state, song, audioReady, channelError, dispatch, startGame, newGame }}
-      />
+      <HostStage game={{ ...game, room }} />
     </>
   )
 }

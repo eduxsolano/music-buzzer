@@ -1,4 +1,4 @@
-import type { Phase, RevealOutcome } from '@/game/types'
+import type { Phase, Player, RevealOutcome } from '@/game/types'
 import { tierDurationMs, type Tier } from '@/game/tiers'
 
 /**
@@ -107,6 +107,76 @@ export function revealHeadline(outcome: RevealOutcome, winnerName: string | null
       return 'Nadie pulsó'
     case 'skipped':
       return 'Canción saltada'
+  }
+}
+
+/**
+ * The second line of a reveal: what the round did to the scoreboard.
+ *
+ * The card alone never explained why the numbers moved. By the time it turns
+ * over the room has been arguing for half a minute, the buzz was three
+ * judgements ago, and "who just scored" is genuinely lost — so the reveal says
+ * it in words instead of leaving the rail to be read backwards.
+ */
+export function revealDetail(outcome: RevealOutcome, winnerName: string | null): string {
+  switch (outcome) {
+    // Deliberately no number: what the answer was worth was frozen at the
+    // press and is no longer anywhere in the state by the time the card turns
+    // over. Naming a figure here would mean carrying one just to print it,
+    // and printing the wrong one is worse than printing none.
+    case 'correct':
+      return winnerName ? `Los puntos son para ${winnerName}` : 'Respuesta correcta'
+    case 'allWrong':
+      return 'Todos quedaron fuera de esta canción'
+    case 'timeout':
+      return 'Se acabó el tiempo y nadie pulsó'
+    case 'skipped':
+      return 'Sin puntos para nadie'
+  }
+}
+
+/**
+ * How the night ended.
+ *
+ * Kept as data rather than a string so the screen can size a name differently
+ * from a list of names, and so the tie case is a fact the compiler carries
+ * around instead of a comparison somebody has to remember to make. The
+ * television used to crown `scoreboard[0]` even when four people were level,
+ * which is a quiet way of being wrong in front of everybody.
+ */
+export type FinalStanding =
+  | { kind: 'nobody' }
+  | { kind: 'winner'; name: string; score: number }
+  | { kind: 'tie'; names: string[]; score: number }
+
+export function finalStanding(scoreboard: Player[]): FinalStanding {
+  const leader = scoreboard[0]
+  if (!leader) return { kind: 'nobody' }
+  const level = scoreboard.filter((player) => player.score === leader.score)
+  if (level.length === 1) return { kind: 'winner', name: leader.name, score: leader.score }
+  return { kind: 'tie', names: level.map((player) => player.name), score: leader.score }
+}
+
+/** `Ana, Beto y Carla` — a list read the way it would be said out loud. */
+export function joinNames(names: string[]): string {
+  if (names.length === 0) return ''
+  if (names.length === 1) return names[0]
+  return `${names.slice(0, -1).join(', ')} y ${names.at(-1)}`
+}
+
+export function pointsLabel(score: number): string {
+  return `${score} ${Math.abs(score) === 1 ? 'punto' : 'puntos'}`
+}
+
+/** The line under the end-of-game hero: who won, or who is level with whom. */
+export function finalNote(standing: FinalStanding): string {
+  switch (standing.kind) {
+    case 'nobody':
+      return 'Sin jugadores'
+    case 'winner':
+      return pointsLabel(standing.score)
+    case 'tie':
+      return `${joinNames(standing.names)} · ${pointsLabel(standing.score)}`
   }
 }
 

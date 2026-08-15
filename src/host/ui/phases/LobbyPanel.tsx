@@ -1,20 +1,22 @@
 'use client'
 
 import { StagePanel } from '@/host/ui/StagePanel'
-import { JoinQr } from '@/host/ui/JoinQr'
+import { QrCard } from '@/host/ui/QrCard'
+import { ShareLink } from '@/ui/ShareLink'
+import { joinUrl } from '@/host/pairing'
 import type { HostView } from '@/host/ui/hostView'
 import { playersConnectedLabel } from '@/host/ui/stagePresentation'
 
 /** Before the music: the room code and the QR are the only two things to do. */
 export function LobbyPanel({ view }: { view: HostView }) {
-  const { room, state, audioReady, startGame } = view
+  const { room, state, audioReady, startGame, origin } = view
 
   return (
     <StagePanel
       kicker="Escanea para entrar"
       hero={
         <div className="flex flex-wrap items-center justify-center gap-[clamp(2rem,5vw,5rem)]">
-          <JoinQr room={room} />
+          <QrCard url={joinUrl(origin, room)} alt={`Unirse a la sala ${room}`} />
           <div className="flex flex-col items-start gap-3">
             <span className="kicker">Sala</span>
             <div className="flex gap-[clamp(0.4rem,0.8vw,0.9rem)]">
@@ -28,6 +30,10 @@ export function LobbyPanel({ view }: { view: HostView }) {
                 </span>
               ))}
             </div>
+            {/* A laptop has no share sheet, so this copies and says so. The
+                phone that is too far from the television to scan gets the link
+                pasted into a chat instead. */}
+            <ShareLink url={joinUrl(origin, room)} className="px-5 py-2.5 text-xs" />
           </div>
         </div>
       }

@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { displayedRemainingMs, ringFraction } from '@/play/countdown'
+import { PULSE_AT_MS, displayedRemainingMs, ringFraction, shouldPulse } from '@/play/countdown'
 
 describe('displayedRemainingMs', () => {
   test('counts down locally from the remainder the host sent', () => {
@@ -59,5 +59,35 @@ describe('ringFraction', () => {
 
   test('never overflows its track if the clocks disagree', () => {
     expect(ringFraction(30_000, 10_000, true)).toBe(1)
+  })
+})
+
+describe('shouldPulse', () => {
+  test('stays still while there is more than three seconds of tier left', () => {
+    expect(shouldPulse(PULSE_AT_MS + 1, true, true, false)).toBe(false)
+    expect(shouldPulse(5_000, true, true, false)).toBe(false)
+  })
+
+  test('fires as the third second begins', () => {
+    expect(shouldPulse(PULSE_AT_MS, true, true, false)).toBe(true)
+    expect(shouldPulse(2_400, true, true, false)).toBe(true)
+    expect(shouldPulse(0, true, true, false)).toBe(true)
+  })
+
+  test('once per run of the clock, never a pattern of them', () => {
+    // The caller sets the flag the moment it fires; six phones repeating this
+    // every tier would be noise rather than a signal.
+    expect(shouldPulse(2_000, true, true, true)).toBe(false)
+  })
+
+  test('only while a tier is actually sounding', () => {
+    expect(shouldPulse(2_000, false, true, false)).toBe(false)
+    expect(shouldPulse(null, true, true, false)).toBe(false)
+  })
+
+  test('only on a phone that can still do something about it', () => {
+    // Locked out of this song, or waiting to be judged: a buzz in the pocket
+    // would be telling somebody about a decision that is not theirs to make.
+    expect(shouldPulse(2_000, true, false, false)).toBe(false)
   })
 })
