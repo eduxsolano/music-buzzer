@@ -168,6 +168,28 @@ export function reduce(state: GameState, event: GameEvent): GameState {
       return { ...state, phase: { kind: 'revealed', outcome: 'skipped', winnerId: null } }
     }
 
+    // Abandon-and-restart, in one step rather than four. Scores, the current
+    // song, the per-song elimination list and the phase all describe "where
+    // the room is right now"; resetting three of them and forgetting the
+    // fourth is exactly the kind of bug that only shows up mid-party, so they
+    // are set together here instead of being assembled by a caller. The deck
+    // goes with them — empty is the deck's own pre-start value, see
+    // `initialState` — and the host deals a freshly shuffled one back in via
+    // `START_GAME`, exactly like the first game. Reshuffling itself does not
+    // belong here: it needs `Math.random`, and this file stays pure.
+    case 'NEW_SESSION': {
+      return {
+        ...state,
+        players: state.players.map((p) => ({ ...p, score: 0 })),
+        deck: [],
+        currentSongId: null,
+        roundsPlayed: 0,
+        roundsTotal: DEFAULT_ROUNDS,
+        lockedOut: [],
+        phase: { kind: 'lobby' },
+      }
+    }
+
     default:
       return state
   }

@@ -281,6 +281,19 @@ export function useHostGame(songs: Song[]) {
     window.location.reload()
   }, [])
 
+  // The panel-only "abandon and restart" control. Unlike `newGame` above,
+  // this never touches localStorage, the room code or the pairing token —
+  // the room the players and the panel are already connected to simply
+  // plays again. `NEW_SESSION` clears `state.deck` back to its pre-start
+  // empty value (see the reducer), so `pendingDeck` is cleared here too:
+  // without it the reshuffle effect below would find a deck already sitting
+  // there — the one the game just finished with, in the same order — and
+  // never reshuffle at all.
+  const newSession = useCallback(() => {
+    dispatch({ type: 'NEW_SESSION' })
+    setPendingDeck(null)
+  }, [dispatch])
+
   const startGameWithSound = useCallback(() => {
     // The one guaranteed user gesture on this page. Web Audio refuses to make
     // a sound before one, so the context is created here rather than on load.
@@ -309,13 +322,16 @@ export function useHostGame(songs: Song[]) {
         case 'UNDO':
           undo()
           return
+        case 'NEW_SESSION':
+          newSession()
+          return
         case 'LAUNCH_TIER':
         case 'SKIP_SONG':
         case 'NEXT_ROUND':
           dispatch({ type: action.type })
       }
     },
-    [judge, undo, dispatch],
+    [judge, undo, newSession, dispatch],
   )
 
   const { paired } = useControlChannel(controlToken, controlState, onControlAction)

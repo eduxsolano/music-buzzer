@@ -42,6 +42,15 @@ export function audioActionFor(prev: AudioSnapshot, next: AudioSnapshot): AudioA
     return prev.kind === 'revealed' || prev.kind === 'finished' ? 'none' : 'stop'
   }
 
+  // Landing in the lobby only ever used to happen via a full page reload
+  // (a fresh session, or the old "Nueva partida"), which threw the audio
+  // player away along with everything else. A session reset now reaches
+  // `lobby` in place, from `playing` or `waiting` included, so this has to
+  // say what the speaker does explicitly rather than falling through to the
+  // catch-all `'playing'` check below, which would leave a mid-song reset
+  // sounding.
+  if (next.kind === 'lobby') return prev.kind === 'lobby' ? 'none' : 'stop'
+
   // The host is holding the room between tiers. Whatever was sounding goes
   // quiet, but the player keeps its position so a cut tier can carry on.
   if (next.kind === 'waiting') return prev.kind === 'playing' ? 'pause' : 'none'

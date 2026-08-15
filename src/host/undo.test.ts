@@ -174,6 +174,21 @@ describe('undoing a judgement', () => {
     expect(step(after, { type: 'BUZZ', playerId: 'p1' })).toBe(after)
   })
 
+  test('a session reset closes a live undo offer, not just the wrong-answer paths', () => {
+    const judged = session([
+      ...twoPlayers,
+      { type: 'LAUNCH_TIER' },
+      { type: 'BUZZ', playerId: 'p1' },
+      { type: 'JUDGE', correct: false },
+    ])
+    expect(judged.undo).not.toBeNull()
+
+    const reset = step(judged, { type: 'NEW_SESSION' })
+    expect(reset.undo).toBeNull()
+    expect(undoJudgement(reset)).toBe(reset)
+    expect(reset.game.phase).toEqual({ kind: 'lobby' })
+  })
+
   test('the reducer itself never learns about undo', () => {
     // The game the reducer produces on its own is byte-for-byte the game the
     // session wrapper produces: `step` adds a memory, never a rule.

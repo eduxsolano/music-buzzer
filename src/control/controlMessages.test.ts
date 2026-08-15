@@ -82,6 +82,7 @@ describe('parseControlCommand', () => {
     expect(parseControlCommand({ type: 'SKIP_SONG' })).toEqual({ type: 'SKIP_SONG' })
     expect(parseControlCommand({ type: 'NEXT_ROUND' })).toEqual({ type: 'NEXT_ROUND' })
     expect(parseControlCommand({ type: 'UNDO' })).toEqual({ type: 'UNDO' })
+    expect(parseControlCommand({ type: 'NEW_SESSION' })).toEqual({ type: 'NEW_SESSION' })
   })
 
   // A JUDGE whose verdict went missing must be dropped, not read as a ❌ that

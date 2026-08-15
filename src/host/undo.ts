@@ -44,6 +44,12 @@ export function step(session: HostSession, event: GameEvent): HostSession {
 
   if (event.type === 'JUDGE') return { game, undo: session.game }
 
+  // A session reset discards any live undo offer outright, deliberately
+  // rather than by the coincidence of `sameRound` below. The state it would
+  // restore belonged to the game that just got wiped — same room, but scores
+  // and round count that no longer describe anything on screen.
+  if (event.type === 'NEW_SESSION') return { game, undo: null }
+
   // Undo is offered only until the next round is dealt. Once the room has
   // moved to another song — or the game is over, which clears the song —
   // going back to the previous one would be a different kind of act

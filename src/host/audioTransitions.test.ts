@@ -87,6 +87,19 @@ describe('audioActionFor', () => {
     expect(audioActionFor(lobby, holding(1))).toBe('none')
   })
 
+  test('a session reset silences whatever was sounding, from any phase', () => {
+    expect(audioActionFor(playing(2), lobby)).toBe('stop')
+    expect(audioActionFor(holding(1), lobby)).toBe('stop')
+    expect(audioActionFor(holdingCut(2), lobby)).toBe('stop')
+    expect(audioActionFor(buzzed, lobby)).toBe('stop')
+    expect(audioActionFor(revealed, lobby)).toBe('stop')
+    expect(audioActionFor(finished, lobby)).toBe('stop')
+  })
+
+  test('landing in the lobby a second time in a row is a no-op', () => {
+    expect(audioActionFor(lobby, lobby)).toBe('none')
+  })
+
   test('starts the next song fresh after a reveal', () => {
     expect(audioActionFor(holding(1), playing(1))).toBe('play')
   })

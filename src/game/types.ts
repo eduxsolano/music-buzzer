@@ -68,3 +68,11 @@ export type GameEvent =
   | { type: 'JUDGE'; correct: boolean }
   | { type: 'SKIP_SONG' }
   | { type: 'NEXT_ROUND' }
+  /**
+   * Abandons the game in progress and returns the room to its pre-start
+   * state: scores zeroed, deck emptied (the host reshuffles and re-deals via
+   * `START_GAME`, same as the first game), nothing playing, nobody
+   * eliminated. The room code and the players themselves are untouched — this
+   * is not a new room, it is the same room agreeing to play again.
+   */
+  | { type: 'NEW_SESSION' }

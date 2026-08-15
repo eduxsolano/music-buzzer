@@ -17,6 +17,13 @@ export type ControlCommand =
   | { type: 'SKIP_SONG' }
   | { type: 'NEXT_ROUND' }
   | { type: 'UNDO' }
+  /**
+   * Abandons the game in progress and starts a fresh one in the same room.
+   * The panel only ever sends this after its own confirmation step — see
+   * `ControlPanel` — so arrival here is already the deliberate act, not the
+   * first tap.
+   */
+  | { type: 'NEW_SESSION' }
 
 /**
  * A command that actually moves the game. `HELLO` is not one of them — it is
@@ -149,6 +156,8 @@ export function parseControlCommand(raw: unknown): ControlCommand | null {
       return { type: 'NEXT_ROUND' }
     case 'UNDO':
       return { type: 'UNDO' }
+    case 'NEW_SESSION':
+      return { type: 'NEW_SESSION' }
     default:
       return null
   }

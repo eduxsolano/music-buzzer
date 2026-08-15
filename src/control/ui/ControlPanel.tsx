@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import type { ControlState } from '@/control/controlState'
 import type { ControlAction } from '@/control/controlMessages'
 import {
@@ -37,6 +38,21 @@ export function ControlPanel({
   const launch = controlLaunchLabel(state)
   const stakes = stakeLabel(state.pointsAtStake)
 
+  // A single tap must never wipe the room's scores, so a tap here only ever
+  // opens the warning below; only the button inside it actually sends
+  // NEW_SESSION. Closed on every phase change, which covers both the happy
+  // path (the reset lands and the phase becomes `lobby`) and the host
+  // changing their mind by pressing something else on the television
+  // meanwhile. Adjusted during render rather than in an effect — this is
+  // local UI state derived from a prop, not a subscription to anything
+  // external, so there is nothing here for an effect to synchronize with.
+  const [confirmingReset, setConfirmingReset] = useState(false)
+  const [phaseSeen, setPhaseSeen] = useState(state.phase)
+  if (state.phase !== phaseSeen) {
+    setPhaseSeen(state.phase)
+    setConfirmingReset(false)
+  }
+
   return (
     <main
       data-mood={controlMood(state.phase, state.outcome)}
@@ -64,11 +80,109 @@ export function ControlPanel({
             ↺ Deshacer
           </button>
         ) : null}
+        {/* Same reasoning as Undo above, for a control with far more to lose:
+            up here, never beside the judge buttons a resting thumb rests
+            near. Absent in the lobby — there is no game in progress yet to
+            abandon, only "Empezar partida" below. */}
+        {state.phase !== 'lobby' && !confirmingReset ? (
+          <button
+            onClick={() => setConfirmingReset(true)}
+            className="btn btn-ghost shrink-0 whitespace-nowrap px-4 py-2 text-xs"
+          >
+            ⟲ Reiniciar
+          </button>
+        ) : null}
         <span className="tabular-nums">
           {state.roundsPlayed}/{state.roundsTotal}
         </span>
       </header>
 
+      {confirmingReset ? (
+        <ResetConfirm
+          players={state.players}
+          onCancel={() => setConfirmingReset(false)}
+          onConfirm={() => send({ type: 'NEW_SESSION' })}
+        />
+      ) : (
+        <ControlBody state={state} send={send} origin={origin} launch={launch} stakes={stakes} />
+      )}
+    </main>
+  )
+}
+
+/**
+ * The deliberate second step. Replaces the entire body below the header —
+ * song, standings, judge buttons, everything — rather than floating over it,
+ * so there is no live judge button anywhere near this screen while the host
+ * decides. The standings are reprinted here on purpose, each score struck
+ * through to zero: "reiniciar" is an abstract word, a list of named scores
+ * about to disappear is not.
+ */
+function ResetConfirm({
+  players,
+  onCancel,
+  onConfirm,
+}: {
+  players: ControlState['players']
+  onCancel: () => void
+  onConfirm: () => void
+}) {
+  return (
+    <section className="flex flex-1 flex-col items-center justify-center gap-6 text-center">
+      <p className="kicker" style={{ color: 'var(--red)' }}>
+        ¿Reiniciar la partida?
+      </p>
+      <p className="note max-w-xs">
+        Se borran todos los puntos y se pierde la canción en juego. La sala,
+        el código y los jugadores siguen igual: nadie tiene que volver a
+        escanear.
+      </p>
+      {players.length > 0 ? (
+        <ul className="flex w-full max-w-xs flex-col gap-1 text-sm" style={{ color: 'var(--text-mid)' }}>
+          {players.map((player) => (
+            <li key={player.id} className="flex items-baseline justify-between gap-4">
+              <span className="truncate">{player.name}</span>
+              <span className="tabular-nums" style={{ color: 'var(--red)' }}>
+                {player.score} → 0
+              </span>
+            </li>
+          ))}
+        </ul>
+      ) : null}
+      <div className="grid w-full grid-cols-2 gap-3">
+        <button onClick={onCancel} className="btn btn-ghost py-5 text-base">
+          Cancelar
+        </button>
+        <button onClick={onConfirm} className="btn btn-no py-5 text-base">
+          Sí, reiniciar
+        </button>
+      </div>
+    </section>
+  )
+}
+
+/**
+ * Everything the panel shows outside the confirmation, unchanged from before
+ * this control existed. Split out only so `confirmingReset` can swap the
+ * whole body for the warning instead of layering a dialog over live judge
+ * buttons — a stray tap through an overlay is exactly the accident a second,
+ * deliberate step is supposed to rule out.
+ */
+function ControlBody({
+  state,
+  send,
+  origin,
+  launch,
+  stakes,
+}: {
+  state: ControlState
+  send: (action: ControlAction) => void
+  origin: string
+  launch: string | null
+  stakes: string | null
+}) {
+  return (
+    <>
       <section className="flex flex-col items-center gap-3 text-center">
         <p className="kicker">{controlPrompt(state)}</p>
 
@@ -135,7 +249,7 @@ export function ControlPanel({
           </div>
         ) : null}
       </footer>
-    </main>
+    </>
   )
 }
 
