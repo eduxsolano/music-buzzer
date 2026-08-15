@@ -58,11 +58,23 @@ export function useHostGame(songs: Song[]) {
     if (!room) return
     saveGame(window.localStorage, room, state)
 
+    // Effects run in declaration order, and the channel-creation effect below
+    // is declared after this one. On the very first render where `room`
+    // becomes non-null, both effects fire in the same flush, so the channel
+    // does not exist yet here. Bail out WITHOUT touching lastPublishedRef: if
+    // we recorded this state as "published" while it never left the page, the
+    // throttle above would then treat the next genuinely-sendable identical
+    // state as a duplicate and swallow it too. The next state change (a tick,
+    // a JOIN) re-runs this effect with the channel in place, so nothing is
+    // lost — only delayed.
+    const channel = channelRef.current
+    if (!channel) return
+
     const publicState = toPublicState(state)
     const serialized = JSON.stringify(publicState)
     if (serialized === lastPublishedRef.current) return
     lastPublishedRef.current = serialized
-    void channelRef.current?.publish({ type: 'STATE', state: publicState })
+    void channel.publish({ type: 'STATE', state: publicState })
   }, [room, state])
 
   // Listen to the phones. The host decides the winner by arrival order:
@@ -100,18 +112,38 @@ export function useHostGame(songs: Song[]) {
   // Audio follows the TRANSITION, not the phase: only that tells "start tier 2"
   // apart from "come back to tier 2 after a wrong answer".
   const previousSnapshot = useRef<AudioSnapshot>({ kind: 'lobby', tier: null })
+  // True once this page session has actually issued a `play`. A reload wipes
+  // the double-buffered YouTube players (their videoId starts out null), so a
+  // computed `resume` before any `play` happened in THIS session would try to
+  // resume a player that never played anything — silence, not a recovery.
+  // Treating that first `resume` as a `play` instead is what actually starts
+  // the song after a reload that lands mid-buzz.
+  const hasPlayedRef = useRef(false)
   useEffect(() => {
+    const audio = audioRef.current
+    // The player isn't attached yet (its iframes load asynchronously and are
+    // almost always slower than this effect's first run after a reload).
+    // Bail out WITHOUT advancing previousSnapshot: recording the transition
+    // as handled here would mean it's never retried once the player attaches,
+    // and this restored game would play silently until the next tier
+    // boundary. Leaving the snapshot stale keeps the transition pending, and
+    // `audioReady` in the dependency array below guarantees a retry.
+    if (!audio) return
+
     const next = snapshot(state.phase)
-    const action = audioActionFor(previousSnapshot.current, next)
+    let action = audioActionFor(previousSnapshot.current, next)
     previousSnapshot.current = next
 
-    const audio = audioRef.current
-    if (!audio) return
-    if (action === 'play' && song) void audio.play(song.videoId, song.startSeconds)
+    if (action === 'resume' && !hasPlayedRef.current) action = 'play'
+
+    if (action === 'play' && song) {
+      void audio.play(song.videoId, song.startSeconds)
+      hasPlayedRef.current = true
+    }
     if (action === 'resume') audio.resume()
     if (action === 'pause') audio.pause()
     if (action === 'stop') audio.stop()
-  }, [state.phase, song])
+  }, [state.phase, song, audioReady])
 
   // Buffer the next song while this one plays, so there is no dead air.
   useEffect(() => {
