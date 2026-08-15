@@ -162,8 +162,14 @@ describe('chooseYear', () => {
     ...over,
   })
 
-  test('accepts a single confident match', () => {
-    expect(chooseYear([highScore({})], 'Nirvana', 'Smells Like Teen Spirit')).toBe(1991)
+  test('returns 0 for a single matching candidate, however high its score', () => {
+    // A lone dated candidate is not corroborated — see MIN_DATED_MATCHES.
+    expect(chooseYear([highScore({})], 'Nirvana', 'Smells Like Teen Spirit')).toBe(0)
+  })
+
+  test('accepts a match corroborated by a second agreeing candidate', () => {
+    const candidates = [highScore({}), highScore({ firstReleaseDate: '1991' })]
+    expect(chooseYear(candidates, 'Nirvana', 'Smells Like Teen Spirit')).toBe(1991)
   })
 
   test('accepts several matches that agree on the year, e.g. album and single releases', () => {
@@ -192,12 +198,15 @@ describe('chooseYear', () => {
   })
 
   test('is case- and accent-insensitive', () => {
-    const candidates = [highScore({ artistCredit: 'nirvana' })]
+    const candidates = [highScore({ artistCredit: 'nirvana' }), highScore({ artistCredit: 'nirvana' })]
     expect(chooseYear(candidates, 'NIRVANA', 'smells like teen spirit')).toBe(1991)
   })
 
   test('ignores promotional noise in a candidate title, mirroring cleanTitle', () => {
-    const candidates = [highScore({ title: 'Smells Like Teen Spirit (Remastered 2011)' })]
+    const candidates = [
+      highScore({ title: 'Smells Like Teen Spirit (Remastered 2011)' }),
+      highScore({ title: 'Smells Like Teen Spirit [HD]' }),
+    ]
     expect(chooseYear(candidates, 'Nirvana', 'Smells Like Teen Spirit')).toBe(1991)
   })
 
@@ -230,9 +239,21 @@ describe('chooseYear', () => {
     expect(chooseYear(candidates, 'Nirvana', 'Smells Like Teen Spirit')).toBe(0)
   })
 
+  test('does not trust a lone dated candidate lost among many undated ones, however high their score', () => {
+    // Live, real MusicBrainz data for exactly this query: fourteen score-100
+    // "Nirvana" / "Smells Like Teen Spirit" candidates with no
+    // first-release-date at all, and exactly one dated 1995 — eight years
+    // after the real 1991 release. One data point proves nothing; before
+    // MIN_DATED_MATCHES existed this returned 1995 with full confidence.
+    const undated = Array.from({ length: 14 }, () => highScore({ firstReleaseDate: undefined }))
+    const candidates = [...undated, highScore({ firstReleaseDate: '1995' })]
+    expect(chooseYear(candidates, 'Nirvana', 'Smells Like Teen Spirit')).toBe(0)
+  })
+
   test('matches a candidate credited with an "&"-joined pair against a title parsed with "feat."', () => {
     const candidates = [
       { title: 'Cold', artistCredit: 'BigXthaPlug & Post Malone', firstReleaseDate: '2025-11-21', score: 100 },
+      { title: 'Cold', artistCredit: 'BigXthaPlug feat. Post Malone', firstReleaseDate: '2025-11-21', score: 100 },
     ]
     expect(chooseYear(candidates, 'BigXthaPlug', 'Cold feat. Post Malone')).toBe(2025)
   })
@@ -257,6 +278,7 @@ describe('chooseYear', () => {
       const candidates = [
         { title: 'Die With a Smile', artistCredit: 'Lady Gaga', firstReleaseDate: '2026-04-18', score: 100 },
         { title: 'Die With a Smile', artistCredit: 'Lady Gaga & Bruno Mars', firstReleaseDate: '2024-08-16', score: 83 },
+        { title: 'Die With a Smile', artistCredit: 'Lady Gaga & Bruno Mars', firstReleaseDate: '2024-10-17', score: 83 },
       ]
       expect(chooseYear(candidates, 'Lady Gaga, Bruno Mars', 'Die With A Smile')).toBe(2024)
     })
@@ -266,6 +288,14 @@ describe('chooseYear', () => {
       // also matches on title text; sharing only "Lady Gaga" is not enough.
       const candidates = [
         { title: 'Die With a Smile', artistCredit: 'Bad Bunny & Lady Gaga', firstReleaseDate: '2026-02-08', score: 83 },
+        { title: 'Die With a Smile', artistCredit: 'Bad Bunny & Lady Gaga', firstReleaseDate: '2026-02-08', score: 83 },
+      ]
+      expect(chooseYear(candidates, 'Lady Gaga, Bruno Mars', 'Die With A Smile')).toBe(0)
+    })
+
+    test('requires at least two dated candidates even when full-name corroboration passed', () => {
+      const candidates = [
+        { title: 'Die With a Smile', artistCredit: 'Lady Gaga & Bruno Mars', firstReleaseDate: '2024-08-16', score: 83 },
       ]
       expect(chooseYear(candidates, 'Lady Gaga, Bruno Mars', 'Die With A Smile')).toBe(0)
     })

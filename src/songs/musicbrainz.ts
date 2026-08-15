@@ -53,6 +53,20 @@ const MIN_SCORE_MULTI_ARTIST = 50
  */
 const MAX_YEAR_SPREAD = 5
 
+/**
+ * Minimum number of independently-dated matching candidates required before
+ * trusting their earliest date. Found live, on "Nirvana" / "Smells Like Teen
+ * Spirit": MusicBrainz returned fifteen score-100, title-and-artist-matching
+ * candidates, fourteen of them with no `first-release-date` at all and
+ * exactly one dated 1995 — eight years after the real 1991 release. A single
+ * data point is not corroboration, however high its score, and the previous
+ * "earliest of whatever survives" logic confidently reported that lone 1995
+ * as the answer. Requiring at least two independent dates that agree (within
+ * MAX_YEAR_SPREAD) makes an isolated stray/mistagged/vandalized date fall
+ * back to 0 instead of being reported as fact.
+ */
+const MIN_DATED_MATCHES = 2
+
 function normalize(text: string): string {
   return text
     .normalize('NFD')
@@ -188,7 +202,9 @@ export function toCandidate(recording: MusicBrainzRecording): MusicBrainzCandida
  * that is not disagreement about the song, so the earliest one is taken as
  * the original release. A spread of more than MAX_YEAR_SPREAD years between
  * accepted candidates is treated as an accidental collision between two
- * different works and falls back to 0, same as no candidates at all.
+ * different works and falls back to 0 — same as no candidates at all, or
+ * fewer than MIN_DATED_MATCHES of them actually carrying a date (see its
+ * own comment for why a single dated candidate is not enough).
  * Ambiguity always resolves to 0 here, never to a guess — the caller treats
  * 0 as "leave for a human to review".
  */
@@ -213,7 +229,7 @@ export function chooseYear(
   })
 
   const years = matches.map((c) => extractYear(c.firstReleaseDate)).filter((y) => y > 0)
-  if (years.length === 0) return 0
+  if (years.length < MIN_DATED_MATCHES) return 0
 
   const earliest = Math.min(...years)
   const latest = Math.max(...years)
