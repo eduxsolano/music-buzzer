@@ -48,5 +48,10 @@
     "id": "sabrina-carpenter-house-tour",
     "year": 2025,
     "note": "External review vs Wikipedia: on Man's Best Friend (2025); MusicBrainz only finds a 2026 single-era release group"
+  },
+  {
+    "id": "sentimiento-muerto-eva",
+    "year": 1991,
+    "note": "Corrected from 1995 (recording-search fallback, corroborated only by two later recordings that both postdate the real release, which MusicBrainz's data is missing entirely); verified against the band's discography, independently confirmed by a second reviewer"
   }
 ]

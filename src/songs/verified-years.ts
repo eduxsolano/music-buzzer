@@ -11,15 +11,24 @@
  * into the repository and didn't survive to the next audit. This list is
  * that memory, checked in, so the next automated pass has no way to forget.
  *
- * Add an entry whenever you personally check a song's year against a real
- * outside source and MusicBrainz's automated pipeline either can't confirm
- * it or confidently disagrees. See src/songs/musicbrainz.ts's
- * chooseYearFromReleaseGroups docstring for the two documented shapes of
- * "can't confirm": a song's true first release was an earlier album
- * appearance a title-only release-group search can't find, or MusicBrainz's
- * own data is simply missing the earliest release entirely. One line, one
- * reason — "why do I believe this number" should be answerable by reading
- * the note, not by re-deriving it.
+ * Membership criterion — the question the next person adding an entry
+ * should be able to answer without asking anyone: a song belongs on this
+ * list when a human established its year against a source outside
+ * MusicBrainz. That covers both directions equally —
+ *   - correcting a wrong automated value (MusicBrainz confidently reported
+ *     something and an outside source proved it wrong), and
+ *   - confirming a doubtful one (MusicBrainz could not confirm a year at
+ *     all, or the surrounding data made a stored value worth double-
+ *     checking, and an outside source settled it).
+ * Neither direction is "more verified" than the other; what matters is that
+ * the year did not come from MusicBrainz being trusted as-is. See
+ * src/songs/musicbrainz.ts's chooseYearFromReleaseGroups docstring for the
+ * two documented shapes of "can't confirm": a song's true first release was
+ * an earlier album appearance a title-only release-group search can't find,
+ * or MusicBrainz's own data is simply missing the earliest release
+ * entirely. The note should record which of the two happened and against
+ * what — one line, one reason — so "why do I believe this number" is
+ * answerable by reading the note, not by re-deriving it.
  *
  * import-playlist.ts and reaudit-years.ts both treat every id here as
  * read-only: the stored year always wins over whatever a fresh MusicBrainz
