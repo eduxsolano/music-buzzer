@@ -3,7 +3,7 @@ import type { PublicState } from '@/game/publicState'
 const ID_KEY = 'hitster:playerId'
 const NAME_KEY = 'hitster:playerName'
 
-export type ButtonState = 'waiting' | 'armed' | 'locked' | 'eliminated'
+export type ButtonState = 'waiting' | 'armed' | 'locked' | 'won' | 'eliminated'
 
 /**
  * A stable id survives the phone going to sleep, changing network, or the tab
@@ -25,5 +25,6 @@ export function saveName(storage: Storage, name: string): void {
 export function buttonState(state: PublicState | null, playerId: string): ButtonState {
   if (!state) return 'waiting'
   if (state.lockedOut.includes(playerId)) return 'eliminated'
+  if (state.phase === 'buzzed' && state.buzzedPlayerId === playerId) return 'won'
   return state.phase === 'playing' ? 'armed' : 'locked'
 }

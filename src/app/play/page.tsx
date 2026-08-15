@@ -12,6 +12,7 @@ const BUTTON_STYLES: Record<ReturnType<typeof buttonState>, string> = {
   waiting: 'bg-slate-700 text-slate-400',
   armed: 'bg-emerald-500 text-emerald-950 active:bg-emerald-400',
   locked: 'bg-slate-700 text-slate-400',
+  won: 'bg-amber-400 text-amber-950',
   eliminated: 'bg-rose-800 text-rose-200',
 }
 
@@ -19,8 +20,11 @@ const BUTTON_LABELS: Record<ReturnType<typeof buttonState>, string> = {
   waiting: 'Conectando…',
   armed: '¡PULSA!',
   locked: 'Espera',
+  won: '¡Ganaste! Di la canción en voz alta',
   eliminated: 'Fuera de esta canción',
 }
+
+const CHANNEL_ERROR_MESSAGE = 'No hay conexión con Supabase. Revisa las variables de entorno.'
 
 // The host may broadcast STATE far more often than once per rejoin window (e.g.
 // every 50ms while a song plays), so this must not re-announce on every message —
@@ -32,6 +36,7 @@ function PlayScreen() {
   const [identity, setIdentity] = useState<{ playerId: string; name: string | null } | null>(null)
   const [draftName, setDraftName] = useState('')
   const [state, setState] = useState<PublicState | null>(null)
+  const [channelError, setChannelError] = useState<string | null>(null)
   const channelRef = useRef<Channel | null>(null)
   // 0 so the very first re-announce (e.g. right after reconnecting) is never
   // delayed — only the repeats afterward are throttled.
@@ -48,16 +53,27 @@ function PlayScreen() {
   useEffect(() => {
     if (!room || !identity?.name) return
     let closed = false
-    const channel = createSupabaseChannel(room)
+    let channel: Channel
+    try {
+      channel = createSupabaseChannel(room)
+    } catch {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setChannelError(CHANNEL_ERROR_MESSAGE)
+      return
+    }
     channelRef.current = channel
 
     void (async () => {
-      await channel.subscribe((raw) => {
-        const message = parseHostMessage(raw)
-        if (message?.type === 'STATE') setState(message.state)
-      })
-      if (closed) return
-      await channel.publish({ type: 'JOIN', playerId: identity.playerId, name: identity.name })
+      try {
+        await channel.subscribe((raw) => {
+          const message = parseHostMessage(raw)
+          if (message?.type === 'STATE') setState(message.state)
+        })
+        if (closed) return
+        await channel.publish({ type: 'JOIN', playerId: identity.playerId, name: identity.name })
+      } catch {
+        if (!closed) setChannelError(CHANNEL_ERROR_MESSAGE)
+      }
     })()
 
     return () => {
@@ -98,15 +114,23 @@ function PlayScreen() {
   }, [status, identity])
 
   if (!room) {
-    return <p className="p-8 text-slate-200">Falta el código de sala. Escanea el QR otra vez.</p>
+    return (
+      <p className="min-h-dvh bg-slate-950 p-8 text-slate-200">
+        Falta el código de sala. Escanea el QR otra vez.
+      </p>
+    )
   }
 
   if (!identity) return null
 
+  if (channelError) {
+    return <p className="min-h-dvh bg-slate-950 p-8 text-slate-200">{channelError}</p>
+  }
+
   if (!identity.name) {
     return (
       <form
-        className="flex min-h-dvh flex-col justify-center gap-4 p-8"
+        className="flex min-h-dvh flex-col justify-center gap-4 bg-slate-950 p-8 text-slate-100"
         onSubmit={(event) => {
           event.preventDefault()
           const name = draftName.trim()
@@ -133,7 +157,7 @@ function PlayScreen() {
   const me = state?.players.find((p) => p.id === identity.playerId)
 
   return (
-    <div className="flex min-h-dvh flex-col">
+    <div className="flex min-h-dvh flex-col bg-slate-950 text-slate-100">
       <header className="flex items-baseline justify-between p-4 text-slate-300">
         <span className="text-lg font-semibold">{identity.name}</span>
         <span className="text-2xl font-bold tabular-nums">{me?.score ?? 0}</span>

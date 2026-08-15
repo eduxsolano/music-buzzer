@@ -1,8 +1,6 @@
 import type { PublicState } from '@/game/publicState'
 
-export type HostMessage =
-  | { type: 'STATE'; state: PublicState }
-  | { type: 'BUZZ_ACCEPTED'; playerId: string }
+export type HostMessage = { type: 'STATE'; state: PublicState }
 
 export type PlayerMessage =
   | { type: 'JOIN'; playerId: string; name: string }
@@ -87,9 +85,6 @@ export function parseHostMessage(raw: unknown): HostMessage | null {
   if (message.type === 'STATE') {
     const state = parsePublicState(message.state)
     return state ? { type: 'STATE', state } : null
-  }
-  if (message.type === 'BUZZ_ACCEPTED' && nonEmptyString(message.playerId)) {
-    return { type: 'BUZZ_ACCEPTED', playerId: message.playerId }
   }
   return null
 }

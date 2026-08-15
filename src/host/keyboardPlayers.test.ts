@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { KEYBOARD_KEYS, eventForKey, keyboardPlayerId } from '@/host/keyboardPlayers'
+import { KEYBOARD_KEYS, eventForKey, keyFromPlayerId, keyboardPlayerId } from '@/host/keyboardPlayers'
 
 describe('keyboard fallback', () => {
   test('offers keys that are far apart on a physical keyboard', () => {
@@ -21,5 +21,19 @@ describe('keyboard fallback', () => {
 
   test('is case-insensitive, since Caps Lock happens at parties', () => {
     expect(eventForKey('A', ['a'])).toEqual({ type: 'BUZZ', playerId: 'key:a' })
+  })
+})
+
+describe('keyFromPlayerId', () => {
+  test('recovers the key from a keyboard player id', () => {
+    expect(keyFromPlayerId('key:a')).toBe('a')
+  })
+
+  test('round-trips through keyboardPlayerId', () => {
+    expect(keyFromPlayerId(keyboardPlayerId('g'))).toBe('g')
+  })
+
+  test('returns null for a phone-issued id', () => {
+    expect(keyFromPlayerId('a1b2c3-uuid')).toBeNull()
   })
 })

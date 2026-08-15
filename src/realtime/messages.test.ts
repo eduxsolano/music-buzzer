@@ -43,13 +43,6 @@ describe('parseHostMessage', () => {
     expect(parseHostMessage({ type: 'STATE', state })).toEqual({ type: 'STATE', state })
   })
 
-  test('accepts a buzz acknowledgement', () => {
-    expect(parseHostMessage({ type: 'BUZZ_ACCEPTED', playerId: 'p1' })).toEqual({
-      type: 'BUZZ_ACCEPTED',
-      playerId: 'p1',
-    })
-  })
-
   test('rejects garbage instead of throwing', () => {
     expect(parseHostMessage({ type: 'STATE' })).toBeNull()
     expect(parseHostMessage(undefined)).toBeNull()

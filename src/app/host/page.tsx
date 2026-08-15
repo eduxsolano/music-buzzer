@@ -1,8 +1,8 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
-import type { GameEvent } from '@/game/types'
-import { KEYBOARD_KEYS, eventForKey, keyboardPlayerId } from '@/host/keyboardPlayers'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import type { GameEvent, Player } from '@/game/types'
+import { KEYBOARD_KEYS, eventForKey, keyFromPlayerId, keyboardPlayerId } from '@/host/keyboardPlayers'
 import QRCode from 'qrcode'
 import { YouTubeStage } from '@/audio/youtubeIframes'
 import { pointsForTier } from '@/game/tiers'
@@ -25,18 +25,25 @@ function JoinQr({ room }: { room: string }) {
 }
 
 function KeyboardFallback({
+  players,
   dispatch,
   showRegistration,
 }: {
+  players: Player[]
   dispatch: (event: GameEvent) => void
   showRegistration: boolean
 }) {
-  const [keys, setKeys] = useState<string[]>([])
+  // Derived from the persisted players, not local state: the JOINs survive a
+  // host reload (they live in state.players), but a useState here would not,
+  // silently orphaning every keyboard buzzer for the rest of the game.
+  const keys = useMemo(
+    () => players.map((p) => keyFromPlayerId(p.id)).filter((key): key is string => key !== null),
+    [players],
+  )
 
   const register = useCallback(
     (key: string, name: string) => {
       dispatch({ type: 'JOIN', playerId: keyboardPlayerId(key), name })
-      setKeys((previous) => (previous.includes(key) ? previous : [...previous, key]))
     },
     [dispatch],
   )
@@ -83,7 +90,7 @@ function KeyboardFallback({
 }
 
 export default function HostPage() {
-  const { room, state, song, audioReady, dispatch, startGame, attachAudio, newGame } =
+  const { room, state, song, audioReady, channelError, dispatch, startGame, attachAudio, newGame } =
     useHostGame(songs)
   if (!room) return null
 
@@ -97,6 +104,8 @@ export default function HostPage() {
       <YouTubeStage onReady={attachAudio} />
 
       <section className="flex flex-col items-center justify-center gap-8 p-10 text-center">
+        {channelError && <p className="text-rose-400">{channelError}</p>}
+
         {state.phase.kind === 'lobby' && (
           <>
             <h1 className="text-6xl font-black">Sala {room}</h1>
@@ -177,7 +186,11 @@ export default function HostPage() {
           </>
         )}
 
-        <KeyboardFallback dispatch={dispatch} showRegistration={state.phase.kind === 'lobby'} />
+        <KeyboardFallback
+          players={state.players}
+          dispatch={dispatch}
+          showRegistration={state.phase.kind === 'lobby'}
+        />
       </section>
 
       <aside className="border-l border-slate-800 p-6">

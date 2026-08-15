@@ -14,12 +14,19 @@ import { clearGame, loadGame, saveGame } from '@/host/persistence'
 import { audioActionFor, snapshot, type AudioSnapshot } from '@/host/audioTransitions'
 
 const TICK_MS = 50
+const CHANNEL_ERROR_MESSAGE = 'No hay conexión con Supabase. Revisa las variables de entorno.'
 
 export function useHostGame(songs: Song[]) {
   const [room, setRoom] = useState<string | null>(null)
   const [state, setState] = useState<GameState>(initialState)
   // Starting before the iframes exist would play a silent round.
   const [audioReady, setAudioReady] = useState(false)
+  const [channelError, setChannelError] = useState<string | null>(null)
+  // Shuffled once the room is minted, not inside startGame: this gives the
+  // preload effect below the whole lobby to buffer the first song instead of
+  // racing a cold buffer the instant Start is pressed. The Start button stays
+  // gated on audioReady, so there is time.
+  const [pendingDeck, setPendingDeck] = useState<string[] | null>(null)
   const audioRef = useRef<AudioPlayer | null>(null)
   const channelRef = useRef<Channel | null>(null)
 
@@ -37,6 +44,16 @@ export function useHostGame(songs: Song[]) {
       setRoom(createRoomCode(Math.random))
     }
   }, [])
+
+  // Shuffle as soon as the lobby is entered (fresh room, or a reload that
+  // landed before Start was pressed), so its first song can be preloaded
+  // below well ahead of the Start click. Guarded on pendingDeck so this
+  // does not reshuffle on every render.
+  useEffect(() => {
+    if (!room || state.phase.kind !== 'lobby' || pendingDeck) return
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setPendingDeck(shuffle(songs.map((s) => s.id), Math.random))
+  }, [room, state.phase.kind, songs, pendingDeck])
 
   const dispatch = useCallback((event: GameEvent) => {
     setState((previous) => reduce(previous, event))
@@ -81,18 +98,27 @@ export function useHostGame(songs: Song[]) {
   // the reducer ignores every BUZZ after the first.
   useEffect(() => {
     if (!room) return
-    const channel = createSupabaseChannel(room)
+    let channel: Channel
+    try {
+      channel = createSupabaseChannel(room)
+    } catch {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setChannelError(CHANNEL_ERROR_MESSAGE)
+      return
+    }
     channelRef.current = channel
 
-    void channel.subscribe((raw) => {
-      const message = parsePlayerMessage(raw)
-      if (!message) return
-      if (message.type === 'JOIN') {
-        dispatch({ type: 'JOIN', playerId: message.playerId, name: message.name })
-      } else {
-        dispatch({ type: 'BUZZ', playerId: message.playerId })
-      }
-    })
+    channel
+      .subscribe((raw) => {
+        const message = parsePlayerMessage(raw)
+        if (!message) return
+        if (message.type === 'JOIN') {
+          dispatch({ type: 'JOIN', playerId: message.playerId, name: message.name })
+        } else {
+          dispatch({ type: 'BUZZ', playerId: message.playerId })
+        }
+      })
+      .catch(() => setChannelError(CHANNEL_ERROR_MESSAGE))
 
     return () => {
       void channel.close()
@@ -107,7 +133,11 @@ export function useHostGame(songs: Song[]) {
     return () => clearInterval(id)
   }, [state.phase.kind, dispatch])
 
-  const song = useMemo(() => currentSong(state, songs), [state, songs])
+  // Keyed on currentSongId, not the whole `state`: state changes identity on
+  // every 50ms tick, and re-deriving `song` that often is pure waste since
+  // only a round change ever moves currentSongId.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const song = useMemo(() => currentSong(state, songs), [state.currentSongId, songs])
 
   // Audio follows the TRANSITION, not the phase: only that tells "start tier 2"
   // apart from "come back to tier 2 after a wrong answer".
@@ -145,23 +175,29 @@ export function useHostGame(songs: Song[]) {
     if (action === 'stop') audio.stop()
   }, [state.phase, song, audioReady])
 
-  // Buffer the next song while this one plays, so there is no dead air.
+  // Buffer the next song while this one plays, so there is no dead air. In
+  // the lobby the deck is still empty (it is only dealt into on START_GAME),
+  // so the song to preload there comes from pendingDeck instead — without
+  // this branch the very first song of the game would hit a cold buffer.
+  // `audioReady` is in the dependency array so this retries once the player
+  // attaches, matching the audio-transition effect above.
   useEffect(() => {
-    const next = songs.find((s) => s.id === state.deck[0])
+    const upcomingId = state.phase.kind === 'lobby' ? pendingDeck?.[0] : state.deck[0]
+    const next = songs.find((s) => s.id === upcomingId)
     if (next) void audioRef.current?.preload(next.videoId, next.startSeconds)
-  }, [state.deck, songs])
+  }, [state.phase.kind, state.deck, pendingDeck, songs, audioReady])
 
   const startGame = useCallback(() => {
-    const deck = shuffle(
-      songs.map((s) => s.id),
-      Math.random,
-    )
+    // pendingDeck is the exact deck whose first song was just preloaded
+    // above; dealing a different, freshly-shuffled deck here would preload
+    // one song and play another.
+    if (!pendingDeck) return
     dispatch({
       type: 'START_GAME',
-      deck,
-      roundsTotal: Math.min(DEFAULT_ROUNDS, deck.length),
+      deck: pendingDeck,
+      roundsTotal: Math.min(DEFAULT_ROUNDS, pendingDeck.length),
     })
-  }, [songs, dispatch])
+  }, [pendingDeck, dispatch])
 
   const attachAudio = useCallback((player: AudioPlayer) => {
     audioRef.current = player
@@ -173,5 +209,5 @@ export function useHostGame(songs: Song[]) {
     window.location.reload()
   }, [])
 
-  return { room, state, song, audioReady, dispatch, startGame, attachAudio, newGame }
+  return { room, state, song, audioReady, channelError, dispatch, startGame, attachAudio, newGame }
 }

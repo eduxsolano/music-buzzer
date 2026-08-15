@@ -62,8 +62,16 @@ describe('buttonState', () => {
     expect(buttonState(stateWith({ phase: 'playing' }), 'p1')).toBe('armed')
   })
 
-  test('is locked while somebody is being judged', () => {
+  test('is locked while somebody else is being judged', () => {
     expect(buttonState(stateWith({ phase: 'buzzed', buzzedPlayerId: 'p2' }), 'p1')).toBe('locked')
+  })
+
+  test('shows the win state for the player who pressed first', () => {
+    expect(buttonState(stateWith({ phase: 'buzzed', buzzedPlayerId: 'p1' }), 'p1')).toBe('won')
+  })
+
+  test('does not show the win state for anyone else, even while someone is winning', () => {
+    expect(buttonState(stateWith({ phase: 'buzzed', buzzedPlayerId: 'p1' }), 'p2')).toBe('locked')
   })
 
   test('shows elimination even while the song keeps playing for the others', () => {

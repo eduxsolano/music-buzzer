@@ -56,7 +56,7 @@ describe('judging a correct answer', () => {
     let state = gameWith(['ana'])
     state = reduce(state, { type: 'TICK', deltaMs: 4_999 })
     state = reduce(state, { type: 'BUZZ', playerId: 'ana' })
-    state = reduce(state, { type: 'TICK', deltaMs: 60_000 }) // el anfitrión se toma su tiempo
+    state = reduce(state, { type: 'TICK', deltaMs: 60_000 }) // the host takes their time
     state = reduce(state, { type: 'JUDGE', correct: true })
     expect(scoreOf(state, 'ana')).toBe(5)
     expect(state.phase).toEqual({ kind: 'revealed', outcome: 'correct', winnerId: 'ana' })
@@ -64,7 +64,7 @@ describe('judging a correct answer', () => {
 
   test('pressing just past the boundary is worth the next tier down', () => {
     let state = gameWith(['ana'])
-    state = reduce(state, { type: 'TICK', deltaMs: 5_000 }) // entra al tramo 2
+    state = reduce(state, { type: 'TICK', deltaMs: 5_000 }) // enters tier 2
     state = reduce(state, { type: 'BUZZ', playerId: 'ana' })
     state = reduce(state, { type: 'JUDGE', correct: true })
     expect(scoreOf(state, 'ana')).toBe(3)
@@ -105,7 +105,7 @@ describe('judging a wrong answer', () => {
   test('the audio resumes at the exact cut point, in the same tier', () => {
     let state = gameWith(['ana', 'beto'])
     state = reduce(state, { type: 'TICK', deltaMs: 5_000 })
-    state = reduce(state, { type: 'TICK', deltaMs: 3_000 }) // tramo 2, 3 s dentro
+    state = reduce(state, { type: 'TICK', deltaMs: 3_000 }) // tier 2, 3 s in
     state = reduce(state, { type: 'BUZZ', playerId: 'ana' })
     state = reduce(state, { type: 'JUDGE', correct: false })
     expect(state.phase).toEqual({ kind: 'playing', tier: 2, elapsedMs: 3_000 })
