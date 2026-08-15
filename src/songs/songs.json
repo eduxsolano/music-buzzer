@@ -5,7 +5,7 @@
     "title": "Smells Like Teen Spirit",
     "artist": "Nirvana",
     "year": 1991,
-    "startSeconds": 0
+    "startSeconds": 20
   },
   {
     "id": "billie-jean",
@@ -13,7 +13,7 @@
     "title": "Billie Jean",
     "artist": "Michael Jackson",
     "year": 1982,
-    "startSeconds": 0
+    "startSeconds": 30
   },
   {
     "id": "rolling-in-the-deep",
@@ -21,7 +21,7 @@
     "title": "Rolling in the Deep",
     "artist": "Adele",
     "year": 2010,
-    "startSeconds": 0
+    "startSeconds": 15
   },
   {
     "id": "despacito",
@@ -29,7 +29,7 @@
     "title": "Despacito",
     "artist": "Luis Fonsi",
     "year": 2017,
-    "startSeconds": 0
+    "startSeconds": 42
   },
   {
     "id": "bohemian-rhapsody",
@@ -37,6 +37,6 @@
     "title": "Bohemian Rhapsody",
     "artist": "Queen",
     "year": 1975,
-    "startSeconds": 0
+    "startSeconds": 175
   }
 ]

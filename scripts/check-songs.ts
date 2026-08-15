@@ -11,6 +11,7 @@
 import { readFileSync } from 'node:fs'
 import path from 'node:path'
 import { parseSongs } from '../src/songs/schema'
+import { isoDurationToSeconds } from '../src/songs/duration'
 import type { Song } from '../src/game/types'
 
 const LONGEST_TIER_SECONDS = 30
@@ -19,14 +20,6 @@ async function isEmbeddable(videoId: string): Promise<boolean> {
   const url = `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`
   const response = await fetch(url)
   return response.ok
-}
-
-/** ISO-8601 duration as returned by the YouTube Data API, e.g. "PT4M33S". */
-function isoDurationToSeconds(iso: string): number {
-  const match = /^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/.exec(iso)
-  if (!match) return 0
-  const [, h, m, s] = match
-  return Number(h ?? 0) * 3600 + Number(m ?? 0) * 60 + Number(s ?? 0)
 }
 
 async function durationSeconds(videoId: string, apiKey: string): Promise<number | null> {
@@ -56,6 +49,13 @@ async function checkSong(song: Song, apiKey: string | undefined): Promise<string
         `too short: ${seconds}s, needs more than ${song.startSeconds + LONGEST_TIER_SECONDS}s`,
       )
     }
+  }
+
+  if (song.year === 0) {
+    problems.push('year not filled in yet (imported songs start at 0)')
+  }
+  if (song.startSeconds === 0) {
+    problems.push('startSeconds still 0 — pick the moment the song becomes recognisable')
   }
 
   return problems

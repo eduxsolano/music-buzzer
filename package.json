@@ -10,7 +10,8 @@
     "lint": "eslint",
     "test": "vitest run",
     "test:watch": "vitest",
-    "check-songs": "tsx scripts/check-songs.ts"
+    "check-songs": "tsx scripts/check-songs.ts",
+    "import-playlist": "tsx scripts/import-playlist.ts"
   },
   "dependencies": {
     "next": "16.3.1",
