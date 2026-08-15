@@ -65,6 +65,10 @@ describe('toPublicState', () => {
     pub = toPublicState(state)
     expect(pub.outcome).toBe('allWrong')
     expect(pub.winnerId).toBeNull()
+    // "Elimination applies to the current song only" is a frozen rule; this is
+    // its direct test at this layer — reports who is eliminated from the
+    // current song.
+    expect(pub.lockedOut).toEqual(['ana'])
   })
 
   test('says what a press is worth right now', () => {

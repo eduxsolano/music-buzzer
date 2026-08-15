@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { clearGame, loadGame, saveGame } from '@/host/persistence'
+import { SAVE_VERSION, clearGame, loadGame, saveGame } from '@/host/persistence'
 import { initialState, reduce } from '@/game/reducer'
 
 class MemoryStorage implements Storage {
@@ -51,6 +51,66 @@ describe('host persistence', () => {
     const storage = new MemoryStorage()
     saveGame(storage, 'KZTR', initialState())
     clearGame(storage)
+    expect(loadGame(storage)).toBeNull()
+  })
+
+  test('discards a save with no version at all, which is every save from before versioning existed', () => {
+    const storage = new MemoryStorage()
+    storage.setItem(
+      'hitster:host',
+      JSON.stringify({ room: 'KZTR', state: initialState() }),
+    )
+    expect(loadGame(storage)).toBeNull()
+  })
+
+  test('discards a save whose version does not match the current one', () => {
+    const storage = new MemoryStorage()
+    storage.setItem(
+      'hitster:host',
+      JSON.stringify({ version: 999, room: 'KZTR', state: initialState() }),
+    )
+    expect(loadGame(storage)).toBeNull()
+  })
+
+  // Regression guard for the production incident: the host crashed on load
+  // with `Error: Unknown tier: undefined` from `tierConfig`, because an older
+  // build's `buzzed` phase carried `tier` directly instead of the current
+  // `worthTier` / `launchTier` / `resumeAtMs` triple. This is the literal
+  // payload read out of the deployed browser's localStorage.
+  test('regression: never throws on the obsolete buzzed-phase payload that crashed production', () => {
+    const storage = new MemoryStorage()
+    storage.setItem(
+      'hitster:host',
+      JSON.stringify({
+        room: 'KZTR',
+        state: {
+          players: [{ id: 'p1', name: 'Ana', score: 0 }],
+          deck: [],
+          currentSongId: 's1',
+          roundsPlayed: 1,
+          roundsTotal: 20,
+          lockedOut: [],
+          phase: { kind: 'buzzed', tier: 1, elapsedMs: 1350, playerId: 'p1' },
+        },
+      }),
+    )
+    expect(() => loadGame(storage)).not.toThrow()
+    expect(loadGame(storage)).toBeNull()
+  })
+
+  test('discards a save whose phase is structurally wrong, even under a matching version', () => {
+    const storage = new MemoryStorage()
+    storage.setItem(
+      'hitster:host',
+      JSON.stringify({
+        version: SAVE_VERSION,
+        room: 'KZTR',
+        state: {
+          ...initialState(),
+          phase: { kind: 'buzzed', tier: 1, elapsedMs: 1350, playerId: 'p1' },
+        },
+      }),
+    )
     expect(loadGame(storage)).toBeNull()
   })
 })

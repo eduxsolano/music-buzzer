@@ -62,7 +62,11 @@ acaba de sonar**, no del que está por venir.
 
 Los límites son cerrados por abajo y abiertos por arriba, medidos sobre el
 segundo de reproducción del tramo en curso: una pulsación en 4.999 s del tramo
-1 vale 5 puntos y una en 5.000 s ya pertenece al tramo siguiente.
+1 suena todavía dentro del tramo 1 y vale sus 5 puntos. En 5.000 s el tramo 1
+**termina de sonar** — ahí acaba su reproducción —, pero eso no cambia lo que
+vale una pulsación: la ronda pasa a esperando y, como toda pulsación durante
+la espera, sigue valiendo los 5 puntos del tramo que acaba de sonar (ver más
+abajo), no los del tramo 2.
 
 Si termina el tramo 3 sin pulsaciones, se revela la canción y nadie puntúa.
 

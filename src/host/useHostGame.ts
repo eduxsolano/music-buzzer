@@ -77,6 +77,22 @@ export function useHostGame(songs: Song[]) {
   // the reason a message goes out. One message per tier, and each phone
   // counts down locally from it.
   const lastPublishedRef = useRef<string | null>(null)
+  // A JOIN is a request to be told the current state, not merely a state
+  // change: for a player the host already knows, JOIN produces a
+  // byte-identical projection (same players, same phase), so the equality
+  // throttle below would otherwise swallow it and the phone would wait for
+  // some unrelated future phase change to ever hear back — indefinitely, if
+  // one lands mid-`waiting`. Set by the subscribe effect whenever a JOIN
+  // arrives; consumed (and cleared) the next time this effect runs.
+  //
+  // This cannot become a publish storm: it only ever forces ONE publish per
+  // JOIN actually received, and the phone that sends JOIN already throttles
+  // its own re-announcements to one per REJOIN_INTERVAL_MS (2s, see
+  // src/app/play/page.tsx). So even a room where every phone re-announces at
+  // once is bounded at (phone count) publishes per 2s — no second throttle is
+  // added here on purpose, per the same reasoning that keeps this file from
+  // duplicating the phone's own retry logic.
+  const forceNextPublishRef = useRef(false)
   useEffect(() => {
     if (!room) return
     saveGame(window.localStorage, room, state)
@@ -84,19 +100,21 @@ export function useHostGame(songs: Song[]) {
     // Effects run in declaration order, and the channel-creation effect below
     // is declared after this one. On the very first render where `room`
     // becomes non-null, both effects fire in the same flush, so the channel
-    // does not exist yet here. Bail out WITHOUT touching lastPublishedRef: if
-    // we recorded this state as "published" while it never left the page, the
-    // throttle above would then treat the next genuinely-sendable identical
-    // state as a duplicate and swallow it too. The next state change (a tick,
-    // a JOIN) re-runs this effect with the channel in place, so nothing is
-    // lost — only delayed.
+    // does not exist yet here. Bail out WITHOUT touching lastPublishedRef (or
+    // consuming forceNextPublishRef): if we recorded this state as
+    // "published" while it never left the page, the throttle above would
+    // then treat the next genuinely-sendable identical state as a duplicate
+    // and swallow it too. The next state change (a tick, a JOIN) re-runs this
+    // effect with the channel in place, so nothing is lost — only delayed.
     const channel = channelRef.current
     if (!channel) return
 
     const publicState = toPublicState(state)
     const serialized = JSON.stringify(publicState)
-    if (serialized === lastPublishedRef.current) return
+    const forced = forceNextPublishRef.current
+    if (serialized === lastPublishedRef.current && !forced) return
     lastPublishedRef.current = serialized
+    forceNextPublishRef.current = false
     void channel.publish({ type: 'STATE', state: withCountdown(publicState, state.phase) })
   }, [room, state])
 
@@ -119,6 +137,9 @@ export function useHostGame(songs: Song[]) {
         const message = parsePlayerMessage(raw)
         if (!message) return
         if (message.type === 'JOIN') {
+          // See forceNextPublishRef above: a JOIN always earns a reply, even
+          // when it changes nothing the equality throttle would notice.
+          forceNextPublishRef.current = true
           dispatch({ type: 'JOIN', playerId: message.playerId, name: message.name })
         } else {
           dispatch({ type: 'BUZZ', playerId: message.playerId })
