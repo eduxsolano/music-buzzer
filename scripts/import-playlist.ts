@@ -4,9 +4,11 @@
  * Fills videoId, title and a guessed artist. startSeconds is set to a fixed
  * default (past most intros) so the deck is playable immediately; year is
  * looked up on MusicBrainz — release groups first (their own reconciled
- * "work first came out" date), individual recordings as a fallback — and
- * left at 0 — pending review — whenever neither is confident. Every run
- * also retries MusicBrainz for any song
+ * "work first came out" date), with the recording search used both as a
+ * fallback and, whenever the release group's only support is a Single (see
+ * src/songs/musicbrainz.ts's combineYearSources), as required corroboration
+ * before that date is trusted — and left at 0 — pending review — whenever
+ * nothing confident survives. Every run also retries MusicBrainz for any song
  * already in the deck that is still pending a year, not just newly added
  * ones, so rerunning the importer is how a better matcher (or a transient
  * MusicBrainz error) gets a second chance. A stored year is never trusted
@@ -28,10 +30,12 @@ import {
   buildReleaseGroupQuery,
   chooseYear,
   chooseYearFromReleaseGroups,
+  combineYearSources,
   toCandidate,
   toReleaseGroupCandidate,
   type MusicBrainzRecording,
   type MusicBrainzReleaseGroup,
+  type ReleaseGroupYearResult,
 } from '../src/songs/musicbrainz'
 import type { Song } from '../src/game/types'
 
@@ -96,23 +100,26 @@ async function fetchMusicBrainzJson(url: URL): Promise<unknown | null> {
  * Primary source: MusicBrainz's own reconciliation of every edition of a
  * work into one release group, whose first-release-date is already the
  * earliest of those editions — see chooseYearFromReleaseGroups for why
- * that beats asking about individual recordings.
+ * that beats asking about individual recordings, and for why its result is
+ * a claim rather than a final answer when singleTypeOnly is true.
  */
-async function lookupYearFromReleaseGroups(artist: string, title: string): Promise<number> {
+async function lookupYearFromReleaseGroups(artist: string, title: string): Promise<ReleaseGroupYearResult> {
   const url = new URL('https://musicbrainz.org/ws/2/release-group/')
   url.searchParams.set('query', buildReleaseGroupQuery(artist, title))
   url.searchParams.set('fmt', 'json')
   url.searchParams.set('limit', String(MUSICBRAINZ_SEARCH_LIMIT))
 
   const body = (await fetchMusicBrainzJson(url)) as { 'release-groups'?: MusicBrainzReleaseGroup[] } | null
-  if (!body) return 0
+  if (!body) return { year: 0, singleTypeOnly: false }
   const candidates = (body['release-groups'] ?? []).map(toReleaseGroupCandidate)
   return chooseYearFromReleaseGroups(candidates, artist, title)
 }
 
 /**
- * Fallback source, used only when no release group answers confidently
- * (e.g. MusicBrainz has no clean release group for the song at all).
+ * Secondary source: sees every individual recording of the song regardless
+ * of which release or release group it belongs to, including an earlier
+ * album appearance a title-based release-group search cannot find — see
+ * combineYearSources for exactly how the two are reconciled.
  */
 async function lookupYearFromRecordings(artist: string, title: string): Promise<number> {
   const url = new URL('https://musicbrainz.org/ws/2/recording/')
@@ -128,18 +135,26 @@ async function lookupYearFromRecordings(artist: string, title: string): Promise<
 
 /**
  * Thin network call: the matching logic lives in src/songs/musicbrainz.ts.
- * Tries the release-group search first; only spends a second request on
- * the noisier recording search when the release group approach found
- * nothing confident to say. The sleep between the two keeps every request
- * this makes at least MUSICBRAINZ_DELAY_MS apart, whether it is the second
- * request for this song or the first request for the next one.
+ * Always asks the release-group search first. The recording search is
+ * skipped only when the release group already answered with an Album/EP
+ * behind it (combineYearSources trusts that outright) — every other case,
+ * including no release-group answer at all, spends the second request:
+ * a Single-only release-group year is a claim, not an answer, until the
+ * recording search either fails to contradict it or actively confirms an
+ * earlier date (see combineYearSources). The sleep before that second
+ * request keeps every request this makes at least MUSICBRAINZ_DELAY_MS
+ * apart, whether it is the second request for this song or the first
+ * request for the next one.
  */
 async function lookupYear(artist: string, title: string): Promise<number> {
   const fromReleaseGroups = await lookupYearFromReleaseGroups(artist, title)
-  if (fromReleaseGroups > 0) return fromReleaseGroups
+  if (fromReleaseGroups.year > 0 && !fromReleaseGroups.singleTypeOnly) {
+    return fromReleaseGroups.year
+  }
 
   await sleep(MUSICBRAINZ_DELAY_MS)
-  return lookupYearFromRecordings(artist, title)
+  const fromRecordings = await lookupYearFromRecordings(artist, title)
+  return combineYearSources(fromReleaseGroups, fromRecordings)
 }
 
 interface PlaylistItem {

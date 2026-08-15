@@ -315,6 +315,23 @@ export function chooseYear(
 }
 
 /**
+ * chooseYearFromReleaseGroups's result. `singleTypeOnly` is what tells the
+ * caller whether `year` needs corroboration before it can be trusted — see
+ * combineYearSources for what that means and why.
+ */
+export interface ReleaseGroupYearResult {
+  year: number
+  /**
+   * True when every clean, matching candidate that contributed to `year`
+   * was typed Single — no Album or EP among them to vouch that this is the
+   * work's own first context rather than a later single promotion of a
+   * song that already existed on an album under a different title.
+   * Meaningless when `year` is 0.
+   */
+  singleTypeOnly: boolean
+}
+
+/**
  * Picks a year from release groups — MusicBrainz's own reconciliation of
  * every edition of a work into one entity, whose `first-release-date` is
  * already computed on their side as the earliest of those editions. This
@@ -334,25 +351,45 @@ export function chooseYear(
  *      type, i.e. not a live album, remix bundle, compilation or
  *      soundtrack tie-in that happens to share a title and artist.
  *
- * Unlike chooseYear, a *single* clean, matching candidate is trusted: its
- * date is not one arbitrary recording's denormalized field, it is
- * MusicBrainz's own reconciled minimum across that release group's
- * editions, which is a fundamentally stronger claim than a lone recording
- * date ever was. When more than one clean candidate matches (e.g. a
- * separate Album and Single release group for the same song) and they
- * disagree by more than MAX_YEAR_SPREAD, that is still treated as
- * unreliable and falls back to 0 — the same "ambiguity resolves to 0"
- * rule as everywhere else. Confirmed live: MusicBrainz can have no clean
- * release group for a song at all (e.g. "Kendrick Lamar" / "luther" has
- * exactly one, mistyped "Other" with a date eight months later than the
- * real release) — that correctly returns 0 here rather than trusting it,
+ * Unlike chooseYear, a *single* clean, matching candidate can still
+ * produce a year here (`years.length === 0` is the only bar, not
+ * MIN_DATED_MATCHES): its date is not one arbitrary recording's
+ * denormalized field, it is MusicBrainz's own reconciled minimum across
+ * that release group's editions. But that is only true *within* a release
+ * group — it says nothing about whether this is the work's earliest
+ * release group. A release group titled after the song can only be found
+ * by searching for the song's title; a release group titled after an
+ * *album* the song first appeared on cannot, because our query never
+ * mentions the album's name. When the only clean matches are typed
+ * Single, this function has no way to know whether it is looking at the
+ * song's true original single or a later single promotion of an existing
+ * album track — three confirmed, live-verified wrong years reached
+ * production this way: "Cruel Summer" (single 2023, but track 2 on
+ * *Lover*, 2019), "House Tour" (single-era release group 2026, but on
+ * *Man's Best Friend*, 2025), and "party 4 u" (radio re-release 2025,
+ * but track 9 on *How I'm Feeling Now*, 2020) — all three a TikTok/radio
+ * resurgence years after the song's real debut. `singleTypeOnly` flags
+ * exactly this case so combineYearSources can demand corroboration
+ * instead of trusting it outright. An Album or EP release group does not
+ * have this problem: it is essentially never a later promotional
+ * repackaging of a song that debuted somewhere else, so it is trusted
+ * directly, same as before.
+ *
+ * When more than one clean candidate matches (e.g. a separate Album and
+ * Single release group for the same song, or several Single pressings)
+ * and they disagree by more than MAX_YEAR_SPREAD, that is treated as
+ * unreliable and falls back to `{ year: 0, singleTypeOnly: false }` — the
+ * same "ambiguity resolves to 0" rule as everywhere else. Confirmed live:
+ * MusicBrainz can have no clean release group for a song at all (e.g.
+ * "Kendrick Lamar" / "luther" has exactly one, mistyped "Other" with a
+ * date eight months later than the real release) — that also returns 0,
  * and the caller falls back to chooseYear's recording-based search.
  */
 export function chooseYearFromReleaseGroups(
   candidates: ReleaseGroupCandidate[],
   artist: string,
   title: string,
-): number {
+): ReleaseGroupYearResult {
   const wantTitle = normalize(stripFeatureCredit(cleanTitle(title)))
   const names = artistNames(artist).map(normalize)
   const isMultiArtist = names.length > 1
@@ -370,10 +407,89 @@ export function chooseYearFromReleaseGroups(
     return normalize(primaryArtist(c.artistCredit)) === names[0]
   })
 
-  const years = matches.map((c) => extractYear(c.firstReleaseDate)).filter((y) => y > 0)
-  if (years.length === 0) return 0
+  const dated = matches.filter((c) => extractYear(c.firstReleaseDate) > 0)
+  if (dated.length === 0) return { year: 0, singleTypeOnly: false }
 
+  const years = dated.map((c) => extractYear(c.firstReleaseDate))
   const earliest = Math.min(...years)
   const latest = Math.max(...years)
-  return latest - earliest <= MAX_YEAR_SPREAD ? earliest : 0
+  if (latest - earliest > MAX_YEAR_SPREAD) return { year: 0, singleTypeOnly: false }
+
+  const singleTypeOnly = dated.every((c) => c.primaryType === 'Single')
+  return { year: earliest, singleTypeOnly }
+}
+
+/**
+ * Combines the release-group and recording-search sources into the one
+ * final year, without ever guessing which of two disagreeing sources to
+ * believe. Each source is strong where the other is weak:
+ *
+ * - Release groups reconcile every edition of a work MusicBrainz can find
+ *   *under that work's own title* into one entity, sidestepping the
+ *   fragmentation across individual recordings that made a lone reissue
+ *   date look like fact (see chooseYearFromReleaseGroups). Their blind
+ *   spot is a song that first appeared on an album and was only later
+ *   promoted to a standalone single — the album's release group is
+ *   titled after the album, not the song, so the search for it never
+ *   finds that earlier, truer date at all. `singleTypeOnly` names exactly
+ *   the release-group results exposed to this blind spot.
+ * - The recording search sees every *recording* of the song regardless of
+ *   which release or release group it belongs to — including an earlier
+ *   album appearance a title-based release-group search would miss. Its
+ *   own weakness is the opposite one: individual recordings fragment
+ *   across remasters, live takes and reissues, and chooseYear's own
+ *   MIN_DATED_MATCHES/MAX_YEAR_SPREAD checks already guard against a lone
+ *   stray date — but they do not guard against a single *mistagged*
+ *   reissue date sitting close enough to the real dates to still pass
+ *   those checks and drag the "earliest" answer down to a wrong year.
+ *
+ * An Album/EP-backed release-group year needs no corroboration and is
+ * returned as-is (never the problem; see chooseYearFromReleaseGroups). A
+ * Single-only release-group year is not trusted alone — it is a *claim*.
+ * An earlier version of this function resolved that claim by trusting
+ * whichever source was earlier, on the theory that an earlier recording-
+ * search year is evidence of an earlier album appearance the release
+ * group could not see. That fixed "Cruel Summer" and "party 4 u" — and
+ * broke "Alex Warren" / "Ordinary": MusicBrainz has a recording dated
+ * 2024-09-27, matching the release date of an EP Warren's team later
+ * confirmed did NOT originally include this track (Wikipedia: "Ordinary"
+ * was a standalone single released 2025-02-07 and only added to a later
+ * digital reissue of that EP); the 2025 release group was actually
+ * correct, and "prefer earlier" silently downgraded it to the wrong 2024.
+ * That earlier recording-search year passed chooseYear's own corroboration
+ * (multiple matches, spread within cap) just as convincingly as the
+ * correct "Cruel Summer" case did — there is no data-only signal here
+ * that tells a genuine earlier album appearance apart from a mistagged
+ * reissue release whose date got copied from an earlier edition. Because
+ * that distinction cannot be made reliably from this data, this function
+ * now treats *any* disagreement as unresolvable ambiguity rather than
+ * picking a side:
+ *
+ *   - No confident recording-search year at all: the Single claim stays
+ *     uncorroborated. Result: 0.
+ *   - A confident recording-search year strictly earlier than the release
+ *     group's: two independent sources disagree, and there is no reliable
+ *     way to tell which one is right. Result: 0 — not the earlier value,
+ *     not the release group's either.
+ *   - A confident recording-search year equal to or later than the
+ *     release group's: nothing contradicts the release group's date, so
+ *     it stands.
+ *
+ * The cost is real: this converts every confirmed real case above,
+ * including the ones this function used to fix ("Cruel Summer", "party
+ * 4 u"), into 0 instead of their correct year, on top of every case it
+ * always converted to 0 (an uncorroborated Single with no recording-search
+ * data at all, e.g. "Kendrick Lamar" / "luther" was one before its
+ * release-group year was 0 in the first place). That is the accepted
+ * trade: coverage is expendable, and a wrong year that passed every
+ * confidence check available is exactly the failure this whole function
+ * exists to prevent.
+ */
+export function combineYearSources(releaseGroupResult: ReleaseGroupYearResult, recordingYear: number): number {
+  if (releaseGroupResult.year === 0) return recordingYear
+  if (!releaseGroupResult.singleTypeOnly) return releaseGroupResult.year
+
+  if (recordingYear === 0) return 0
+  if (recordingYear < releaseGroupResult.year) return 0
+  return releaseGroupResult.year
 }

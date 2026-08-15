@@ -5,6 +5,7 @@ import {
   buildReleaseGroupQuery,
   chooseYear,
   chooseYearFromReleaseGroups,
+  combineYearSources,
   extractYear,
   primaryArtist,
   stripFeatureCredit,
@@ -364,7 +365,18 @@ describe('chooseYearFromReleaseGroups', () => {
     // Real MusicBrainz data for this exact query: the true 1991 single is
     // the only release group that is both an exact title match and a
     // plain Single with no secondary type.
-    expect(chooseYearFromReleaseGroups([clean({})], 'Nirvana', 'Smells Like Teen Spirit')).toBe(1991)
+    expect(chooseYearFromReleaseGroups([clean({})], 'Nirvana', 'Smells Like Teen Spirit')).toEqual({
+      year: 1991,
+      singleTypeOnly: true,
+    })
+  })
+
+  test('flags singleTypeOnly false when an Album/EP candidate contributes', () => {
+    const candidates = [clean({ primaryType: 'Album' })]
+    expect(chooseYearFromReleaseGroups(candidates, 'Nirvana', 'Smells Like Teen Spirit')).toEqual({
+      year: 1991,
+      singleTypeOnly: false,
+    })
   })
 
   test('ignores a release group with a secondary type, e.g. a compilation reissue', () => {
@@ -380,7 +392,7 @@ describe('chooseYearFromReleaseGroups', () => {
         secondaryTypes: ['Compilation'],
       }),
     ]
-    expect(chooseYearFromReleaseGroups(candidates, 'Queen', 'Bohemian Rhapsody')).toBe(1975)
+    expect(chooseYearFromReleaseGroups(candidates, 'Queen', 'Bohemian Rhapsody').year).toBe(1975)
   })
 
   test('ignores a release group whose primary type is not Single/Album/EP', () => {
@@ -389,12 +401,12 @@ describe('chooseYearFromReleaseGroups', () => {
     // eight months after the real 2024-11-22 release). Rejecting it here
     // is what lets the caller correctly fall back to the recording search.
     const candidates = [clean({ primaryType: 'Other', firstReleaseDate: '2025-04-11' })]
-    expect(chooseYearFromReleaseGroups(candidates, 'Nirvana', 'Smells Like Teen Spirit')).toBe(0)
+    expect(chooseYearFromReleaseGroups(candidates, 'Nirvana', 'Smells Like Teen Spirit').year).toBe(0)
   })
 
   test('ignores a title match with no type info at all (undefined primaryType)', () => {
     const candidates = [clean({ primaryType: undefined })]
-    expect(chooseYearFromReleaseGroups(candidates, 'Nirvana', 'Smells Like Teen Spirit')).toBe(0)
+    expect(chooseYearFromReleaseGroups(candidates, 'Nirvana', 'Smells Like Teen Spirit').year).toBe(0)
   })
 
   test('requires every credited name for a multi-performer release group, not just the primary', () => {
@@ -405,7 +417,7 @@ describe('chooseYearFromReleaseGroups', () => {
         firstReleaseDate: '2026-04-18',
       }),
     ]
-    expect(chooseYearFromReleaseGroups(candidates, 'Lady Gaga, Bruno Mars', 'Die With A Smile')).toBe(0)
+    expect(chooseYearFromReleaseGroups(candidates, 'Lady Gaga, Bruno Mars', 'Die With A Smile').year).toBe(0)
   })
 
   test('trusts a single clean, fully co-credited release group for a collaboration', () => {
@@ -416,30 +428,90 @@ describe('chooseYearFromReleaseGroups', () => {
         firstReleaseDate: '2024-08-16',
       }),
     ]
-    expect(chooseYearFromReleaseGroups(candidates, 'Lady Gaga, Bruno Mars', 'Die With A Smile')).toBe(2024)
+    expect(chooseYearFromReleaseGroups(candidates, 'Lady Gaga, Bruno Mars', 'Die With A Smile').year).toBe(2024)
   })
 
   test('takes the earliest when two clean release groups agree closely, e.g. single and album', () => {
     const candidates = [clean({ firstReleaseDate: '1991-09-10' }), clean({ firstReleaseDate: '1991-09-24' })]
-    expect(chooseYearFromReleaseGroups(candidates, 'Nirvana', 'Smells Like Teen Spirit')).toBe(1991)
+    expect(chooseYearFromReleaseGroups(candidates, 'Nirvana', 'Smells Like Teen Spirit').year).toBe(1991)
   })
 
   test('returns 0 when clean release groups disagree by more than the spread cap', () => {
     const candidates = [clean({ firstReleaseDate: '1975-01-01' }), clean({ firstReleaseDate: '2000-01-01' })]
-    expect(chooseYearFromReleaseGroups(candidates, 'Nirvana', 'Smells Like Teen Spirit')).toBe(0)
+    expect(chooseYearFromReleaseGroups(candidates, 'Nirvana', 'Smells Like Teen Spirit').year).toBe(0)
   })
 
   test('returns 0 when there are no candidates', () => {
-    expect(chooseYearFromReleaseGroups([], 'Nirvana', 'Smells Like Teen Spirit')).toBe(0)
+    expect(chooseYearFromReleaseGroups([], 'Nirvana', 'Smells Like Teen Spirit').year).toBe(0)
   })
 
   test('returns 0 when the title does not match', () => {
     const candidates = [clean({ title: 'A Completely Different Song' })]
-    expect(chooseYearFromReleaseGroups(candidates, 'Nirvana', 'Smells Like Teen Spirit')).toBe(0)
+    expect(chooseYearFromReleaseGroups(candidates, 'Nirvana', 'Smells Like Teen Spirit').year).toBe(0)
   })
 
   test('ignores a very low relevance score even if everything else matches', () => {
     const candidates = [clean({ score: 10 })]
-    expect(chooseYearFromReleaseGroups(candidates, 'Nirvana', 'Smells Like Teen Spirit')).toBe(0)
+    expect(chooseYearFromReleaseGroups(candidates, 'Nirvana', 'Smells Like Teen Spirit').year).toBe(0)
+  })
+})
+
+describe('combineYearSources', () => {
+  test('trusts an Album/EP-backed release-group year with no corroboration needed', () => {
+    expect(combineYearSources({ year: 1975, singleTypeOnly: false }, 0)).toBe(1975)
+  })
+
+  test('falls back to the recording search entirely when the release group found nothing', () => {
+    expect(combineYearSources({ year: 0, singleTypeOnly: false }, 2010)).toBe(2010)
+    expect(combineYearSources({ year: 0, singleTypeOnly: false }, 0)).toBe(0)
+  })
+
+  test('returns 0 for a Single-only release-group year with no corroborating recording-search year', () => {
+    // The uncorroborated claim is not trusted alone, however clean it looked.
+    expect(combineYearSources({ year: 2026, singleTypeOnly: true }, 0)).toBe(0)
+  })
+
+  // Real case: "party 4 u" by Charli xcx. The release-group search finds
+  // only a Single release group dated 2025 (a radio re-release after a
+  // TikTok resurgence). The recording search sees the song's earlier
+  // appearance as track 9 on the 2020 album "How I'm Feeling Now" and
+  // reports 2020. A wrong 2025 shipped here for real before this rule
+  // existed — a five-year gap that is unmistakable once caught — but so
+  // did "prefer the earlier of the two" as a first attempt at a fix,
+  // until it also produced a *new* wrong year on "Alex Warren" / "Ordinary"
+  // (see combineYearSources's docstring for the full story). Two sources
+  // disagreeing on which year is earliest is exactly the ambiguity
+  // "resolves to 0, never a guess" was written for.
+  test('returns 0 rather than guess, when the two sources disagree on the year', () => {
+    expect(combineYearSources({ year: 2025, singleTypeOnly: true }, 2020)).toBe(0)
+  })
+
+  // Real case: "Alex Warren" / "Ordinary". The release-group search finds a
+  // clean Single dated 2025-02-07 (correct, per Wikipedia). The recording
+  // search finds a *corroborated* 2024-09-27 (multiple matches, spread
+  // within cap) that is nonetheless wrong — a mistagged reissue release
+  // whose date was copied from an earlier EP this song was not originally
+  // on. This is what proved "prefer the earlier source" unsafe: it cannot
+  // be told apart, from this data alone, from the genuinely-earlier "party
+  // 4 u" case above. Both now return 0.
+  test('returns 0 rather than guess, even when the recording search is itself internally corroborated', () => {
+    expect(combineYearSources({ year: 2025, singleTypeOnly: true }, 2024)).toBe(0)
+  })
+
+  test('keeps the Single-only release-group year when the recording search agrees', () => {
+    expect(combineYearSources({ year: 2024, singleTypeOnly: true }, 2024)).toBe(2024)
+  })
+
+  test('keeps the Single-only release-group year when the recording search finds something later', () => {
+    // No evidence contradicts the release group's date; a later recording
+    // search hit is more likely a remix/reissue than an earlier original,
+    // so this is not the same kind of disagreement as the two cases above.
+    expect(combineYearSources({ year: 2024, singleTypeOnly: true }, 2025)).toBe(2024)
+  })
+
+  test('never lets a Single-only release group beat an Album/EP one, since only the latter is trusted outright', () => {
+    // Sanity check on the overall shape: an Album/EP result short-circuits
+    // before the recording year is even consulted.
+    expect(combineYearSources({ year: 1991, singleTypeOnly: false }, 2015)).toBe(1991)
   })
 })
