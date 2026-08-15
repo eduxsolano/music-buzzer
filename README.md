@@ -3,7 +3,7 @@
 Juego de buzzer musical presencial. Suena un fragmento de una canción de
 YouTube y los jugadores compiten por pulsar primero desde su celular. Quien
 acierta título y artista puntúa: 5 puntos si pulsó en los primeros 5 segundos,
-3 en los primeros 10, 1 en los primeros 30. Fallar cuesta 1 punto y te deja
+3 en los primeros 10, 2 en los primeros 15. Fallar cuesta 1 punto y te deja
 fuera de esa canción.
 
 ## Montar una partida

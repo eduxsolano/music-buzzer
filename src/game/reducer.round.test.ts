@@ -109,7 +109,7 @@ describe('tier progression', () => {
     expect(state.phase).toEqual({ kind: 'waiting', worthTier: 2, launchTier: 3, resumeAtMs: 0 })
     state = reduce(state, { type: 'LAUNCH_TIER' })
     expect(state.phase).toMatchObject({ kind: 'playing', tier: 3 })
-    state = reduce(state, { type: 'TICK', deltaMs: 30_000 })
+    state = reduce(state, { type: 'TICK', deltaMs: 15_000 })
     expect(state.phase).toEqual({ kind: 'revealed', outcome: 'timeout', winnerId: null })
     expect(state.players[0].score).toBe(0)
   })

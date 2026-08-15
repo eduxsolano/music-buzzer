@@ -132,7 +132,7 @@ describe('pointsAtStake', () => {
   test('is the running tier while a song plays', () => {
     expect(pointsAtStake({ kind: 'playing', tier: 1, elapsedMs: 0 })).toBe(5)
     expect(pointsAtStake({ kind: 'playing', tier: 2, elapsedMs: 0 })).toBe(3)
-    expect(pointsAtStake({ kind: 'playing', tier: 3, elapsedMs: 0 })).toBe(1)
+    expect(pointsAtStake({ kind: 'playing', tier: 3, elapsedMs: 0 })).toBe(2)
   })
 
   test('is the tier just heard while the host holds the room', () => {

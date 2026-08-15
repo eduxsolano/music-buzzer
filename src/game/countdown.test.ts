@@ -6,7 +6,7 @@ describe('remainingTierMs', () => {
   test('drains as the tier plays', () => {
     expect(remainingTierMs({ kind: 'playing', tier: 1, elapsedMs: 0 })).toBe(5_000)
     expect(remainingTierMs({ kind: 'playing', tier: 1, elapsedMs: 1_800 })).toBe(3_200)
-    expect(remainingTierMs({ kind: 'playing', tier: 3, elapsedMs: 29_500 })).toBe(500)
+    expect(remainingTierMs({ kind: 'playing', tier: 3, elapsedMs: 14_500 })).toBe(500)
   })
 
   test('never goes negative, however far a tick overshot', () => {
@@ -58,7 +58,7 @@ describe('tierTotalMs', () => {
         launchTier: 3,
         resumeAtMs: 900,
       }),
-    ).toBe(30_000)
+    ).toBe(15_000)
   })
 
   test('agrees with the remainder it scales, so a ring can never read past full', () => {

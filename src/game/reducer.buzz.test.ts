@@ -98,7 +98,7 @@ describe('judging a correct answer', () => {
     expect(scoreOf(state, 'ana')).toBe(3)
   })
 
-  test('the third tier is worth one point', () => {
+  test('the third tier is worth two points', () => {
     let state = gameWith(['ana'])
     state = reduce(state, { type: 'TICK', deltaMs: 5_000 })
     state = reduce(state, { type: 'LAUNCH_TIER' })
@@ -106,7 +106,7 @@ describe('judging a correct answer', () => {
     state = reduce(state, { type: 'LAUNCH_TIER' })
     state = reduce(state, { type: 'BUZZ', playerId: 'ana' })
     state = reduce(state, { type: 'JUDGE', correct: true })
-    expect(scoreOf(state, 'ana')).toBe(1)
+    expect(scoreOf(state, 'ana')).toBe(2)
   })
 })
 

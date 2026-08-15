@@ -32,7 +32,7 @@ Estas cosas quedan explícitamente fuera de esta versión:
 | Hosting | Vercel | Sin instalar nada en la laptop, sin IPs de red local; el QR funciona incluso con datos móviles. |
 | Tiempo real | Supabase Realtime (canales broadcast) | Vercel no soporta WebSockets. Supabase deja la puerta abierta a persistir listas más adelante. |
 | Autoridad del juego | La página del anfitrión | Elimina backend y base de datos. Un solo árbitro del orden de pulsaciones. |
-| Puntuación | Por tramo: 5 / 3 / 1 | Premia la velocidad, que es el objetivo declarado del juego. |
+| Puntuación | Por tramo: 5 / 3 / 2 | Premia la velocidad, que es el objetivo declarado del juego. |
 | Acierto válido | Título **y** artista, ambos | Exige saberse la canción de verdad. |
 | Fallo | −1 punto y eliminado de esa canción | Desincentiva pulsar a ciegas. |
 | Progresión de tramos | Reinicia desde el principio, más largo | El reconocimiento musical funciona sobre el mismo gancho con más contexto. |
@@ -50,10 +50,10 @@ mano por el anfitrión:
 |---|---|---|
 | 1 | de `startSeconds` a `startSeconds + 5` | 5 puntos |
 | 2 | de `startSeconds` a `startSeconds + 10` | 3 puntos |
-| 3 | de `startSeconds` a `startSeconds + 30` | 1 punto |
+| 3 | de `startSeconds` a `startSeconds + 15` | 2 puntos |
 
 Cada tramo **vuelve a empezar** en `startSeconds`, no continúa donde quedó el
-anterior. La canción suena unos 45 segundos en total si nadie pulsa.
+anterior. La canción suena unos 30 segundos en total si nadie pulsa.
 
 Entre un tramo y el siguiente la ronda queda **esperando**: la música para y
 el anfitrión decide cuándo suena el tramo siguiente. Los celulares siguen
@@ -133,8 +133,9 @@ de juegos.
 
 Un script `npm run check-songs` recorre `songs.json` y reporta, para cada
 canción: que el `videoId` exista, que el video permita embebido, y que su
-duración sea mayor que `startSeconds + 30`. Falla con código distinto de cero
-si alguna entrada no pasa, para poder engancharlo a CI más adelante.
+duración sea mayor que `startSeconds + 15` (la duración del tramo 3). Falla
+con código distinto de cero si alguna entrada no pasa, para poder engancharlo
+a CI más adelante.
 
 Existen videos que bloquean el embebido; descubrirlo en plena fiesta es el
 peor momento posible.
@@ -250,7 +251,7 @@ Pila: Next.js (App Router) + TypeScript + Tailwind. Sin rutas de API.
 **Motor de juego (unitarias, sin navegador).** Es la única parte donde una
 regla puede estar sutilmente mal y arruinar una partida:
 
-- Pulsar en el segundo 4.9 vale 5 puntos; en el 5.1, 3 puntos; en el 10.1, 1.
+- Pulsar en el segundo 4.9 vale 5 puntos; en el 5.1, 3 puntos; en el 10.1, 2.
 - El valor se fija al pulsar y no cambia aunque el juicio tarde.
 - Un fallo resta 1 punto, elimina a ese jugador de la canción y **no** afecta
   a los demás.
@@ -273,8 +274,8 @@ recargar la página del anfitrión.
 ## 8. Configuración
 
 Valores en un único módulo de configuración, para ajustarlos entre partidas
-sin tocar la lógica: duración de los tramos (5/10/30), puntos por tramo
-(5/3/1), penalización por fallo (−1) y número de canciones por partida (20).
+sin tocar la lógica: duración de los tramos (5/10/15), puntos por tramo
+(5/3/2), penalización por fallo (−1) y número de canciones por partida (20).
 
 Variables de entorno en Vercel: `NEXT_PUBLIC_SUPABASE_URL` y
 `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
@@ -307,7 +308,7 @@ eventos y devolviendo estado.
 - **El mazo es la playlist.** Sin importador, sin `songs.json`: se elige una
   playlist propia al empezar y ya está.
 - **Corte preciso.** El Web Playback SDK permite arrancar en `position_ms` y
-  pausar, así que los tramos de 5/10/30 s funcionan igual de bien.
+  pausar, así que los tramos de 5/10/15 s funcionan igual de bien.
 
 ### Lo que Spotify complica
 

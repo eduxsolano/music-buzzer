@@ -4,7 +4,9 @@
  * Always checked: the video exists and allows embedding (YouTube's oEmbed
  * endpoint returns 401/404 otherwise).
  * Only when YOUTUBE_API_KEY is set: the video is long enough for the third
- * tier, i.e. duration > startSeconds + 30.
+ * tier, i.e. duration > startSeconds + tierDurationMs(3) — read from
+ * src/game/config.ts so this check can never drift from the real tier
+ * durations.
  *
  * year and startSeconds both use 0 as a "needs a human" sentinel. The
  * importer never writes year: 0 unless MusicBrainz could not confirm it, and
@@ -22,9 +24,10 @@ import { readFileSync } from 'node:fs'
 import path from 'node:path'
 import { parseSongs } from '../src/songs/schema'
 import { isoDurationToSeconds } from '../src/songs/duration'
+import { tierDurationMs } from '../src/game/tiers'
 import type { Song } from '../src/game/types'
 
-const LONGEST_TIER_SECONDS = 30
+const LONGEST_TIER_SECONDS = tierDurationMs(3) / 1_000
 
 async function isEmbeddable(videoId: string): Promise<boolean> {
   const url = `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`

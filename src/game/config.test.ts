@@ -6,7 +6,7 @@ describe('config', () => {
     expect(TIERS).toEqual([
       { tier: 1, durationMs: 5_000, points: 5 },
       { tier: 2, durationMs: 10_000, points: 3 },
-      { tier: 3, durationMs: 30_000, points: 1 },
+      { tier: 3, durationMs: 15_000, points: 2 },
     ])
   })
 

@@ -148,7 +148,7 @@ describe('launchLabel', () => {
   it('names the duration of a tier nobody has heard yet', () => {
     expect(launchLabel(1, 0)).toBe('Sonar 5 segundos')
     expect(launchLabel(2, 0)).toBe('Sonar 10 segundos')
-    expect(launchLabel(3, 0)).toBe('Sonar 30 segundos')
+    expect(launchLabel(3, 0)).toBe('Sonar 15 segundos')
   })
 
   it('says it is picking up a cut tier rather than starting one', () => {
