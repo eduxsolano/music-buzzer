@@ -37,6 +37,10 @@ describe('cleanTitle', () => {
   test('collapses the whitespace left behind', () => {
     expect(cleanTitle('Song  (Official Video)   ')).toBe('Song')
   })
+
+  test('keeps a parenthetical whose words merely contain a keyword as a substring', () => {
+    expect(cleanTitle('Song (Happy Birthday Mix)')).toBe('Song (Happy Birthday Mix)')
+  })
 })
 
 describe('splitArtistAndTitle', () => {

@@ -36,4 +36,10 @@ describe('parseSongs', () => {
   test('rejects duplicate ids, which would break round tracking', () => {
     expect(() => parseSongs([valid, valid])).toThrow(/duplicate/i)
   })
+
+  test('rejects duplicate video ids even when the song ids differ, which would play the same song twice', () => {
+    expect(() =>
+      parseSongs([valid, { ...valid, id: 'billie-jean' }]),
+    ).toThrow(/duplicate.*hTWKbfoikeg/is)
+  })
 })

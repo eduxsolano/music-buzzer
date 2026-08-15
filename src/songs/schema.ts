@@ -40,10 +40,16 @@ export function parseSongs(raw: unknown): Song[] {
   if (!Array.isArray(raw)) throw new Error('The song list must be an array')
   const songs = raw.map(parseSong)
 
-  const seen = new Set<string>()
+  const seenIds = new Set<string>()
   for (const song of songs) {
-    if (seen.has(song.id)) throw new Error(`Duplicate song id: "${song.id}"`)
-    seen.add(song.id)
+    if (seenIds.has(song.id)) throw new Error(`Duplicate song id: "${song.id}"`)
+    seenIds.add(song.id)
+  }
+
+  const seenVideoIds = new Set<string>()
+  for (const song of songs) {
+    if (seenVideoIds.has(song.videoId)) throw new Error(`Duplicate video id: "${song.videoId}"`)
+    seenVideoIds.add(song.videoId)
   }
   return songs
 }

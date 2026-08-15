@@ -54,6 +54,8 @@ function toSong(item: PlaylistItem, takenIds: Set<string>): Song | null {
   if (rawTitle === 'Deleted video' || rawTitle === 'Private video') return null
 
   const { artist, title } = splitArtistAndTitle(rawTitle, item.snippet?.videoOwnerChannelTitle ?? '')
+  // A raw title that is nothing but promotional noise cleans down to nothing.
+  if (!title) return null
 
   let id = slugify(`${artist}-${title}`) || videoId.toLowerCase()
   let suffix = 2
@@ -86,7 +88,10 @@ async function main(): Promise<void> {
   for (const item of items) {
     if (knownVideoIds.has(item.snippet?.resourceId?.videoId ?? '')) continue
     const song = toSong(item, takenIds)
-    if (song) added.push(song)
+    if (!song) continue
+    added.push(song)
+    // A video repeated later in the same playlist must not be added twice.
+    knownVideoIds.add(song.videoId)
   }
 
   const merged = [...existing, ...added]

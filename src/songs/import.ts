@@ -1,6 +1,6 @@
 /** Bracketed segments that exist only to advertise the upload, not the song. */
 const PROMO_NOISE =
-  /\s*[([][^()[\]]*(?:official|video|audio|lyrics?|hd|hq|4k|8k|remaster(?:ed)?|mv|visuali[sz]er|full song)[^()[\]]*[)\]]/gi
+  /\s*[([][^()[\]]*\b(?:official|video|audio|lyrics?|hd|hq|4k|8k|remaster(?:ed)?|mv|visuali[sz]er|full song)\b[^()[\]]*[)\]]/gi
 
 const UNKNOWN_ARTIST = 'Desconocido'
 
