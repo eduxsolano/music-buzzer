@@ -1,0 +1,52 @@
+[
+  {
+    "id": "smells-like-teen-spirit",
+    "year": 1991,
+    "note": "Original hand-curated deck seed, predates automated import"
+  },
+  {
+    "id": "billie-jean",
+    "year": 1982,
+    "note": "Original hand-curated deck seed, predates automated import"
+  },
+  {
+    "id": "rolling-in-the-deep",
+    "year": 2010,
+    "note": "Original hand-curated deck seed, predates automated import"
+  },
+  {
+    "id": "despacito",
+    "year": 2017,
+    "note": "Original hand-curated deck seed, predates automated import"
+  },
+  {
+    "id": "bohemian-rhapsody",
+    "year": 1975,
+    "note": "Original hand-curated deck seed, predates automated import"
+  },
+  {
+    "id": "katy-perry-the-one-that-got-away",
+    "year": 2010,
+    "note": "External review vs Wikipedia/Discogs: track 7 on Teenage Dream (Aug 2010); MusicBrainz only finds the 2011 single promotion"
+  },
+  {
+    "id": "teddy-swims-the-door",
+    "year": 2023,
+    "note": "External review vs Wikipedia/Discogs: on I've Tried Everything but Therapy (Part 1) (Sep 2023); MusicBrainz only finds the 2024 single promotion"
+  },
+  {
+    "id": "charli-xcx-party-4-u",
+    "year": 2020,
+    "note": "External review vs Wikipedia/Discogs: track 9 on How I'm Feeling Now (May 2020); MusicBrainz only finds the 2025 TikTok-resurgence radio re-release"
+  },
+  {
+    "id": "alex-warren-ordinary",
+    "year": 2025,
+    "note": "External review vs Wikipedia: standalone single released 2025-02-07; MusicBrainz's recording search surfaces a mistagged 2024 EP reissue date for a track that EP did not originally include"
+  },
+  {
+    "id": "sabrina-carpenter-house-tour",
+    "year": 2025,
+    "note": "External review vs Wikipedia: on Man's Best Friend (2025); MusicBrainz only finds a 2026 single-era release group"
+  }
+]

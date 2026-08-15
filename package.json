@@ -11,7 +11,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "check-songs": "tsx --env-file-if-exists=.env.local scripts/check-songs.ts",
-    "import-playlist": "tsx --env-file-if-exists=.env.local scripts/import-playlist.ts"
+    "import-playlist": "tsx --env-file-if-exists=.env.local scripts/import-playlist.ts",
+    "reaudit-years": "tsx --env-file-if-exists=.env.local scripts/reaudit-years.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.3",

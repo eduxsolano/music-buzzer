@@ -18,144 +18,28 @@
  * src/songs/musicbrainz.ts). check-songs reports what is still pending
  * afterwards.
  *
+ * A song listed in src/songs/verified-years.json is never touched by any of
+ * the above: its year is a human's hand-verified fact, not a matcher guess,
+ * and it is excluded from both the pending and multi-performer lookups. If
+ * its stored value has drifted from the verified one (e.g. something wrote
+ * over it outside this script), it is restored and reported instead of
+ * silently left however it was found.
+ *
  * Run with: npm run import-playlist -- <playlist url or id>
  */
 import { readFileSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 import { parseSongs } from '../src/songs/schema'
 import { playlistIdFromInput, slugify, splitArtistAndTitle } from '../src/songs/import'
-import {
-  artistNames,
-  buildRecordingQuery,
-  buildReleaseGroupQuery,
-  chooseYear,
-  chooseYearFromReleaseGroups,
-  combineYearSources,
-  toCandidate,
-  toReleaseGroupCandidate,
-  type MusicBrainzRecording,
-  type MusicBrainzReleaseGroup,
-  type ReleaseGroupYearResult,
-} from '../src/songs/musicbrainz'
+import { artistNames } from '../src/songs/musicbrainz'
+import { parseVerifiedYears, verifiedYearsById } from '../src/songs/verified-years'
+import { lookupYear, sleep, MUSICBRAINZ_DELAY_MS } from './musicbrainz-client'
 import type { Song } from '../src/game/types'
 
 const PAGE_SIZE = 50
 
 /** Past most intros for popular music; imperfect, but far better than 0 (dead air). */
 const DEFAULT_START_SECONDS = 30
-
-/**
- * MusicBrainz's own policy: "All users of the API must ensure that each of
- * their client applications never make more than ONE call per second."
- * We wait a little longer than one second to stay safely clear of that.
- */
-const MUSICBRAINZ_DELAY_MS = 1100
-
-/**
- * MusicBrainz: "Each request sent to MusicBrainz needs to include a User-Agent
- * header, with enough information in the User-Agent for us (MusicBrainz) to
- * contact the application maintainers" — hence the app name, version and a
- * contact email below, not a generic/default library User-Agent.
- */
-const MUSICBRAINZ_USER_AGENT = 'HitsterBuzzer/0.1 (eduardoasolanog@gmail.com)'
-
-/**
- * MusicBrainz occasionally answers a well-behaved, one-per-second client
- * with a transient 503 (server-side load, not something we caused). Treating
- * that as "no match" would wrongly send a real song to manual review, so a
- * 503 gets a couple of backed-off retries before we give up on it.
- */
-const MUSICBRAINZ_MAX_ATTEMPTS = 3
-
-function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms))
-}
-
-/**
- * MusicBrainz's relevance ranking is not date-ordered, and a hot chart song
- * can have a dozen near-duplicate entries (singles, remixes, live takes,
- * even mistagged or vandalized ones); a low result count risks the correct
- * earliest recording simply not being in the page we look at.
- */
-const MUSICBRAINZ_SEARCH_LIMIT = 15
-
-/**
- * Fetches one MusicBrainz search URL, retrying a transient 503 (their own
- * signal for "you're overloading us right now", confirmed to happen even to
- * a well-behaved, spaced-out client — see MUSICBRAINZ_MAX_ATTEMPTS) with
- * backoff. Returns the parsed body, or null if every attempt failed.
- */
-async function fetchMusicBrainzJson(url: URL): Promise<unknown | null> {
-  for (let attempt = 1; attempt <= MUSICBRAINZ_MAX_ATTEMPTS; attempt += 1) {
-    const response = await fetch(url, { headers: { 'User-Agent': MUSICBRAINZ_USER_AGENT } })
-    if (response.ok) return response.json()
-    const canRetry = response.status === 503 && attempt < MUSICBRAINZ_MAX_ATTEMPTS
-    if (!canRetry) return null
-    await sleep(MUSICBRAINZ_DELAY_MS * attempt)
-  }
-  return null
-}
-
-/**
- * Primary source: MusicBrainz's own reconciliation of every edition of a
- * work into one release group, whose first-release-date is already the
- * earliest of those editions — see chooseYearFromReleaseGroups for why
- * that beats asking about individual recordings, and for why its result is
- * a claim rather than a final answer when singleTypeOnly is true.
- */
-async function lookupYearFromReleaseGroups(artist: string, title: string): Promise<ReleaseGroupYearResult> {
-  const url = new URL('https://musicbrainz.org/ws/2/release-group/')
-  url.searchParams.set('query', buildReleaseGroupQuery(artist, title))
-  url.searchParams.set('fmt', 'json')
-  url.searchParams.set('limit', String(MUSICBRAINZ_SEARCH_LIMIT))
-
-  const body = (await fetchMusicBrainzJson(url)) as { 'release-groups'?: MusicBrainzReleaseGroup[] } | null
-  if (!body) return { year: 0, singleTypeOnly: false }
-  const candidates = (body['release-groups'] ?? []).map(toReleaseGroupCandidate)
-  return chooseYearFromReleaseGroups(candidates, artist, title)
-}
-
-/**
- * Secondary source: sees every individual recording of the song regardless
- * of which release or release group it belongs to, including an earlier
- * album appearance a title-based release-group search cannot find — see
- * combineYearSources for exactly how the two are reconciled.
- */
-async function lookupYearFromRecordings(artist: string, title: string): Promise<number> {
-  const url = new URL('https://musicbrainz.org/ws/2/recording/')
-  url.searchParams.set('query', buildRecordingQuery(artist, title))
-  url.searchParams.set('fmt', 'json')
-  url.searchParams.set('limit', String(MUSICBRAINZ_SEARCH_LIMIT))
-
-  const body = (await fetchMusicBrainzJson(url)) as { recordings?: MusicBrainzRecording[] } | null
-  if (!body) return 0
-  const candidates = (body.recordings ?? []).map(toCandidate)
-  return chooseYear(candidates, artist, title)
-}
-
-/**
- * Thin network call: the matching logic lives in src/songs/musicbrainz.ts.
- * Always asks the release-group search first. The recording search is
- * skipped only when the release group already answered with an Album/EP
- * behind it (combineYearSources trusts that outright) — every other case,
- * including no release-group answer at all, spends the second request:
- * a Single-only release-group year is a claim, not an answer, until the
- * recording search either fails to contradict it or actively confirms an
- * earlier date (see combineYearSources). The sleep before that second
- * request keeps every request this makes at least MUSICBRAINZ_DELAY_MS
- * apart, whether it is the second request for this song or the first
- * request for the next one.
- */
-async function lookupYear(artist: string, title: string): Promise<number> {
-  const fromReleaseGroups = await lookupYearFromReleaseGroups(artist, title)
-  if (fromReleaseGroups.year > 0 && !fromReleaseGroups.singleTypeOnly) {
-    return fromReleaseGroups.year
-  }
-
-  await sleep(MUSICBRAINZ_DELAY_MS)
-  const fromRecordings = await lookupYearFromRecordings(artist, title)
-  return combineYearSources(fromReleaseGroups, fromRecordings)
-}
 
 interface PlaylistItem {
   snippet?: {
@@ -226,6 +110,9 @@ async function main(): Promise<void> {
   const knownVideoIds = new Set(existing.map((s) => s.videoId))
   const takenIds = new Set(existing.map((s) => s.id))
 
+  const verifiedFile = path.join(process.cwd(), 'src/songs/verified-years.json')
+  const verifiedById = verifiedYearsById(parseVerifiedYears(JSON.parse(readFileSync(verifiedFile, 'utf8'))))
+
   const items = await fetchPlaylistItems(playlistId, apiKey)
   const added: Song[] = []
   for (const item of items) {
@@ -241,6 +128,25 @@ async function main(): Promise<void> {
 
   const merged = [...existing, ...added]
 
+  // A song on the verified-years list is read-only for this script: its
+  // year is a human's hand-verified fact, never a matcher guess, so it is
+  // kept out of both groups below entirely. If its stored value has
+  // drifted from the verified one (an out-of-band process wrote over it —
+  // exactly the incident src/songs/verified-years.ts exists to stop), it
+  // is restored here and reported, not silently left wrong.
+  let restoredFromVerified = 0
+  for (const song of merged) {
+    const verified = verifiedById.get(song.id)
+    if (verified && song.year !== verified.year) {
+      console.warn(
+        `aviso: "${song.id}" tenía year=${song.year} pero está protegido en verified-years.json ` +
+          `con ${verified.year} (${verified.note}); restaurado.`,
+      )
+      song.year = verified.year
+      restoredFromVerified += 1
+    }
+  }
+
   // Two groups get a MusicBrainz lookup this run:
   //   - every song still pending a year, new or not — a rerun is how a
   //     better matcher (or a transient MusicBrainz hiccup) gets a second
@@ -251,8 +157,10 @@ async function main(): Promise<void> {
   //     confident year has actually happened (see chooseYear's docstring).
   //     Its year is reset to 0 before the lookup, so if the fixed matcher
   //     still can't confirm it, it lands on 0 — never keeps a stale value.
-  const pending = merged.filter((s) => s.year === 0)
-  const multiArtistToRecheck = merged.filter((s) => s.year !== 0 && artistNames(s.artist).length > 1)
+  const pending = merged.filter((s) => s.year === 0 && !verifiedById.has(s.id))
+  const multiArtistToRecheck = merged.filter(
+    (s) => s.year !== 0 && artistNames(s.artist).length > 1 && !verifiedById.has(s.id),
+  )
   const beforeYear = new Map(multiArtistToRecheck.map((s) => [s.id, s.year]))
   for (const song of multiArtistToRecheck) song.year = 0
 
@@ -292,6 +200,9 @@ async function main(): Promise<void> {
       `${corrected} corregidos, ${confirmedUnchanged} confirmados sin cambios, ` +
       `${revertedToZero} vueltos a 0 por no poder confirmarse con el matcher corregido.`,
   )
+  if (restoredFromVerified > 0) {
+    console.log(`${restoredFromVerified} año(s) protegido(s) en verified-years.json se restauraron.`)
+  }
   console.log(`${needsYearReview.length} canciones siguen sin año confirmado en total.`)
   if (needsYearReview.length > 0) {
     console.log('Canciones sin año confirmado (revisar year y, si hace falta, startSeconds):')
