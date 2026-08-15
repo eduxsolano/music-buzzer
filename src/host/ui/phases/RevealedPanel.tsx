@@ -34,7 +34,7 @@ export function RevealedPanel({
         </>
       }
       note={
-        song ? (
+        song && song.year !== 0 ? (
           <span className="hero hero-sm block" style={{ opacity: 0.9 }}>
             {song.year}
           </span>
