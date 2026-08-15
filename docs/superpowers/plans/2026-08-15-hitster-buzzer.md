@@ -2619,12 +2619,23 @@ git commit -m "feat: pantalla del jugador con botón de buzzer"
 **Files:**
 - Create: `src/host/useHostGame.ts`
 - Create: `src/host/persistence.ts`
+- Create: `src/host/audioTransitions.ts`
 - Create: `src/app/host/page.tsx`
 - Test: `src/host/persistence.test.ts`
+- Test: `src/host/audioTransitions.test.ts`
 
 **Interfaces:**
 - Consumes: `initialState`, `reduce`, `currentSong` de `@/game/reducer`; `toPublicState` de `@/game/publicState`; `shuffle`, `createRoomCode` de `@/game/random`; `parsePlayerMessage` de `@/realtime/messages`; `createSupabaseChannel`; `AudioPlayer`; `YouTubeStage`; `parseSongs` de `@/songs/schema`.
-- Produces: desde `@/host/persistence`: `saveGame(storage, room, state): void`, `loadGame(storage): { room: string; state: GameState } | null`, `clearGame(storage): void`. Desde `@/host/useHostGame`: hook `useHostGame(songs: Song[])`. Ruta `/host`.
+- Produces: desde `@/host/persistence`: `saveGame(storage, room, state): void`, `loadGame(storage): { room: string; state: GameState } | null`, `clearGame(storage): void`. Desde `@/host/audioTransitions`: `interface AudioSnapshot`, `type AudioAction`, `snapshot(phase: Phase): AudioSnapshot`, `audioActionFor(prev: AudioSnapshot, next: AudioSnapshot): AudioAction`. Desde `@/host/useHostGame`: hook `useHostGame(songs: Song[])`. Ruta `/host`.
+
+**Nota de diseño — la regla más fácil de romper en toda la app.** Tras una
+respuesta incorrecta, el reducer vuelve a `playing` **con el mismo tramo y el
+mismo `elapsedMs`**, y el audio debe **retomar** donde se cortó, no reiniciar.
+Un efecto que reaccione simplemente a "el tramo es 2" no distingue *empezar el
+tramo 2* de *volver al tramo 2 tras un fallo*, y reiniciaría la canción
+regalando el gancho otra vez. Por eso la decisión vive en una función pura,
+`audioActionFor`, que mira la transición entre dos estados y no el estado
+suelto — y por eso tiene sus propios tests.
 
 - [ ] **Step 1: Escribir los tests de persistencia que fallan**
 
@@ -2732,6 +2743,120 @@ export function clearGame(storage: Storage): void {
 Run: `npm test`
 Expected: PASS — toda la suite en verde
 
+- [ ] **Step 4b: Escribir los tests de transición de audio**
+
+Crear `src/host/audioTransitions.test.ts`:
+
+```typescript
+import { describe, expect, test } from 'vitest'
+import { audioActionFor, snapshot, type AudioSnapshot } from '@/host/audioTransitions'
+import type { Phase } from '@/game/types'
+
+const lobby: AudioSnapshot = { kind: 'lobby', tier: null }
+const playing = (tier: 1 | 2 | 3): AudioSnapshot => ({ kind: 'playing', tier })
+const buzzed: AudioSnapshot = { kind: 'buzzed', tier: null }
+const revealed: AudioSnapshot = { kind: 'revealed', tier: null }
+const finished: AudioSnapshot = { kind: 'finished', tier: null }
+
+describe('snapshot', () => {
+  test('keeps the tier only while a song is playing', () => {
+    const phase: Phase = { kind: 'playing', tier: 2, elapsedMs: 3_000 }
+    expect(snapshot(phase)).toEqual({ kind: 'playing', tier: 2 })
+  })
+
+  test('ignores elapsed time, so ticking does not churn the audio', () => {
+    expect(snapshot({ kind: 'playing', tier: 1, elapsedMs: 10 })).toEqual(
+      snapshot({ kind: 'playing', tier: 1, elapsedMs: 4_000 }),
+    )
+  })
+})
+
+describe('audioActionFor', () => {
+  test('starts the song when the first tier begins', () => {
+    expect(audioActionFor(lobby, playing(1))).toBe('play')
+  })
+
+  test('does nothing while the clock merely ticks', () => {
+    expect(audioActionFor(playing(1), playing(1))).toBe('none')
+  })
+
+  test('restarts the song when the tier advances', () => {
+    expect(audioActionFor(playing(1), playing(2))).toBe('play')
+    expect(audioActionFor(playing(2), playing(3))).toBe('play')
+  })
+
+  test('cuts the audio the moment somebody buzzes', () => {
+    expect(audioActionFor(playing(2), buzzed)).toBe('pause')
+  })
+
+  test('RESUMES after a wrong answer instead of restarting the song', () => {
+    expect(audioActionFor(buzzed, playing(2))).toBe('resume')
+  })
+
+  test('stops when the song is revealed or the game ends', () => {
+    expect(audioActionFor(playing(3), revealed)).toBe('stop')
+    expect(audioActionFor(buzzed, revealed)).toBe('stop')
+    expect(audioActionFor(revealed, finished)).toBe('none')
+  })
+
+  test('starts the next song fresh after a reveal', () => {
+    expect(audioActionFor(revealed, playing(1))).toBe('play')
+  })
+
+  test('is idempotent when the phase has not changed', () => {
+    expect(audioActionFor(revealed, revealed)).toBe('none')
+    expect(audioActionFor(buzzed, buzzed)).toBe('none')
+  })
+})
+```
+
+- [ ] **Step 4c: Ejecutar y verificar que falla**
+
+Run: `npm test`
+Expected: FAIL — `Failed to resolve import "@/host/audioTransitions"`
+
+- [ ] **Step 4d: Implementar las transiciones de audio**
+
+Crear `src/host/audioTransitions.ts`:
+
+```typescript
+import type { Tier } from '@/game/tiers'
+import type { Phase } from '@/game/types'
+
+export interface AudioSnapshot {
+  kind: Phase['kind']
+  tier: Tier | null
+}
+
+export type AudioAction = 'play' | 'resume' | 'pause' | 'stop' | 'none'
+
+/** Drops elapsedMs on purpose: ticking must not look like a change. */
+export function snapshot(phase: Phase): AudioSnapshot {
+  return { kind: phase.kind, tier: phase.kind === 'playing' ? phase.tier : null }
+}
+
+export function audioActionFor(prev: AudioSnapshot, next: AudioSnapshot): AudioAction {
+  if (next.kind === 'buzzed') return prev.kind === 'buzzed' ? 'none' : 'pause'
+
+  if (next.kind === 'revealed' || next.kind === 'finished') {
+    return prev.kind === 'revealed' || prev.kind === 'finished' ? 'none' : 'stop'
+  }
+
+  if (next.kind !== 'playing') return 'none'
+
+  // A wrong answer returns us to the very tier we cut, at the very millisecond
+  // we cut it. Resuming is the spec; restarting would hand out the hook again.
+  if (prev.kind === 'buzzed') return 'resume'
+
+  return prev.kind === 'playing' && prev.tier === next.tier ? 'none' : 'play'
+}
+```
+
+- [ ] **Step 4e: Ejecutar y verificar que pasa**
+
+Run: `npm test`
+Expected: PASS — toda la suite en verde
+
 - [ ] **Step 5: Escribir el hook del anfitrión**
 
 Crear `src/host/useHostGame.ts`:
@@ -2750,12 +2875,15 @@ import type { Channel } from '@/realtime/channel'
 import { parsePlayerMessage } from '@/realtime/messages'
 import { createSupabaseChannel } from '@/realtime/supabaseChannel'
 import { clearGame, loadGame, saveGame } from '@/host/persistence'
+import { audioActionFor, snapshot, type AudioSnapshot } from '@/host/audioTransitions'
 
 const TICK_MS = 50
 
 export function useHostGame(songs: Song[]) {
   const [room, setRoom] = useState<string | null>(null)
   const [state, setState] = useState<GameState>(initialState)
+  // Starting before the iframes exist would play a silent round.
+  const [audioReady, setAudioReady] = useState(false)
   const audioRef = useRef<AudioPlayer | null>(null)
   const channelRef = useRef<Channel | null>(null)
 
@@ -2812,21 +2940,22 @@ export function useHostGame(songs: Song[]) {
   }, [state.phase.kind, dispatch])
 
   const song = useMemo(() => currentSong(state, songs), [state, songs])
-  const phase = state.phase
 
-  // Audio follows the phase: a new tier restarts the song, a buzz cuts it,
-  // a wrong answer resumes at the cut point.
-  const tier = phase.kind === 'playing' ? phase.tier : null
+  // Audio follows the TRANSITION, not the phase: only that tells "start tier 2"
+  // apart from "come back to tier 2 after a wrong answer".
+  const previousSnapshot = useRef<AudioSnapshot>({ kind: 'lobby', tier: null })
   useEffect(() => {
+    const next = snapshot(state.phase)
+    const action = audioActionFor(previousSnapshot.current, next)
+    previousSnapshot.current = next
+
     const audio = audioRef.current
-    if (!audio || !song || tier === null) return
-    void audio.play(song.videoId, song.startSeconds)
-  }, [song, tier])
-
-  useEffect(() => {
-    if (phase.kind === 'buzzed') audioRef.current?.pause()
-    if (phase.kind === 'revealed' || phase.kind === 'finished') audioRef.current?.stop()
-  }, [phase.kind])
+    if (!audio) return
+    if (action === 'play' && song) void audio.play(song.videoId, song.startSeconds)
+    if (action === 'resume') audio.resume()
+    if (action === 'pause') audio.pause()
+    if (action === 'stop') audio.stop()
+  }, [state.phase, song])
 
   // Buffer the next song while this one plays, so there is no dead air.
   useEffect(() => {
@@ -2848,6 +2977,7 @@ export function useHostGame(songs: Song[]) {
 
   const attachAudio = useCallback((player: AudioPlayer) => {
     audioRef.current = player
+    setAudioReady(true)
   }, [])
 
   const newGame = useCallback(() => {
@@ -2855,7 +2985,7 @@ export function useHostGame(songs: Song[]) {
     window.location.reload()
   }, [])
 
-  return { room, state, song, dispatch, startGame, attachAudio, newGame }
+  return { room, state, song, audioReady, dispatch, startGame, attachAudio, newGame }
 }
 ```
 
@@ -2894,7 +3024,8 @@ function JoinQr({ room }: { room: string }) {
 }
 
 export default function HostPage() {
-  const { room, state, song, dispatch, startGame, attachAudio, newGame } = useHostGame(songs)
+  const { room, state, song, audioReady, dispatch, startGame, attachAudio, newGame } =
+    useHostGame(songs)
   if (!room) return null
 
   const scoreboard = [...state.players].sort((a, b) => b.score - a.score)
@@ -2918,10 +3049,10 @@ export default function HostPage() {
             </p>
             <button
               onClick={startGame}
-              disabled={state.players.length === 0}
+              disabled={state.players.length === 0 || !audioReady}
               className="rounded-2xl bg-emerald-500 px-10 py-5 text-2xl font-bold text-emerald-950 disabled:bg-slate-700 disabled:text-slate-500"
             >
-              Empezar partida
+              {audioReady ? 'Empezar partida' : 'Cargando audio…'}
             </button>
           </>
         )}
@@ -3114,7 +3245,13 @@ import { KEYBOARD_KEYS, eventForKey, keyboardPlayerId } from '@/host/keyboardPla
 Añadir este componente encima de `HostPage`:
 
 ```tsx
-function KeyboardFallback({ dispatch }: { dispatch: (event: GameEvent) => void }) {
+function KeyboardFallback({
+  dispatch,
+  showRegistration,
+}: {
+  dispatch: (event: GameEvent) => void
+  showRegistration: boolean
+}) {
   const [keys, setKeys] = useState<string[]>([])
 
   const register = useCallback(
@@ -3133,6 +3270,10 @@ function KeyboardFallback({ dispatch }: { dispatch: (event: GameEvent) => void }
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [keys, dispatch])
+
+  // Registration only makes sense in the lobby, but the key listener above must
+  // stay mounted for the whole game — that is when the keys are actually used.
+  if (!showRegistration) return null
 
   return (
     <details className="mt-6 text-left text-slate-400">
@@ -3163,11 +3304,17 @@ function KeyboardFallback({ dispatch }: { dispatch: (event: GameEvent) => void }
 }
 ```
 
-Y renderizarlo dentro del bloque de `lobby`, justo después del botón "Empezar partida":
+Renderizarlo **fuera** de los bloques por fase, como último hijo del `<section>`
+(justo antes de `</section>`), para que el listener de teclas siga vivo durante
+toda la partida:
 
 ```tsx
-            <KeyboardFallback dispatch={dispatch} />
+        <KeyboardFallback dispatch={dispatch} showRegistration={state.phase.kind === 'lobby'} />
 ```
+
+Montarlo dentro del bloque de `lobby` sería un error silencioso: el componente
+se desmontaría al empezar la partida y las teclas dejarían de responder justo
+cuando se usan.
 
 - [ ] **Step 6: Verificar compilación y build**
 
