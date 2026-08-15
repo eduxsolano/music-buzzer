@@ -22,14 +22,18 @@ interface YtApiPlayer {
   unMute(): void
 }
 
+let apiPromise: Promise<void> | null = null
+
 function loadIframeApi(): Promise<void> {
   if (window.YT?.Player) return Promise.resolve()
-  return new Promise((resolve) => {
+  if (apiPromise) return apiPromise
+  apiPromise = new Promise((resolve) => {
     window.onYouTubeIframeAPIReady = () => resolve()
     const script = document.createElement('script')
     script.src = 'https://www.youtube.com/iframe_api'
     document.head.appendChild(script)
   })
+  return apiPromise
 }
 
 function createApiPlayer(element: HTMLElement): Promise<YtApiPlayer> {
@@ -61,20 +65,21 @@ function adapt(player: YtApiPlayer): YouTubePlayer {
 export function YouTubeStage({ onReady }: { onReady: (player: AudioPlayer) => void }) {
   const slotA = useRef<HTMLDivElement>(null)
   const slotB = useRef<HTMLDivElement>(null)
-  const started = useRef(false)
+  const players = useRef<[YouTubePlayer, YouTubePlayer] | null>(null)
 
   useEffect(() => {
-    if (started.current) return
-    started.current = true
-
     let cancelled = false
     void (async () => {
       await loadIframeApi()
-      if (cancelled || !slotA.current || !slotB.current) return
-      const a = adapt(await createApiPlayer(slotA.current))
-      const b = adapt(await createApiPlayer(slotB.current))
       if (cancelled) return
-      onReady(createDoubleBufferedPlayer(() => [a, b]))
+      if (!players.current) {
+        if (!slotA.current || !slotB.current) return
+        const a = adapt(await createApiPlayer(slotA.current))
+        const b = adapt(await createApiPlayer(slotB.current))
+        if (cancelled) return
+        players.current = [a, b]
+      }
+      onReady(createDoubleBufferedPlayer(() => players.current!))
     })()
 
     return () => {
