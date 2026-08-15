@@ -1,23 +1,526 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ─────────────────────────────────────────────────────────────────────
+   A dark stage, with colour as a state signal.
+
+   The host screen is projected on a television and watched from three or
+   four metres away in a half-lit room; the phone is held 30 cm from a face
+   in the dark. Both use the same hues, but the phone runs at a far lower
+   luminance. Every colour decision below lives in one of two places: the
+   base tokens here, or a `[data-mood]` / `[data-state]` block that swaps
+   them. Nothing else in the app hard-codes a colour.
+   ───────────────────────────────────────────────────────────────────── */
 
 @theme inline {
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-anton), "Arial Narrow", sans-serif;
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  color-scheme: dark;
+
+  /* Ground. Never pure black: large flat #000 fields band badly on TVs. */
+  --ink-0: #0b0d12;
+  --ink-1: #12151d;
+  --ink-2: #191d27;
+  --line: #262c39;
+
+  --text-hi: #eef2f8;
+  --text-mid: #98a2b5;
+  --text-low: #5b6579;
+
+  /* The five signal hues. */
+  --steel: #8fb6d9;
+  --amber: #ffb020;
+  --green: #3ad98d;
+  --red: #ff5a5f;
+  --gold: #ffd166;
+
+  /* Grain, laid over every large gradient so televisions do not band it. */
+  --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+
+  /* Mood tokens. Default is `idle`; the blocks below only override. */
+  --stage-ground: var(--ink-0);
+  --stage-wash: #1b2c3d;
+  --stage-accent: var(--steel);
+  --stage-wash-strength: 0.55;
+  --stage-bloom: 0.3;
+}
+
+/* While the song plays: cool, patient, nothing shouting. */
+[data-mood="live"] {
+  --stage-ground: #0a0f16;
+  --stage-wash: #16334d;
+  --stage-accent: var(--steel);
+  --stage-wash-strength: 0.7;
+  --stage-bloom: 0.35;
+}
+
+/* Someone pressed. The whole room should know before their eyes focus. */
+[data-mood="buzzed"] {
+  --stage-ground: #150d02;
+  --stage-wash: #7a4a00;
+  --stage-accent: var(--amber);
+  --stage-wash-strength: 1;
+  --stage-bloom: 0.45;
+}
+
+[data-mood="correct"] {
+  --stage-ground: #04150f;
+  --stage-wash: #0a5c3b;
+  --stage-accent: var(--green);
+  --stage-wash-strength: 1;
+  --stage-bloom: 0.4;
+}
+
+[data-mood="wrong"] {
+  --stage-ground: #17060a;
+  --stage-wash: #6e1420;
+  --stage-accent: var(--red);
+  --stage-wash-strength: 1;
+  --stage-bloom: 0.4;
+}
+
+[data-mood="over"] {
+  --stage-ground: #120e04;
+  --stage-wash: #6a5210;
+  --stage-accent: var(--gold);
+  --stage-wash-strength: 0.9;
+  --stage-bloom: 0.45;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--ink-0);
+  color: var(--text-hi);
+  font-family: var(--font-sans);
+}
+
+/* ── The stage ─────────────────────────────────────────────────────── */
+
+.stage {
+  position: relative;
+  isolation: isolate;
+  background-color: var(--stage-ground);
+  transition: background-color 300ms ease;
+}
+
+/* Bloom: one soft light source behind the protagonist element. */
+.stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background: radial-gradient(115% 85% at 42% 45%, var(--stage-wash) 0%, transparent 62%);
+  opacity: var(--stage-wash-strength);
+  transition:
+    opacity 300ms ease,
+    background 300ms ease;
+}
+
+.stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: var(--noise);
+  opacity: 0.05;
+  pointer-events: none;
+}
+
+/* ── Display type ──────────────────────────────────────────────────── */
+
+.hero {
+  font-family: var(--font-display);
+  font-weight: 400;
+  /* Loose enough that the acute accents of uppercase Spanish (CANCIÓN, TÍTULO)
+     clear the line above; any tighter and they collide. */
+  line-height: 0.95;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  color: var(--stage-accent);
+  text-wrap: balance;
+  text-shadow: 0 0 clamp(1.5rem, 5vw, 6rem)
+    color-mix(in oklab, var(--stage-accent) calc(var(--stage-bloom) * 100%), transparent);
+}
+
+/* Size steps chosen by `heroSizeClass()` from the text length, so a long
+   name still fills the screen without overflowing it. */
+.hero-xl {
+  font-size: clamp(4.5rem, 21vw, 17rem);
+}
+.hero-lg {
+  font-size: clamp(3.5rem, 14vw, 11.5rem);
+}
+.hero-md {
+  font-size: clamp(2.75rem, 9.5vw, 7.5rem);
+}
+.hero-sm {
+  font-size: clamp(2.25rem, 6.5vw, 5rem);
+}
+
+.kicker {
+  font-size: clamp(0.75rem, 1.15vw, 1.15rem);
+  font-weight: 600;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--text-mid);
+}
+
+.note {
+  font-size: clamp(1.1rem, 2vw, 1.9rem);
+  color: var(--text-mid);
+  letter-spacing: 0.02em;
+}
+
+/* ── Controls ──────────────────────────────────────────────────────── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  cursor: pointer;
+  transition:
+    transform 120ms ease,
+    background-color 180ms ease,
+    color 180ms ease,
+    border-color 180ms ease,
+    opacity 180ms ease;
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(1px) scale(0.99);
+}
+
+.btn:focus-visible {
+  outline: 3px solid var(--stage-accent);
+  outline-offset: 4px;
+}
+
+.btn-primary {
+  background: var(--stage-accent);
+  color: #0a0c11;
+  box-shadow: 0 0 3rem color-mix(in oklab, var(--stage-accent) 28%, transparent);
+}
+
+.btn-primary:disabled {
+  background: var(--ink-2);
+  color: var(--text-low);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.btn-ghost {
+  border: 1px solid var(--line);
+  color: var(--text-low);
+  background: transparent;
+}
+
+.btn-ghost:hover {
+  color: var(--text-hi);
+  border-color: var(--text-low);
+}
+
+.btn-yes {
+  background: var(--green);
+  color: #04150f;
+  box-shadow: 0 0 3.5rem color-mix(in oklab, var(--green) 30%, transparent);
+}
+
+.btn-no {
+  background: var(--red);
+  color: #1a0407;
+  box-shadow: 0 0 3.5rem color-mix(in oklab, var(--red) 30%, transparent);
+}
+
+/* ── Furniture ─────────────────────────────────────────────────────── */
+
+/* The scoreboard rail: a quiet column, deliberately not competing with the
+   protagonist to its left. */
+/* Opaque rather than blurred on purpose: this column repaints alongside a
+   20Hz clock while the same laptop decodes a YouTube stream, and a
+   backdrop-filter over an area this size is not worth the frames. */
+.rail {
+  background: #07080c;
+  border-left: 1px solid var(--line);
+}
+
+.rail-row {
+  display: grid;
+  grid-template-columns: 1.6rem 1fr auto;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid color-mix(in oklab, var(--line) 55%, transparent);
+  color: var(--text-hi);
+  transition:
+    opacity 200ms ease,
+    color 200ms ease;
+}
+
+/* Eliminated from this song only: struck through and stood down, never removed. */
+.rail-row[data-out="true"] {
+  color: var(--text-low);
+  opacity: 0.55;
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+
+.rail-row[data-lead="true"] .rail-rank {
+  color: var(--stage-accent);
+}
+
+.rail-rank {
+  font-family: var(--font-display);
+  color: var(--text-low);
+  font-size: 0.95em;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.35rem 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--text-mid);
+  background: color-mix(in oklab, #06070a 55%, transparent);
+}
+
+/* The tier clock: a hairline that drains across the top of the stage. Enough
+   to feel the pressure, not enough to look at. */
+.meter {
+  height: 3px;
+  width: 100%;
+  background: color-mix(in oklab, var(--line) 70%, transparent);
+  overflow: hidden;
+}
+
+.meter-fill {
+  height: 100%;
+  background: var(--stage-accent);
+  box-shadow: 0 0 1.5rem var(--stage-accent);
+  transform-origin: left center;
+  transition: transform 90ms linear;
+}
+
+.tier-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--text-low);
+  opacity: 0.45;
+}
+
+.tier-dot[data-on="true"] {
+  background: var(--stage-accent);
+  opacity: 1;
+}
+
+/* The QR needs a light quiet zone to scan; it is the only light surface in
+   the whole design, and it stays the size of a beer mat. */
+.qr-card {
+  background: #f4f6fa;
+  border-radius: 1.25rem;
+  padding: 0.9rem;
+  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.55);
+}
+
+.ring-badge {
+  position: absolute;
+  border-radius: 999px;
+  border: 2px solid var(--stage-accent);
+  inset: -1.5rem;
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* ── Motion ────────────────────────────────────────────────────────── */
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(1.1rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.enter {
+  animation: rise 420ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.enter-1 {
+  animation-delay: 70ms;
+}
+.enter-2 {
+  animation-delay: 150ms;
+}
+.enter-3 {
+  animation-delay: 240ms;
+}
+
+@keyframes slam {
+  0% {
+    opacity: 0;
+    transform: scale(1.16);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(0.99);
+  }
+  100% {
+    transform: none;
+  }
+}
+
+/* The buzz is the loudest moment of the evening; the name lands like one. */
+.slam {
+  animation: slam 320ms cubic-bezier(0.2, 0.9, 0.25, 1) both;
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.035);
+  }
+}
+
+.breathe {
+  animation: breathe 2.6s ease-in-out infinite;
+}
+
+@keyframes burst {
+  from {
+    opacity: 0.85;
+    transform: scale(0.55);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.8);
+  }
+}
+
+.burst {
+  animation: burst 900ms ease-out both;
+}
+
+/* ── The phone ─────────────────────────────────────────────────────── */
+
+/* Held 30 cm from a face in a dark room: same hues as the stage, a fraction
+   of the light. The pad is the whole screen; only its colour and its ring
+   change between states. */
+.pad {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  border: 0;
+  width: 100%;
+  text-align: center;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  background:
+    radial-gradient(120% 78% at 50% 46%, var(--pad-core) 0%, var(--pad-edge) 74%),
+    var(--pad-edge);
+  color: var(--pad-ink);
+  transition:
+    background 220ms ease,
+    color 220ms ease;
+}
+
+.pad::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--noise);
+  opacity: 0.05;
+  pointer-events: none;
+}
+
+.pad[data-state="waiting"] {
+  --pad-core: #10141c;
+  --pad-edge: #07090d;
+  --pad-ink: #59647a;
+  --pad-ring: #232a37;
+}
+
+.pad[data-state="armed"] {
+  --pad-core: #7a2f08;
+  --pad-edge: #150803;
+  --pad-ink: #ffc78c;
+  --pad-ring: #f97316;
+}
+
+.pad[data-state="locked"] {
+  --pad-core: #101a26;
+  --pad-edge: #070a0f;
+  --pad-ink: #5f7690;
+  --pad-ring: #24303f;
+}
+
+.pad[data-state="won"] {
+  --pad-core: #7a5504;
+  --pad-edge: #151002;
+  --pad-ink: #ffdf9e;
+  --pad-ring: #fbbf24;
+}
+
+.pad[data-state="eliminated"] {
+  --pad-core: #2a0d11;
+  --pad-edge: #0c0406;
+  --pad-ink: #b0707a;
+  --pad-ring: #5c2029;
+}
+
+.pad-ring {
+  position: absolute;
+  width: min(74vw, 74vh);
+  aspect-ratio: 1;
+  border-radius: 999px;
+  border: 2px solid var(--pad-ring);
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+.pad-label {
+  position: relative;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  line-height: 0.9;
+  letter-spacing: 0.01em;
+}
+
+.pad:active:not(:disabled) .pad-ring {
+  transform: scale(0.94);
+}
+
+/* ── Reduced motion ────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }

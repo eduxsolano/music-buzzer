@@ -7,22 +7,8 @@ import { parseHostMessage } from '@/realtime/messages'
 import type { Channel } from '@/realtime/channel'
 import { createSupabaseChannel } from '@/realtime/supabaseChannel'
 import { buttonState, loadIdentity, saveName } from '@/play/playerIdentity'
-
-const BUTTON_STYLES: Record<ReturnType<typeof buttonState>, string> = {
-  waiting: 'bg-slate-700 text-slate-400',
-  armed: 'bg-emerald-500 text-emerald-950 active:bg-emerald-400',
-  locked: 'bg-slate-700 text-slate-400',
-  won: 'bg-amber-400 text-amber-950',
-  eliminated: 'bg-rose-800 text-rose-200',
-}
-
-const BUTTON_LABELS: Record<ReturnType<typeof buttonState>, string> = {
-  waiting: 'Conectando…',
-  armed: '¡PULSA!',
-  locked: 'Espera',
-  won: '¡Ganaste! Di la canción en voz alta',
-  eliminated: 'Fuera de esta canción',
-}
+import { BUTTON_PRESENTATION } from '@/play/buttonPresentation'
+import { playCue, unlockGameSounds } from '@/sounds/gameSounds'
 
 const CHANNEL_ERROR_MESSAGE = 'No hay conexión con Supabase. Revisa las variables de entorno.'
 
@@ -30,6 +16,15 @@ const CHANNEL_ERROR_MESSAGE = 'No hay conexión con Supabase. Revisa las variabl
 // every 50ms while a song plays), so this must not re-announce on every message —
 // that would flood the shared channel every other phone in the room listens to.
 const REJOIN_INTERVAL_MS = 2_000
+
+/** A dark room, 30 cm from a face: same palette as the stage, far less light. */
+function Message({ children }: { children: React.ReactNode }) {
+  return (
+    <main className="stage flex min-h-dvh flex-col items-center justify-center gap-4 p-8 text-center">
+      <p className="note max-w-xs">{children}</p>
+    </main>
+  )
+}
 
 function PlayScreen() {
   const room = (useSearchParams().get('sala') ?? '').toUpperCase()
@@ -110,64 +105,109 @@ function PlayScreen() {
   const buzz = useCallback(() => {
     if (status !== 'armed' || !identity) return
     navigator.vibrate?.(60)
+    // The press is a gesture, so this is a legal moment to make sound. The cue
+    // that matters is the one on the host speaker; this one is just for the
+    // thumb that pressed.
+    unlockGameSounds()
+    playCue('buzz')
     void channelRef.current?.publish({ type: 'BUZZ', playerId: identity.playerId })
   }, [status, identity])
 
-  if (!room) {
-    return (
-      <p className="min-h-dvh bg-slate-950 p-8 text-slate-200">
-        Falta el código de sala. Escanea el QR otra vez.
-      </p>
-    )
-  }
+  if (!room) return <Message>Falta el código de sala. Escanea el QR otra vez.</Message>
 
   if (!identity) return null
 
-  if (channelError) {
-    return <p className="min-h-dvh bg-slate-950 p-8 text-slate-200">{channelError}</p>
-  }
+  if (channelError) return <Message>{channelError}</Message>
 
   if (!identity.name) {
     return (
-      <form
-        className="flex min-h-dvh flex-col justify-center gap-4 bg-slate-950 p-8 text-slate-100"
-        onSubmit={(event) => {
-          event.preventDefault()
-          const name = draftName.trim()
-          if (!name) return
-          saveName(window.localStorage, name)
-          setIdentity({ ...identity, name })
-        }}
-      >
-        <h1 className="text-2xl font-bold text-slate-100">Sala {room}</h1>
-        <input
-          autoFocus
-          className="rounded-xl bg-slate-800 p-4 text-xl text-slate-100"
-          placeholder="Tu nombre"
-          value={draftName}
-          onChange={(event) => setDraftName(event.target.value)}
-        />
-        <button className="rounded-xl bg-emerald-500 p-4 text-xl font-bold text-emerald-950">
-          Entrar
-        </button>
-      </form>
+      <main className="stage flex min-h-dvh flex-col justify-center gap-6 p-7">
+        <div className="flex flex-col gap-2">
+          <span className="kicker">Sala {room}</span>
+          <h1 className="hero hero-sm">Tu nombre</h1>
+        </div>
+        <form
+          className="flex flex-col gap-3"
+          onSubmit={(event) => {
+            event.preventDefault()
+            const name = draftName.trim()
+            if (!name) return
+            // First certain gesture on this phone: get the audio context out of
+            // its suspended state now, not in the middle of a round.
+            unlockGameSounds()
+            saveName(window.localStorage, name)
+            setIdentity({ ...identity, name })
+          }}
+        >
+          <input
+            autoFocus
+            maxLength={18}
+            className="rounded-2xl px-5 py-4 text-2xl font-semibold outline-none"
+            style={{
+              background: 'var(--ink-1)',
+              color: 'var(--text-hi)',
+              border: '1px solid var(--line)',
+            }}
+            placeholder="Cómo te llaman"
+            value={draftName}
+            onChange={(event) => setDraftName(event.target.value)}
+          />
+          <button className="btn btn-primary px-6 py-4 text-lg" disabled={draftName.trim() === ''}>
+            Entrar
+          </button>
+        </form>
+        <p className="text-sm" style={{ color: 'var(--text-low)' }}>
+          Se queda guardado en este celular: si se bloquea, vuelves con tus puntos.
+        </p>
+      </main>
     )
   }
 
   const me = state?.players.find((p) => p.id === identity.playerId)
+  const presentation = BUTTON_PRESENTATION[status]
 
   return (
-    <div className="flex min-h-dvh flex-col bg-slate-950 text-slate-100">
-      <header className="flex items-baseline justify-between p-4 text-slate-300">
-        <span className="text-lg font-semibold">{identity.name}</span>
-        <span className="text-2xl font-bold tabular-nums">{me?.score ?? 0}</span>
+    <div className="flex min-h-dvh flex-col" style={{ background: 'var(--ink-0)' }}>
+      <header
+        className="flex items-baseline justify-between px-5 py-3 text-sm"
+        style={{ color: 'var(--text-low)' }}
+      >
+        <span className="max-w-[45%] truncate font-semibold">{identity.name}</span>
+        {state ? (
+          <span className="tabular-nums">
+            {state.roundsPlayed}/{state.roundsTotal}
+          </span>
+        ) : null}
+        <span className="font-display text-2xl tabular-nums" style={{ color: 'var(--text-mid)' }}>
+          {me?.score ?? 0}
+        </span>
       </header>
+
       <button
+        type="button"
         onPointerDown={buzz}
         disabled={status !== 'armed'}
-        className={`flex-1 text-5xl font-black tracking-tight transition-colors ${BUTTON_STYLES[status]}`}
+        data-state={status}
+        className="pad flex-1"
       >
-        {BUTTON_LABELS[status]}
+        <span
+          aria-hidden
+          className={`pad-ring ${presentation.motion === 'breathe' ? 'breathe' : ''}`}
+        />
+        {presentation.motion === 'burst' ? (
+          <span key={status} className="pad-ring burst" aria-hidden />
+        ) : null}
+        <span
+          className={`pad-label ${status === 'eliminated' ? 'line-through' : ''}`}
+          style={{ fontSize: 'clamp(3rem,17vw,6rem)' }}
+        >
+          {presentation.label}
+        </span>
+        {presentation.hint ? (
+          <span className="relative max-w-[16rem] text-base leading-snug opacity-80">
+            {presentation.hint}
+          </span>
+        ) : null}
       </button>
     </div>
   )
