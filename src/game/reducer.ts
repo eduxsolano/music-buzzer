@@ -1,6 +1,6 @@
-import { DEFAULT_ROUNDS } from '@/game/config'
-import { nextTier, tierDurationMs } from '@/game/tiers'
-import type { GameEvent, GameState, Song } from '@/game/types'
+import { DEFAULT_ROUNDS, WRONG_ANSWER_PENALTY } from '@/game/config'
+import { nextTier, pointsForTier, tierDurationMs } from '@/game/tiers'
+import type { GameEvent, GameState, Player, PlayerId, Song } from '@/game/types'
 
 export function initialState(): GameState {
   return {
@@ -25,6 +25,10 @@ function dealRound(state: GameState): GameState {
     lockedOut: [],
     phase: { kind: 'playing', tier: 1, elapsedMs: 0 },
   }
+}
+
+function addScore(players: Player[], playerId: PlayerId, delta: number): Player[] {
+  return players.map((p) => (p.id === playerId ? { ...p, score: p.score + delta } : p))
 }
 
 export function reduce(state: GameState, event: GameEvent): GameState {
@@ -54,6 +58,9 @@ export function reduce(state: GameState, event: GameEvent): GameState {
       })
     }
 
+    // TICK deltas must stay small relative to a tier's duration: a delta that
+    // overshoots a boundary loses the excess. The host guarantees this by
+    // dispatching a constant 50 ms.
     case 'TICK': {
       if (state.phase.kind !== 'playing') return state
       const elapsedMs = state.phase.elapsedMs + event.deltaMs
@@ -65,6 +72,46 @@ export function reduce(state: GameState, event: GameEvent): GameState {
         return { ...state, phase: { kind: 'revealed', outcome: 'timeout', winnerId: null } }
       }
       return { ...state, phase: { kind: 'playing', tier: upcoming, elapsedMs: 0 } }
+    }
+
+    case 'BUZZ': {
+      if (state.phase.kind !== 'playing') return state
+      if (state.lockedOut.includes(event.playerId)) return state
+      if (!state.players.some((p) => p.id === event.playerId)) return state
+      return {
+        ...state,
+        phase: {
+          kind: 'buzzed',
+          tier: state.phase.tier,
+          elapsedMs: state.phase.elapsedMs,
+          playerId: event.playerId,
+        },
+      }
+    }
+
+    case 'JUDGE': {
+      if (state.phase.kind !== 'buzzed') return state
+      const { playerId, tier, elapsedMs } = state.phase
+
+      if (event.correct) {
+        return {
+          ...state,
+          players: addScore(state.players, playerId, pointsForTier(tier)),
+          phase: { kind: 'revealed', outcome: 'correct', winnerId: playerId },
+        }
+      }
+
+      const players = addScore(state.players, playerId, -WRONG_ANSWER_PENALTY)
+      const lockedOut = [...state.lockedOut, playerId]
+      if (lockedOut.length >= players.length) {
+        return {
+          ...state,
+          players,
+          lockedOut,
+          phase: { kind: 'revealed', outcome: 'allWrong', winnerId: null },
+        }
+      }
+      return { ...state, players, lockedOut, phase: { kind: 'playing', tier, elapsedMs } }
     }
 
     default:
