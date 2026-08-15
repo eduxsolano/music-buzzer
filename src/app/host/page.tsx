@@ -1,6 +1,8 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import type { GameEvent } from '@/game/types'
+import { KEYBOARD_KEYS, eventForKey, keyboardPlayerId } from '@/host/keyboardPlayers'
 import QRCode from 'qrcode'
 import { YouTubeStage } from '@/audio/youtubeIframes'
 import { pointsForTier } from '@/game/tiers'
@@ -20,6 +22,64 @@ function JoinQr({ room }: { room: string }) {
 
   // eslint-disable-next-line @next/next/no-img-element
   return dataUrl ? <img src={dataUrl} alt={`Unirse a la sala ${room}`} className="rounded-xl" /> : null
+}
+
+function KeyboardFallback({
+  dispatch,
+  showRegistration,
+}: {
+  dispatch: (event: GameEvent) => void
+  showRegistration: boolean
+}) {
+  const [keys, setKeys] = useState<string[]>([])
+
+  const register = useCallback(
+    (key: string, name: string) => {
+      dispatch({ type: 'JOIN', playerId: keyboardPlayerId(key), name })
+      setKeys((previous) => (previous.includes(key) ? previous : [...previous, key]))
+    },
+    [dispatch],
+  )
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      const gameEvent = eventForKey(event.key, keys)
+      if (gameEvent) dispatch(gameEvent)
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [keys, dispatch])
+
+  // Registration only makes sense in the lobby, but the key listener above must
+  // stay mounted for the whole game — that is when the keys are actually used.
+  if (!showRegistration) return null
+
+  return (
+    <details className="mt-6 text-left text-slate-400">
+      <summary className="cursor-pointer text-sm uppercase tracking-widest">
+        Sin wifi: jugar con teclado
+      </summary>
+      <div className="mt-3 space-y-2">
+        {KEYBOARD_KEYS.map((key) => (
+          <form
+            key={key}
+            className="flex gap-2"
+            onSubmit={(event) => {
+              event.preventDefault()
+              const input = event.currentTarget.elements.namedItem('name') as HTMLInputElement
+              const name = input.value.trim()
+              if (name) register(key, name)
+              input.value = ''
+            }}
+          >
+            <span className="w-10 rounded bg-slate-800 text-center font-mono uppercase">{key}</span>
+            <input name="name" placeholder="Nombre" className="flex-1 rounded bg-slate-800 px-2" />
+            <button className="rounded bg-slate-700 px-3">Asignar</button>
+          </form>
+        ))}
+      </div>
+    </details>
+  )
 }
 
 export default function HostPage() {
@@ -116,6 +176,8 @@ export default function HostPage() {
             </button>
           </>
         )}
+
+        <KeyboardFallback dispatch={dispatch} showRegistration={state.phase.kind === 'lobby'} />
       </section>
 
       <aside className="border-l border-slate-800 p-6">
