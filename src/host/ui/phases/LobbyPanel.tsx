@@ -9,14 +9,19 @@ import { playersConnectedLabel } from '@/host/ui/stagePresentation'
 
 /** Before the music: the room code and the QR are the only two things to do. */
 export function LobbyPanel({ view }: { view: HostView }) {
-  const { room, state, audioReady, startGame, origin } = view
+  const { room, state, audioReady, startGame, origin, pairingOpen } = view
 
   return (
     <StagePanel
       kicker="Escanea para entrar"
       hero={
         <div className="flex flex-wrap items-center justify-center gap-[clamp(2rem,5vw,5rem)]">
-          <QrCard url={joinUrl(origin, room)} alt={`Unirse a la sala ${room}`} />
+          {/* Never while the pairing code is up. The overlay already covers
+              this, and this is the second, independent reason the room can
+              never be looking at both squares at once — see PairingPanel. */}
+          {pairingOpen ? null : (
+            <QrCard url={joinUrl(origin, room)} alt={`Unirse a la sala ${room}`} />
+          )}
           <div className="flex flex-col items-start gap-3">
             <span className="kicker">Sala</span>
             <div className="flex gap-[clamp(0.4rem,0.8vw,0.9rem)]">

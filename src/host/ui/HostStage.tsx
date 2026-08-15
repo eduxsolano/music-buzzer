@@ -1,11 +1,11 @@
 'use client'
 
-import { useEffect, useMemo, useRef, type ReactElement } from 'react'
+import { useEffect, useMemo, useRef, useState, type ReactElement } from 'react'
 import type { GameEvent, GameState, Song } from '@/game/types'
 import { Scoreboard } from '@/host/ui/Scoreboard'
 import { TierMeter } from '@/host/ui/TierMeter'
 import { KeyboardFallback } from '@/host/ui/KeyboardFallback'
-import { PairingPanel } from '@/host/ui/PairingPanel'
+import { PairingChip, PairingOverlay } from '@/host/ui/PairingPanel'
 import { LobbyPanel } from '@/host/ui/phases/LobbyPanel'
 import { WaitingPanel } from '@/host/ui/phases/WaitingPanel'
 import { PlayingPanel } from '@/host/ui/phases/PlayingPanel'
@@ -64,6 +64,12 @@ export function HostStage({ game }: { game: HostGameApi }) {
     newGame,
   } = game
 
+  // Owned here rather than inside the pairing components because two parts of
+  // the screen have to agree on it: while the pairing code is up, the lobby
+  // must not also be showing the join QR. One piece of state, two readers, no
+  // way for the two codes to end up on the television together.
+  const [pairingOpen, setPairingOpen] = useState(false)
+
   // The buzzer cue belongs to the room, not to the phone: it fires here, on
   // the speaker, in the silence the cut music just left behind. Comparing
   // against the previous phase keeps a host reload mid-buzz from replaying it.
@@ -92,6 +98,7 @@ export function HostStage({ game }: { game: HostGameApi }) {
     audioReady,
     scoreboard,
     canUndo,
+    pairingOpen,
     dispatch,
     startGame,
     judge,
@@ -121,11 +128,11 @@ export function HostStage({ game }: { game: HostGameApi }) {
               </span>
             ) : null}
             {controlToken ? (
-              <PairingPanel
-                origin={origin}
-                token={controlToken}
+              <PairingChip
                 paired={panelPaired}
-                showByDefault={phase.kind === 'lobby'}
+                open={pairingOpen}
+                onToggle={() => setPairingOpen((open) => !open)}
+                inviting={phase.kind === 'lobby'}
               />
             ) : null}
           </div>
@@ -141,6 +148,16 @@ export function HostStage({ game }: { game: HostGameApi }) {
       </section>
 
       <Scoreboard players={scoreboard} lockedOut={state.lockedOut} />
+
+      {/* Last in the tree and opaque: while the pairing code is up it is the
+          only thing on the television, and the only square anybody can scan. */}
+      {pairingOpen && controlToken ? (
+        <PairingOverlay
+          origin={origin}
+          token={controlToken}
+          onClose={() => setPairingOpen(false)}
+        />
+      ) : null}
     </main>
   )
 }

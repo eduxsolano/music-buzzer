@@ -18,6 +18,13 @@ export interface HostView {
   scoreboard: Player[]
   /** True while the last judgement can still be taken back. */
   canUndo: boolean
+  /**
+   * True while the pairing code is on the television. Panels must not render
+   * anything else scannable while it is: the private door and the public one
+   * being photographable in the same frame is exactly the confusion this
+   * flag exists to prevent.
+   */
+  pairingOpen: boolean
   dispatch: (event: GameEvent) => void
   startGame: () => void
   /** Judges the current buzz and flashes the room green or red. */

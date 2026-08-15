@@ -4,6 +4,7 @@ import {
   createControlToken,
   isControlToken,
   joinUrl,
+  tokenFromHash,
   type RandomBytes,
 } from '@/host/pairing'
 
@@ -57,17 +58,58 @@ describe('isControlToken', () => {
     expect(isControlToken(undefined)).toBe(false)
   })
 
-  it('rejects characters outside the alphabet, however long', () => {
+  it('rejects characters outside the alphabet', () => {
     expect(isControlToken('ABCDEFGHIJKLMNOPQRSTUVWXYZ')).toBe(false)
     expect(isControlToken('abcdefghijklmnopqrstuvwxy!')).toBe(false)
     expect(isControlToken('abcdefghijklmnopqrstuvwxy0')).toBe(false)
+  })
+
+  // A validator for a bearer secret that accepts a range accepts tokens
+  // weaker than the ones it issues. Nothing produces a short one today; that
+  // is not a reason to leave the door open.
+  it('demands the exact length the minter produces, not a range', () => {
+    const token = createControlToken(countingBytes)
+    expect(isControlToken(token)).toBe(true)
+    expect(isControlToken(token.slice(0, 25))).toBe(false)
+    expect(isControlToken(token.slice(0, 20))).toBe(false)
+    expect(isControlToken(token + 'a')).toBe(false)
+  })
+})
+
+describe('tokenFromHash', () => {
+  it('reads back exactly what controlUrl wrote', () => {
+    const token = createControlToken(countingBytes)
+    const url = new URL(controlUrl('https://x.app', token))
+    expect(tokenFromHash(url.hash)).toBe(token)
+  })
+
+  it('tolerates the fragment with or without its hash', () => {
+    const token = createControlToken(maxBytes)
+    expect(tokenFromHash(`#t=${token}`)).toBe(token)
+    expect(tokenFromHash(`t=${token}`)).toBe(token)
+  })
+
+  it('refuses anything that is not a token, before it can become a channel name', () => {
+    expect(tokenFromHash('')).toBeNull()
+    expect(tokenFromHash('#')).toBeNull()
+    expect(tokenFromHash('#t=KZTR')).toBeNull()
+    expect(tokenFromHash('#sala=KZTR')).toBeNull()
+    expect(tokenFromHash('#t=')).toBeNull()
   })
 })
 
 describe('urls', () => {
   it('sends players to the room and the panel to the token', () => {
     expect(joinUrl('https://x.app', 'KZTR')).toBe('https://x.app/play?sala=KZTR')
-    expect(controlUrl('https://x.app', 'abc23')).toBe('https://x.app/control?t=abc23')
+    expect(controlUrl('https://x.app', 'abc23')).toBe('https://x.app/control#t=abc23')
+  })
+
+  // A fragment never leaves the browser: no edge access log, no proxy, no
+  // Referer header ever sees the secret.
+  it('keeps the secret in the fragment, never in the query string', () => {
+    const url = new URL(controlUrl('https://x.app', 'abc23'))
+    expect(url.search).toBe('')
+    expect(url.hash).toBe('#t=abc23')
   })
 
   it('never leaks the room code into the panel url', () => {

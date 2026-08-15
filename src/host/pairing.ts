@@ -32,6 +32,18 @@ const TOKEN_BYTES = 16
 /** Lowercase base32 without padding: URL-safe, and survives being typed. */
 const TOKEN_ALPHABET = 'abcdefghijklmnopqrstuvwxyz234567'
 
+/**
+ * How many characters a token has, derived rather than written down: every
+ * output character carries 5 bits, so 128 bits is 26 characters with the last
+ * one part-full.
+ *
+ * `isControlToken` checks this length exactly. A validator for a bearer secret
+ * that accepts a range accepts tokens weaker than the ones it issues, and the
+ * fact that nothing currently produces a short one is not a reason to keep the
+ * door open.
+ */
+const TOKEN_LENGTH = Math.ceil((TOKEN_BYTES * 8) / 5)
+
 export type RandomBytes = (length: number) => Uint8Array
 
 /** The browser's CSPRNG, injected so the token generator stays testable. */
@@ -65,7 +77,7 @@ export function createControlToken(randomBytes: RandomBytes = cryptoRandomBytes)
 
 /** Rejects anything that is not a token this build could have minted. */
 export function isControlToken(value: unknown): value is string {
-  if (typeof value !== 'string' || value.length < 20 || value.length > 40) return false
+  if (typeof value !== 'string' || value.length !== TOKEN_LENGTH) return false
   return [...value].every((character) => TOKEN_ALPHABET.includes(character))
 }
 
@@ -75,10 +87,32 @@ export function joinUrl(origin: string, room: string): string {
 }
 
 /**
- * Where the host's phone goes. The room code is deliberately absent: the panel
- * learns it from the private channel, so this URL carries the secret and
- * nothing else.
+ * Where the host's phone goes.
+ *
+ * Two deliberate choices, both about keeping the secret in as few places as
+ * possible:
+ *
+ * - **No room code.** The panel learns the room from the private channel, so
+ *   this URL carries the secret and nothing that would help correlate it with
+ *   a game.
+ * - **A fragment, not a query string.** A fragment is never sent to the
+ *   server: it stays out of Vercel's edge access logs, out of any proxy in
+ *   between, and out of the `Referer` of anything the page might load. It
+ *   still lands in browser history, which is a phone the host owns.
  */
 export function controlUrl(origin: string, token: string): string {
-  return `${origin}/control?t=${encodeURIComponent(token)}`
+  return `${origin}/control#t=${encodeURIComponent(token)}`
+}
+
+/**
+ * Reads the token back out of a location fragment.
+ *
+ * Lives here, beside the function that writes it, so the two cannot drift.
+ * Anything that is not a token this build could have minted comes back null
+ * rather than becoming a channel name.
+ */
+export function tokenFromHash(hash: string): string | null {
+  const raw = hash.startsWith('#') ? hash.slice(1) : hash
+  const value = new URLSearchParams(raw).get('t')
+  return isControlToken(value) ? value : null
 }

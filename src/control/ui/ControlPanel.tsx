@@ -42,8 +42,28 @@ export function ControlPanel({
       data-mood={controlMood(state.phase, state.outcome)}
       className="stage flex min-h-dvh flex-col justify-between gap-4 p-5"
     >
-      <header className="flex items-center justify-between gap-3 text-xs" style={{ color: 'var(--text-low)' }}>
-        <span className="chip">Sala {state.room}</span>
+      <header
+        className="flex items-center justify-between gap-2 text-xs"
+        style={{ color: 'var(--text-low)' }}
+      >
+        <span className="chip shrink-0 whitespace-nowrap">Sala {state.room}</span>
+        {/* Undo lives up here, as far from a resting thumb as this screen
+            allows, and never in the column the judge and next-song buttons
+            occupy. A control that rewinds the scoreboard must not be reachable
+            by the same movement as the one that advances it. It is simply
+            absent whenever there is nothing to take back.
+            One caveat worth knowing before pressing it: it restores the state
+            from immediately before the last judgement, so if somebody has
+            buzzed again since, that buzz — and anybody who joined in the
+            meantime — goes away with it. */}
+        {state.canUndo ? (
+          <button
+            onClick={() => send({ type: 'UNDO' })}
+            className="btn btn-ghost shrink-0 whitespace-nowrap px-4 py-2 text-xs"
+          >
+            ↺ Deshacer
+          </button>
+        ) : null}
         <span className="tabular-nums">
           {state.roundsPlayed}/{state.roundsTotal}
         </span>
@@ -107,24 +127,13 @@ export function ControlPanel({
           <ShareLink url={joinUrl(origin, state.room)} allowShare className="w-full py-4 text-sm" />
         ) : null}
 
-        <div className="flex items-center justify-between gap-3">
-          {/* Undo is the reason this panel is worth carrying, and also the
-              button that must never be hit on the way to another one: it is
-              small, it is off to the side, and it is simply absent whenever
-              there is nothing to take back. */}
-          {state.canUndo ? (
-            <button onClick={() => send({ type: 'UNDO' })} className="btn btn-ghost px-5 py-3 text-sm">
-              ↺ Deshacer juicio
-            </button>
-          ) : (
-            <span />
-          )}
-          {state.phase === 'waiting' || state.phase === 'playing' || state.phase === 'buzzed' ? (
+        {state.phase === 'waiting' || state.phase === 'playing' || state.phase === 'buzzed' ? (
+          <div className="flex justify-end">
             <button onClick={() => send({ type: 'SKIP_SONG' })} className="btn btn-ghost px-5 py-3 text-sm">
               Saltar canción
             </button>
-          ) : null}
-        </div>
+          </div>
+        ) : null}
       </footer>
     </main>
   )
