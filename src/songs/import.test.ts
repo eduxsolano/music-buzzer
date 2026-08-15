@@ -142,6 +142,31 @@ describe('splitArtistAndTitle', () => {
       title: 'Bohemian Rhapsody - Live Aid',
     })
   })
+
+  // Regression coverage for stripTrailingArtistSelfReference actually being
+  // wired into the import path, not just unit-tested in isolation — a
+  // playlist import is the only caller that knows the artist and the raw
+  // title at the same time, which is exactly what this convention needs.
+  test('strips a trailing self-reference to the channel-derived artist, then mops up the noise it exposes', () => {
+    expect(splitArtistAndTitle('“Internet Girl” Visualizer | KATSEYE', 'KATSEYE')).toEqual({
+      artist: 'KATSEYE',
+      title: 'Internet Girl',
+    })
+  })
+
+  test('strips a trailing self-reference to the dash-derived artist too', () => {
+    expect(splitArtistAndTitle('Nirvana - Smells Like Teen Spirit - Nirvana', 'NirvanaVEVO')).toEqual({
+      artist: 'Nirvana',
+      title: 'Smells Like Teen Spirit',
+    })
+  })
+
+  test('does not strip a trailing segment that only resembles the artist', () => {
+    expect(splitArtistAndTitle('Song | KATSEYE Fan Cover', 'KATSEYE')).toEqual({
+      artist: 'KATSEYE',
+      title: 'Song | KATSEYE Fan Cover',
+    })
+  })
 })
 
 describe('slugify', () => {

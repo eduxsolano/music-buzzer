@@ -110,14 +110,16 @@ export function splitArtistAndTitle(
 ): { artist: string; title: string } {
   const cleaned = cleanTitle(rawTitle)
   const dash = cleaned.indexOf(' - ')
-  if (dash > 0) {
-    return {
-      artist: cleaned.slice(0, dash).trim(),
-      title: cleaned.slice(dash + 3).trim(),
-    }
-  }
-  const channel = channelTitle.replace(/\s*-\s*Topic$/i, '').trim()
-  return { artist: channel || UNKNOWN_ARTIST, title: cleaned }
+  const { artist, title } =
+    dash > 0
+      ? { artist: cleaned.slice(0, dash).trim(), title: cleaned.slice(dash + 3).trim() }
+      : { artist: channelTitle.replace(/\s*-\s*Topic$/i, '').trim() || UNKNOWN_ARTIST, title: cleaned }
+  // Only once the artist is settled can a trailing self-reference to it ("Song |
+  // Artist", the "visualizer" / "performance video" convention) be told apart
+  // from real title content — and stripping it can expose more noise
+  // ("Visualizer" was only "in the way" of the self-reference, not of the
+  // title), so cleanTitle runs once more after.
+  return { artist, title: cleanTitle(stripTrailingArtistSelfReference(title, artist)) }
 }
 
 export function slugify(text: string): string {
