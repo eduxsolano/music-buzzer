@@ -2,12 +2,16 @@ import { describe, expect, test } from 'vitest'
 import {
   artistNames,
   buildRecordingQuery,
+  buildReleaseGroupQuery,
   chooseYear,
+  chooseYearFromReleaseGroups,
   extractYear,
   primaryArtist,
   stripFeatureCredit,
   toCandidate,
+  toReleaseGroupCandidate,
   type MusicBrainzCandidate,
+  type ReleaseGroupCandidate,
 } from '@/songs/musicbrainz'
 
 describe('artistNames', () => {
@@ -309,5 +313,133 @@ describe('chooseYear', () => {
       ]
       expect(chooseYear(candidates, 'Kendrick Lamar, SZA', 'luther')).toBe(2024)
     })
+  })
+})
+
+describe('buildReleaseGroupQuery', () => {
+  test('queries by the primary artist and a feature-stripped title', () => {
+    expect(buildReleaseGroupQuery('Nirvana', 'Smells Like Teen Spirit')).toBe(
+      'releasegroup:"Smells Like Teen Spirit" AND artist:"Nirvana"',
+    )
+  })
+})
+
+describe('toReleaseGroupCandidate', () => {
+  test('extracts type fields alongside the usual ones', () => {
+    const candidate = toReleaseGroupCandidate({
+      title: 'Rolling in the Deep',
+      score: 100,
+      'first-release-date': '2010-11-29',
+      'primary-type': 'Single',
+      'secondary-types': [],
+      'artist-credit': [{ name: 'Adele' }],
+    })
+    expect(candidate).toEqual({
+      title: 'Rolling in the Deep',
+      artistCredit: 'Adele',
+      firstReleaseDate: '2010-11-29',
+      score: 100,
+      primaryType: 'Single',
+      secondaryTypes: [],
+    })
+  })
+
+  test('defaults secondaryTypes to an empty array rather than throwing', () => {
+    expect(toReleaseGroupCandidate({}).secondaryTypes).toEqual([])
+  })
+})
+
+describe('chooseYearFromReleaseGroups', () => {
+  const clean = (over: Partial<ReleaseGroupCandidate>): ReleaseGroupCandidate => ({
+    title: 'Smells Like Teen Spirit',
+    artistCredit: 'Nirvana',
+    firstReleaseDate: '1991-09-10',
+    score: 100,
+    primaryType: 'Single',
+    secondaryTypes: [],
+    ...over,
+  })
+
+  test('trusts a single clean, matching release group — unlike chooseYear, one is enough', () => {
+    // Real MusicBrainz data for this exact query: the true 1991 single is
+    // the only release group that is both an exact title match and a
+    // plain Single with no secondary type.
+    expect(chooseYearFromReleaseGroups([clean({})], 'Nirvana', 'Smells Like Teen Spirit')).toBe(1991)
+  })
+
+  test('ignores a release group with a secondary type, e.g. a compilation reissue', () => {
+    // Real shape: Bohemian Rhapsody has a clean 1975 Single alongside a
+    // 1992 reissue tagged secondary-type Compilation. Only the clean one
+    // should count, or the 17-year gap would look like ambiguity.
+    const candidates = [
+      clean({ title: 'Bohemian Rhapsody', artistCredit: 'Queen', firstReleaseDate: '1975-10-31' }),
+      clean({
+        title: 'Bohemian Rhapsody',
+        artistCredit: 'Queen',
+        firstReleaseDate: '1992-03',
+        secondaryTypes: ['Compilation'],
+      }),
+    ]
+    expect(chooseYearFromReleaseGroups(candidates, 'Queen', 'Bohemian Rhapsody')).toBe(1975)
+  })
+
+  test('ignores a release group whose primary type is not Single/Album/EP', () => {
+    // Real shape: the only "luther" / Kendrick Lamar release group in
+    // MusicBrainz is typed "Other" and carries a wrong date (2025-04-11,
+    // eight months after the real 2024-11-22 release). Rejecting it here
+    // is what lets the caller correctly fall back to the recording search.
+    const candidates = [clean({ primaryType: 'Other', firstReleaseDate: '2025-04-11' })]
+    expect(chooseYearFromReleaseGroups(candidates, 'Nirvana', 'Smells Like Teen Spirit')).toBe(0)
+  })
+
+  test('ignores a title match with no type info at all (undefined primaryType)', () => {
+    const candidates = [clean({ primaryType: undefined })]
+    expect(chooseYearFromReleaseGroups(candidates, 'Nirvana', 'Smells Like Teen Spirit')).toBe(0)
+  })
+
+  test('requires every credited name for a multi-performer release group, not just the primary', () => {
+    const candidates = [
+      clean({
+        title: 'Die With a Smile',
+        artistCredit: 'Lady Gaga',
+        firstReleaseDate: '2026-04-18',
+      }),
+    ]
+    expect(chooseYearFromReleaseGroups(candidates, 'Lady Gaga, Bruno Mars', 'Die With A Smile')).toBe(0)
+  })
+
+  test('trusts a single clean, fully co-credited release group for a collaboration', () => {
+    const candidates = [
+      clean({
+        title: 'Die With a Smile',
+        artistCredit: 'Lady Gaga & Bruno Mars',
+        firstReleaseDate: '2024-08-16',
+      }),
+    ]
+    expect(chooseYearFromReleaseGroups(candidates, 'Lady Gaga, Bruno Mars', 'Die With A Smile')).toBe(2024)
+  })
+
+  test('takes the earliest when two clean release groups agree closely, e.g. single and album', () => {
+    const candidates = [clean({ firstReleaseDate: '1991-09-10' }), clean({ firstReleaseDate: '1991-09-24' })]
+    expect(chooseYearFromReleaseGroups(candidates, 'Nirvana', 'Smells Like Teen Spirit')).toBe(1991)
+  })
+
+  test('returns 0 when clean release groups disagree by more than the spread cap', () => {
+    const candidates = [clean({ firstReleaseDate: '1975-01-01' }), clean({ firstReleaseDate: '2000-01-01' })]
+    expect(chooseYearFromReleaseGroups(candidates, 'Nirvana', 'Smells Like Teen Spirit')).toBe(0)
+  })
+
+  test('returns 0 when there are no candidates', () => {
+    expect(chooseYearFromReleaseGroups([], 'Nirvana', 'Smells Like Teen Spirit')).toBe(0)
+  })
+
+  test('returns 0 when the title does not match', () => {
+    const candidates = [clean({ title: 'A Completely Different Song' })]
+    expect(chooseYearFromReleaseGroups(candidates, 'Nirvana', 'Smells Like Teen Spirit')).toBe(0)
+  })
+
+  test('ignores a very low relevance score even if everything else matches', () => {
+    const candidates = [clean({ score: 10 })]
+    expect(chooseYearFromReleaseGroups(candidates, 'Nirvana', 'Smells Like Teen Spirit')).toBe(0)
   })
 })

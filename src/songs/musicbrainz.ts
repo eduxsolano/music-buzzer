@@ -161,6 +161,84 @@ export function toCandidate(recording: MusicBrainzRecording): MusicBrainzCandida
 }
 
 /**
+ * The fields we use out of one entry in MusicBrainz's `/release-group`
+ * search results. A release group is MusicBrainz's own reconciliation of
+ * every edition of a work (the original single, the album, compilations,
+ * remasters, per-country pressings) into one entity whose own
+ * `first-release-date` is already computed as the earliest of those —
+ * see chooseYearFromReleaseGroups for why that is a fundamentally better
+ * question to ask than any individual recording's date.
+ */
+export interface ReleaseGroupCandidate {
+  title: string
+  artistCredit: string
+  firstReleaseDate?: string
+  score: number
+  primaryType?: string
+  secondaryTypes: string[]
+}
+
+/** Raw shape of one entry in the `/release-group?fmt=json` response, trimmed to what we read. */
+export interface MusicBrainzReleaseGroup {
+  title?: string
+  score?: number
+  'first-release-date'?: string
+  'primary-type'?: string
+  'secondary-types'?: string[]
+  'artist-credit'?: { name?: string; joinphrase?: string }[]
+}
+
+/** Builds the Lucene query MusicBrainz's `/release-group` search endpoint expects. */
+export function buildReleaseGroupQuery(artist: string, title: string): string {
+  const searchArtist = primaryArtist(artist)
+  const searchTitle = stripFeatureCredit(cleanTitle(title))
+  return `releasegroup:"${escapeLucene(searchTitle)}" AND artist:"${escapeLucene(searchArtist)}"`
+}
+
+/** Extracts the fields we care about from one raw release-group search result. */
+export function toReleaseGroupCandidate(releaseGroup: MusicBrainzReleaseGroup): ReleaseGroupCandidate {
+  const artistCredit = (releaseGroup['artist-credit'] ?? [])
+    .map((part) => `${part.name ?? ''}${part.joinphrase ?? ''}`)
+    .join('')
+  return {
+    title: releaseGroup.title ?? '',
+    artistCredit,
+    firstReleaseDate: releaseGroup['first-release-date'],
+    score: releaseGroup.score ?? 0,
+    primaryType: releaseGroup['primary-type'],
+    secondaryTypes: releaseGroup['secondary-types'] ?? [],
+  }
+}
+
+/**
+ * A release group only counts as "the original work" — as opposed to a
+ * live album, a remix bundle, a compilation, a soundtrack tie-in, or a DJ
+ * mix that happens to share its title and artist — when it is a plain
+ * Single, Album or EP with no secondary type at all. MusicBrainz gives us
+ * this as structured data, which is exactly what title-text filtering
+ * (cleanTitle's PROMO_NOISE) was always an approximation of.
+ */
+const CLEAN_RELEASE_GROUP_TYPES = new Set(['Single', 'Album', 'EP'])
+
+function isCleanReleaseGroup(candidate: ReleaseGroupCandidate): boolean {
+  return (
+    candidate.primaryType !== undefined &&
+    CLEAN_RELEASE_GROUP_TYPES.has(candidate.primaryType) &&
+    candidate.secondaryTypes.length === 0
+  )
+}
+
+/**
+ * The score floor for a release-group match. Deliberately low: once a
+ * candidate has passed the exact title match, the exact (or, for a
+ * collaboration, full-name-corroborated) artist match, and the "clean
+ * type" filter above, its relevance score has already done its job of
+ * ranking candidates against each other — it is not additional evidence
+ * the way MIN_SCORE is for a loosely-matched recording.
+ */
+const MIN_SCORE_RELEASE_GROUP = 50
+
+/**
  * Picks a year only when confident. A candidate must have a title match
  * (normalized, feature-credit stripped) to be considered at all, and then
  * an artist match whose shape depends on how many performers the song was
@@ -230,6 +308,70 @@ export function chooseYear(
 
   const years = matches.map((c) => extractYear(c.firstReleaseDate)).filter((y) => y > 0)
   if (years.length < MIN_DATED_MATCHES) return 0
+
+  const earliest = Math.min(...years)
+  const latest = Math.max(...years)
+  return latest - earliest <= MAX_YEAR_SPREAD ? earliest : 0
+}
+
+/**
+ * Picks a year from release groups — MusicBrainz's own reconciliation of
+ * every edition of a work into one entity, whose `first-release-date` is
+ * already computed on their side as the earliest of those editions. This
+ * is the primary source: it sidesteps the exact failure mode chooseYear
+ * exists to defend against, where a song has a dozen individual
+ * *recordings* (remaster, live take, radio edit...), most undated, and
+ * trusting whichever ones happen to carry a date risks trusting a reissue
+ * instead of the original (this is exactly how "Smells Like Teen Spirit"
+ * came back 1995 instead of 1991 before MIN_DATED_MATCHES existed).
+ *
+ * A candidate only counts once three things are all true:
+ *   1. Its title matches exactly (normalized, feature-credit stripped).
+ *   2. Its artist matches — primary-artist-reduced for a solo credit, or
+ *      every credited name present in its raw artist-credit for a
+ *      collaboration (same rule as chooseYear, same reasons).
+ *   3. isCleanReleaseGroup: a plain Single/Album/EP with no secondary
+ *      type, i.e. not a live album, remix bundle, compilation or
+ *      soundtrack tie-in that happens to share a title and artist.
+ *
+ * Unlike chooseYear, a *single* clean, matching candidate is trusted: its
+ * date is not one arbitrary recording's denormalized field, it is
+ * MusicBrainz's own reconciled minimum across that release group's
+ * editions, which is a fundamentally stronger claim than a lone recording
+ * date ever was. When more than one clean candidate matches (e.g. a
+ * separate Album and Single release group for the same song) and they
+ * disagree by more than MAX_YEAR_SPREAD, that is still treated as
+ * unreliable and falls back to 0 — the same "ambiguity resolves to 0"
+ * rule as everywhere else. Confirmed live: MusicBrainz can have no clean
+ * release group for a song at all (e.g. "Kendrick Lamar" / "luther" has
+ * exactly one, mistyped "Other" with a date eight months later than the
+ * real release) — that correctly returns 0 here rather than trusting it,
+ * and the caller falls back to chooseYear's recording-based search.
+ */
+export function chooseYearFromReleaseGroups(
+  candidates: ReleaseGroupCandidate[],
+  artist: string,
+  title: string,
+): number {
+  const wantTitle = normalize(stripFeatureCredit(cleanTitle(title)))
+  const names = artistNames(artist).map(normalize)
+  const isMultiArtist = names.length > 1
+
+  const matches = candidates.filter((c) => {
+    if (c.score < MIN_SCORE_RELEASE_GROUP) return false
+    if (!isCleanReleaseGroup(c)) return false
+    if (normalize(stripFeatureCredit(cleanTitle(c.title))) !== wantTitle) return false
+
+    if (isMultiArtist) {
+      const candidateArtist = normalize(c.artistCredit)
+      return names.every((name) => candidateArtist.includes(name))
+    }
+
+    return normalize(primaryArtist(c.artistCredit)) === names[0]
+  })
+
+  const years = matches.map((c) => extractYear(c.firstReleaseDate)).filter((y) => y > 0)
+  if (years.length === 0) return 0
 
   const earliest = Math.min(...years)
   const latest = Math.max(...years)
