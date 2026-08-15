@@ -6,6 +6,7 @@ import { Scoreboard } from '@/host/ui/Scoreboard'
 import { TierMeter } from '@/host/ui/TierMeter'
 import { KeyboardFallback } from '@/host/ui/KeyboardFallback'
 import { LobbyPanel } from '@/host/ui/phases/LobbyPanel'
+import { WaitingPanel } from '@/host/ui/phases/WaitingPanel'
 import { PlayingPanel } from '@/host/ui/phases/PlayingPanel'
 import { BuzzedPanel } from '@/host/ui/phases/BuzzedPanel'
 import { RevealedPanel } from '@/host/ui/phases/RevealedPanel'
@@ -145,6 +146,8 @@ function phaseStage(view: HostView): ReactElement {
   switch (phase.kind) {
     case 'lobby':
       return <LobbyPanel view={view} />
+    case 'waiting':
+      return <WaitingPanel view={view} phase={phase} />
     case 'playing':
       return <PlayingPanel view={view} phase={phase} />
     case 'buzzed':

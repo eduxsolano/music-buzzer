@@ -30,6 +30,11 @@ function stateWith(overrides: Partial<PublicState>): PublicState {
     players: [{ id: 'p1', name: 'Ana', score: 0 }],
     lockedOut: [],
     buzzedPlayerId: null,
+    outcome: null,
+    winnerId: null,
+    pointsAtStake: 5,
+    tierDurationMs: 5_000,
+    remainingMs: 5_000,
     roundsPlayed: 1,
     roundsTotal: 20,
     ...overrides,
@@ -55,11 +60,28 @@ describe('identity', () => {
 
 describe('buttonState', () => {
   test('waits until the host has sent anything', () => {
-    expect(buttonState(null, 'p1')).toBe('waiting')
+    expect(buttonState(null, 'p1')).toBe('connecting')
   })
 
   test('is armed while the song is playing', () => {
     expect(buttonState(stateWith({ phase: 'playing' }), 'p1')).toBe('armed')
+  })
+
+  test('stays armed while the host holds the room between tiers', () => {
+    // The pause is part of the round: someone who names the song half a
+    // second after the music stops still earns the tier that just played.
+    expect(buttonState(stateWith({ phase: 'waiting' }), 'p1')).toBe('armed')
+  })
+
+  test('celebrates on the phone of the player just judged correct', () => {
+    const judged = stateWith({ phase: 'revealed', outcome: 'correct', winnerId: 'p1' })
+    expect(buttonState(judged, 'p1')).toBe('celebrating')
+    expect(buttonState(judged, 'p2')).toBe('locked')
+  })
+
+  test('does not celebrate a reveal nobody won', () => {
+    expect(buttonState(stateWith({ phase: 'revealed', outcome: 'timeout' }), 'p1')).toBe('locked')
+    expect(buttonState(stateWith({ phase: 'revealed', outcome: 'allWrong' }), 'p1')).toBe('locked')
   })
 
   test('is locked while somebody else is being judged', () => {
@@ -84,6 +106,10 @@ describe('buttonState', () => {
     expect(buttonState(stateWith({ phase: 'lobby' }), 'p1')).toBe('locked')
     expect(buttonState(stateWith({ phase: 'revealed' }), 'p1')).toBe('locked')
     expect(buttonState(stateWith({ phase: 'finished' }), 'p1')).toBe('locked')
+  })
+
+  test('an eliminated player stays out for the whole song, pauses included', () => {
+    expect(buttonState(stateWith({ phase: 'waiting', lockedOut: ['p1'] }), 'p1')).toBe('eliminated')
   })
 
   test('elimination clears when the next song starts', () => {

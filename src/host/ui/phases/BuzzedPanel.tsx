@@ -19,7 +19,7 @@ export function BuzzedPanel({
   phase: Extract<Phase, { kind: 'buzzed' }>
 }) {
   const name = playerName(view, phase.playerId) ?? 'Alguien'
-  const points = pointsForTier(phase.tier)
+  const points = pointsForTier(phase.worthTier)
 
   return (
     <StagePanel

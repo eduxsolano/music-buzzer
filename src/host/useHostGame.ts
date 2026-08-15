@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { DEFAULT_ROUNDS } from '@/game/config'
 import { currentSong, initialState, reduce } from '@/game/reducer'
-import { toPublicState } from '@/game/publicState'
+import { toPublicState, withCountdown } from '@/game/publicState'
 import { createRoomCode, shuffle } from '@/game/random'
 import type { GameEvent, GameState, Song } from '@/game/types'
 import type { AudioPlayer } from '@/audio/audioPlayer'
@@ -70,6 +70,12 @@ export function useHostGame(songs: Song[]) {
   // changed, or we saturate the channel with no-op STATE messages and force
   // every phone's self-healing re-announce to fire at the same 20Hz. Do NOT
   // "simplify" this back to publishing on every state change.
+  //
+  // The phones' countdown does not weaken this: `withCountdown` attaches the
+  // remaining milliseconds AFTER the comparison, and the type of what
+  // `toPublicState` returns has no room for it, so the countdown can never be
+  // the reason a message goes out. One message per tier, and each phone
+  // counts down locally from it.
   const lastPublishedRef = useRef<string | null>(null)
   useEffect(() => {
     if (!room) return
@@ -91,7 +97,7 @@ export function useHostGame(songs: Song[]) {
     const serialized = JSON.stringify(publicState)
     if (serialized === lastPublishedRef.current) return
     lastPublishedRef.current = serialized
-    void channel.publish({ type: 'STATE', state: publicState })
+    void channel.publish({ type: 'STATE', state: withCountdown(publicState, state.phase) })
   }, [room, state])
 
   // Listen to the phones. The host decides the winner by arrival order:
@@ -141,7 +147,7 @@ export function useHostGame(songs: Song[]) {
 
   // Audio follows the TRANSITION, not the phase: only that tells "start tier 2"
   // apart from "come back to tier 2 after a wrong answer".
-  const previousSnapshot = useRef<AudioSnapshot>({ kind: 'lobby', tier: null })
+  const previousSnapshot = useRef<AudioSnapshot>({ kind: 'lobby', tier: null, resumes: false })
   // True once this page session has actually issued a `play`. A reload wipes
   // the double-buffered YouTube players (their videoId starts out null), so a
   // computed `resume` before any `play` happened in THIS session would try to

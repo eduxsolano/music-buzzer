@@ -1,5 +1,5 @@
 import type { Phase, RevealOutcome } from '@/game/types'
-import type { Tier } from '@/game/tiers'
+import { tierDurationMs, type Tier } from '@/game/tiers'
 
 /**
  * The presentation vocabulary of the host screen, kept pure so it can be
@@ -10,7 +10,7 @@ import type { Tier } from '@/game/tiers'
  * word — cool while the song plays, amber the instant someone presses, green
  * or red on the judgement.
  */
-export type Mood = 'idle' | 'live' | 'buzzed' | 'correct' | 'wrong' | 'over'
+export type Mood = 'idle' | 'hold' | 'live' | 'buzzed' | 'correct' | 'wrong' | 'over'
 
 /** A judgement just delivered, held for a beat so the room registers it. */
 export type Judgement = 'correct' | 'wrong'
@@ -25,6 +25,11 @@ export function moodFor(phase: Phase, judgement: Judgement | null): Mood {
   switch (phase.kind) {
     case 'lobby':
       return 'idle'
+    // A held breath, not a dead screen: the same cool family as `live`, dimmed
+    // and drawn in, so the room reads "the music stopped and something is
+    // about to happen" without a word.
+    case 'waiting':
+      return 'hold'
     case 'playing':
       return 'live'
     case 'buzzed':
@@ -54,13 +59,16 @@ export interface TierClock {
  *
  * A buzz freezes the tier rather than ending it, so the meter freezes with
  * it — the room can see exactly how much of the tier was left when the music
- * cut.
+ * cut. `waiting` shows the same thing from the other side: the tier the host
+ * is about to launch, already drained by however much of it was heard.
  */
 export function tierClockFor(phase: Phase): TierClock {
   switch (phase.kind) {
     case 'playing':
-    case 'buzzed':
       return { tier: phase.tier, elapsedMs: phase.elapsedMs }
+    case 'waiting':
+    case 'buzzed':
+      return { tier: phase.launchTier, elapsedMs: phase.resumeAtMs }
     case 'lobby':
     case 'revealed':
     case 'finished':
@@ -100,6 +108,24 @@ export function revealHeadline(outcome: RevealOutcome, winnerName: string | null
     case 'skipped':
       return 'Canción saltada'
   }
+}
+
+/**
+ * What the host's launch button promises.
+ *
+ * Sounding a tier for the first time and picking a cut one back up are two
+ * different acts, and the button has to say which: after a wrong answer the
+ * room already heard the first seconds and needs to know the music continues
+ * rather than starts over.
+ */
+export function launchLabel(launchTier: Tier, resumeAtMs: number): string {
+  if (resumeAtMs > 0) return 'Retomar donde se cortó'
+  return `Sonar ${Math.round(tierDurationMs(launchTier) / 1_000)} segundos`
+}
+
+/** The line under the launch button: why the room is standing still. */
+export function waitingNote(worthPoints: number): string {
+  return worthPoints === 1 ? 'punto en juego ahora' : 'puntos en juego ahora'
 }
 
 export function playersConnectedLabel(count: number): string {

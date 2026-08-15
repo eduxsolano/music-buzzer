@@ -2,12 +2,14 @@ import { describe, expect, test } from 'vitest'
 import { initialState, reduce } from '@/game/reducer'
 import type { GameState } from '@/game/types'
 
+/** A game with tier 1 already sounding: every round now starts held by the host. */
 function gameWith(names: string[]): GameState {
   const joined = names.reduce(
     (state, name) => reduce(state, { type: 'JOIN', playerId: name, name }),
     initialState(),
   )
-  return reduce(joined, { type: 'START_GAME', deck: ['s1', 's2'], roundsTotal: 2 })
+  const dealt = reduce(joined, { type: 'START_GAME', deck: ['s1', 's2'], roundsTotal: 2 })
+  return reduce(dealt, { type: 'LAUNCH_TIER' })
 }
 
 function scoreOf(state: GameState, id: string): number {
@@ -17,11 +19,36 @@ function scoreOf(state: GameState, id: string): number {
 }
 
 describe('buzzing', () => {
-  test('freezes the tier and the elapsed time at the moment of the press', () => {
+  test('freezes what the press is worth and where the music was cut', () => {
     let state = gameWith(['ana'])
     state = reduce(state, { type: 'TICK', deltaMs: 4_999 })
     state = reduce(state, { type: 'BUZZ', playerId: 'ana' })
-    expect(state.phase).toEqual({ kind: 'buzzed', tier: 1, elapsedMs: 4_999, playerId: 'ana' })
+    expect(state.phase).toEqual({
+      kind: 'buzzed',
+      playerId: 'ana',
+      worthTier: 1,
+      launchTier: 1,
+      resumeAtMs: 4_999,
+    })
+  })
+
+  test('a press during the pause between tiers earns the tier that just played', () => {
+    let state = gameWith(['ana'])
+    state = reduce(state, { type: 'TICK', deltaMs: 5_000 })
+    expect(state.phase).toMatchObject({ kind: 'waiting', worthTier: 1, launchTier: 2 })
+    state = reduce(state, { type: 'BUZZ', playerId: 'ana' })
+    expect(state.phase).toEqual({
+      kind: 'buzzed',
+      playerId: 'ana',
+      worthTier: 1,
+      launchTier: 2,
+      resumeAtMs: 0,
+    })
+  })
+
+  test('a press in the lobby does nothing', () => {
+    const lobby = reduce(initialState(), { type: 'JOIN', playerId: 'ana', name: 'ana' })
+    expect(reduce(lobby, { type: 'BUZZ', playerId: 'ana' })).toBe(lobby)
   })
 
   test('two near-simultaneous presses produce exactly one winner', () => {
@@ -64,7 +91,8 @@ describe('judging a correct answer', () => {
 
   test('pressing just past the boundary is worth the next tier down', () => {
     let state = gameWith(['ana'])
-    state = reduce(state, { type: 'TICK', deltaMs: 5_000 }) // enters tier 2
+    state = reduce(state, { type: 'TICK', deltaMs: 5_000 })
+    state = reduce(state, { type: 'LAUNCH_TIER' }) // tier 2 sounding, 0 ms in
     state = reduce(state, { type: 'BUZZ', playerId: 'ana' })
     state = reduce(state, { type: 'JUDGE', correct: true })
     expect(scoreOf(state, 'ana')).toBe(3)
@@ -73,7 +101,9 @@ describe('judging a correct answer', () => {
   test('the third tier is worth one point', () => {
     let state = gameWith(['ana'])
     state = reduce(state, { type: 'TICK', deltaMs: 5_000 })
+    state = reduce(state, { type: 'LAUNCH_TIER' })
     state = reduce(state, { type: 'TICK', deltaMs: 10_000 })
+    state = reduce(state, { type: 'LAUNCH_TIER' })
     state = reduce(state, { type: 'BUZZ', playerId: 'ana' })
     state = reduce(state, { type: 'JUDGE', correct: true })
     expect(scoreOf(state, 'ana')).toBe(1)
@@ -105,10 +135,40 @@ describe('judging a wrong answer', () => {
   test('the audio resumes at the exact cut point, in the same tier', () => {
     let state = gameWith(['ana', 'beto'])
     state = reduce(state, { type: 'TICK', deltaMs: 5_000 })
+    state = reduce(state, { type: 'LAUNCH_TIER' })
     state = reduce(state, { type: 'TICK', deltaMs: 3_000 }) // tier 2, 3 s in
     state = reduce(state, { type: 'BUZZ', playerId: 'ana' })
     state = reduce(state, { type: 'JUDGE', correct: false })
+    // The room goes quiet and the host decides when the music comes back —
+    // but it comes back on the very tier that was cut, at the very
+    // millisecond it was cut, and it is still worth that tier.
+    expect(state.phase).toEqual({
+      kind: 'waiting',
+      worthTier: 2,
+      launchTier: 2,
+      resumeAtMs: 3_000,
+    })
+    state = reduce(state, { type: 'LAUNCH_TIER' })
     expect(state.phase).toEqual({ kind: 'playing', tier: 2, elapsedMs: 3_000 })
+  })
+
+  test('a press during the pause after a wrong answer keeps that tier, cut point and all', () => {
+    let state = gameWith(['ana', 'beto'])
+    state = reduce(state, { type: 'TICK', deltaMs: 5_000 })
+    state = reduce(state, { type: 'LAUNCH_TIER' })
+    state = reduce(state, { type: 'TICK', deltaMs: 3_000 })
+    state = reduce(state, { type: 'BUZZ', playerId: 'ana' })
+    state = reduce(state, { type: 'JUDGE', correct: false })
+    state = reduce(state, { type: 'BUZZ', playerId: 'beto' })
+    expect(state.phase).toEqual({
+      kind: 'buzzed',
+      playerId: 'beto',
+      worthTier: 2,
+      launchTier: 2,
+      resumeAtMs: 3_000,
+    })
+    state = reduce(state, { type: 'JUDGE', correct: true })
+    expect(scoreOf(state, 'beto')).toBe(3)
   })
 
   test('an eliminated player is available again on the next song', () => {

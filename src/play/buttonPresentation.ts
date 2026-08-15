@@ -18,7 +18,7 @@ export interface ButtonPresentation {
 }
 
 export const BUTTON_PRESENTATION: Record<ButtonState, ButtonPresentation> = {
-  waiting: {
+  connecting: {
     label: 'Conectando',
     hint: 'Buscando la partida',
     motion: 'none',
@@ -36,6 +36,11 @@ export const BUTTON_PRESENTATION: Record<ButtonState, ButtonPresentation> = {
   won: {
     label: '¡Ganaste!',
     hint: 'Di el título y el artista en voz alta',
+    motion: 'burst',
+  },
+  celebrating: {
+    label: '¡Acertaste!',
+    hint: 'Puntos para ti',
     motion: 'burst',
   },
   eliminated: {

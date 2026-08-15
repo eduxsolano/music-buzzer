@@ -8,14 +8,14 @@ function gameWith(deck: string[], roundsTotal: number): GameState {
 }
 
 describe('advancing rounds', () => {
-  test('deals the next song and resets the tier', () => {
+  test('deals the next song and hands the room back to the host', () => {
     let state = gameWith(['s1', 's2'], 2)
     state = reduce(state, { type: 'BUZZ', playerId: 'ana' })
     state = reduce(state, { type: 'JUDGE', correct: true })
     state = reduce(state, { type: 'NEXT_ROUND' })
     expect(state.currentSongId).toBe('s2')
     expect(state.roundsPlayed).toBe(2)
-    expect(state.phase).toEqual({ kind: 'playing', tier: 1, elapsedMs: 0 })
+    expect(state.phase).toEqual({ kind: 'waiting', worthTier: 1, launchTier: 1, resumeAtMs: 0 })
   })
 
   test('no song is dealt twice in one game', () => {
@@ -29,9 +29,11 @@ describe('advancing rounds', () => {
     expect(new Set(dealt).size).toBe(3)
   })
 
-  test('advancing is ignored while the song is still playing', () => {
-    const state = gameWith(['s1', 's2'], 2)
-    expect(reduce(state, { type: 'NEXT_ROUND' })).toBe(state)
+  test('advancing is ignored while the round is still going', () => {
+    const held = gameWith(['s1', 's2'], 2)
+    expect(reduce(held, { type: 'NEXT_ROUND' })).toBe(held)
+    const playing = reduce(held, { type: 'LAUNCH_TIER' })
+    expect(reduce(playing, { type: 'NEXT_ROUND' })).toBe(playing)
   })
 })
 
@@ -59,8 +61,23 @@ describe('skipping a song', () => {
     expect(state.players[0].score).toBe(0)
   })
 
+  test('works while the host is still holding the room, before a note has played', () => {
+    const state = gameWith(['s1', 's2'], 2)
+    expect(state.phase).toMatchObject({ kind: 'waiting' })
+    expect(reduce(state, { type: 'SKIP_SONG' }).phase).toMatchObject({
+      kind: 'revealed',
+      outcome: 'skipped',
+    })
+  })
+
+  test('works mid-tier, in case the video turns out to be broken', () => {
+    let state = reduce(gameWith(['s1', 's2'], 2), { type: 'LAUNCH_TIER' })
+    state = reduce(state, { type: 'SKIP_SONG' })
+    expect(state.phase).toMatchObject({ kind: 'revealed', outcome: 'skipped' })
+  })
+
   test('works while a player is being judged, in case the video is broken', () => {
-    let state = gameWith(['s1', 's2'], 2)
+    let state = reduce(gameWith(['s1', 's2'], 2), { type: 'LAUNCH_TIER' })
     state = reduce(state, { type: 'BUZZ', playerId: 'ana' })
     state = reduce(state, { type: 'SKIP_SONG' })
     expect(state.phase).toMatchObject({ kind: 'revealed', outcome: 'skipped' })

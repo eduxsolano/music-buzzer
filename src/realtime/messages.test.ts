@@ -35,6 +35,11 @@ describe('parseHostMessage', () => {
     players: [],
     lockedOut: [],
     buzzedPlayerId: null,
+    outcome: null,
+    winnerId: null,
+    pointsAtStake: 5,
+    tierDurationMs: 5_000,
+    remainingMs: 5_000,
     roundsPlayed: 1,
     roundsTotal: 20,
   }
@@ -54,6 +59,11 @@ describe('parseHostMessage', () => {
       players: [{ id: 'p1', name: 'Ana', score: 3 }],
       lockedOut: ['p2'],
       buzzedPlayerId: 'p1',
+      outcome: null,
+      winnerId: null,
+      pointsAtStake: 3,
+      tierDurationMs: 10_000,
+      remainingMs: 7_000,
       roundsPlayed: 2,
       roundsTotal: 20,
     }
@@ -61,6 +71,48 @@ describe('parseHostMessage', () => {
       type: 'STATE',
       state: fullState,
     })
+  })
+
+  test('accepts the phase the host holds the room in', () => {
+    expect(
+      parseHostMessage({ type: 'STATE', state: { ...state, phase: 'waiting' } })?.state.phase,
+    ).toBe('waiting')
+  })
+
+  test('carries the round result through, so a phone knows it was right', () => {
+    const revealed = { ...state, phase: 'revealed' as const, outcome: 'correct', winnerId: 'p1' }
+    const parsed = parseHostMessage({ type: 'STATE', state: revealed })
+    expect(parsed?.state.outcome).toBe('correct')
+    expect(parsed?.state.winnerId).toBe('p1')
+  })
+
+  test('rejects a state whose outcome is an unknown string', () => {
+    expect(
+      parseHostMessage({ type: 'STATE', state: { ...state, outcome: 'meh' } }),
+    ).toBeNull()
+  })
+
+  test('rejects a state whose countdown or stake is not a number', () => {
+    expect(
+      parseHostMessage({ type: 'STATE', state: { ...state, remainingMs: 'soon' } }),
+    ).toBeNull()
+    expect(
+      parseHostMessage({ type: 'STATE', state: { ...state, pointsAtStake: 'lots' } }),
+    ).toBeNull()
+  })
+
+  test('rejects a state missing the fields the phone now needs', () => {
+    for (const field of [
+      'outcome',
+      'winnerId',
+      'pointsAtStake',
+      'tierDurationMs',
+      'remainingMs',
+    ]) {
+      const incomplete: Record<string, unknown> = { ...state }
+      delete incomplete[field]
+      expect(parseHostMessage({ type: 'STATE', state: incomplete })).toBeNull()
+    }
   })
 
   test('rejects a state that is an array', () => {

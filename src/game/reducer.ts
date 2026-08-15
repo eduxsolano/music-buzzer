@@ -1,6 +1,6 @@
 import { DEFAULT_ROUNDS, WRONG_ANSWER_PENALTY } from '@/game/config'
 import { nextTier, pointsForTier, tierDurationMs } from '@/game/tiers'
-import type { GameEvent, GameState, Player, PlayerId, Song } from '@/game/types'
+import type { GameEvent, GameState, Player, PlayerId, Song, Stakes } from '@/game/types'
 
 export function initialState(): GameState {
   return {
@@ -14,7 +14,14 @@ export function initialState(): GameState {
   }
 }
 
-/** Deals the next song. Assumes the deck is non-empty. */
+/**
+ * Deals the next song and hands the room back to the host.
+ *
+ * A round no longer starts sounding on its own: between tiers the room is
+ * arguing about what the song is, and music restarting by itself is
+ * indistinguishable from the music that was already there. The host holds the
+ * room and presses to start each tier.
+ */
 function dealRound(state: GameState): GameState {
   const [songId, ...rest] = state.deck
   return {
@@ -23,7 +30,7 @@ function dealRound(state: GameState): GameState {
     currentSongId: songId,
     roundsPlayed: state.roundsPlayed + 1,
     lockedOut: [],
-    phase: { kind: 'playing', tier: 1, elapsedMs: 0 },
+    phase: { kind: 'waiting', worthTier: 1, launchTier: 1, resumeAtMs: 0 },
   }
 }
 
@@ -58,6 +65,15 @@ export function reduce(state: GameState, event: GameEvent): GameState {
       })
     }
 
+    case 'LAUNCH_TIER': {
+      if (state.phase.kind !== 'waiting') return state
+      const { launchTier, resumeAtMs } = state.phase
+      // `resumeAtMs` is 0 for a fresh tier and the exact cut point after a
+      // wrong answer, so one line covers both "sound tier 2" and "carry on
+      // from 3.4 s into tier 2".
+      return { ...state, phase: { kind: 'playing', tier: launchTier, elapsedMs: resumeAtMs } }
+    }
+
     // TICK deltas must stay small relative to a tier's duration: a delta that
     // overshoots a boundary loses the excess. The host guarantees this by
     // dispatching a constant 50 ms.
@@ -71,32 +87,44 @@ export function reduce(state: GameState, event: GameEvent): GameState {
       if (upcoming === null) {
         return { ...state, phase: { kind: 'revealed', outcome: 'timeout', winnerId: null } }
       }
-      return { ...state, phase: { kind: 'playing', tier: upcoming, elapsedMs: 0 } }
-    }
-
-    case 'BUZZ': {
-      if (state.phase.kind !== 'playing') return state
-      if (state.lockedOut.includes(event.playerId)) return state
-      if (!state.players.some((p) => p.id === event.playerId)) return state
+      // The tier that just ran out is STILL what a press is worth. Somebody
+      // who names the song half a second after the music stops has earned it;
+      // that is what makes the pause tense rather than dead.
       return {
         ...state,
         phase: {
-          kind: 'buzzed',
-          tier: state.phase.tier,
-          elapsedMs: state.phase.elapsedMs,
-          playerId: event.playerId,
+          kind: 'waiting',
+          worthTier: state.phase.tier,
+          launchTier: upcoming,
+          resumeAtMs: 0,
         },
       }
     }
 
+    case 'BUZZ': {
+      const { phase } = state
+      // Pressing during the pause is deliberate, not a leak: the wait is part
+      // of the round, and it pays whatever the last tier heard was worth.
+      if (phase.kind !== 'playing' && phase.kind !== 'waiting') return state
+      if (state.lockedOut.includes(event.playerId)) return state
+      if (!state.players.some((p) => p.id === event.playerId)) return state
+
+      const stakes: Stakes =
+        phase.kind === 'playing'
+          ? { worthTier: phase.tier, launchTier: phase.tier, resumeAtMs: phase.elapsedMs }
+          : { worthTier: phase.worthTier, launchTier: phase.launchTier, resumeAtMs: phase.resumeAtMs }
+
+      return { ...state, phase: { kind: 'buzzed', playerId: event.playerId, ...stakes } }
+    }
+
     case 'JUDGE': {
       if (state.phase.kind !== 'buzzed') return state
-      const { playerId, tier, elapsedMs } = state.phase
+      const { playerId, worthTier, launchTier, resumeAtMs } = state.phase
 
       if (event.correct) {
         return {
           ...state,
-          players: addScore(state.players, playerId, pointsForTier(tier)),
+          players: addScore(state.players, playerId, pointsForTier(worthTier)),
           phase: { kind: 'revealed', outcome: 'correct', winnerId: playerId },
         }
       }
@@ -111,15 +139,23 @@ export function reduce(state: GameState, event: GameEvent): GameState {
           phase: { kind: 'revealed', outcome: 'allWrong', winnerId: null },
         }
       }
-      return { ...state, players, lockedOut, phase: { kind: 'playing', tier, elapsedMs } }
+      // The three facts come back untouched: same worth, same tier, same
+      // millisecond. The audio resumes rather than restarting, so the hook is
+      // never handed out twice.
+      return {
+        ...state,
+        players,
+        lockedOut,
+        phase: { kind: 'waiting', worthTier, launchTier, resumeAtMs },
+      }
     }
 
     case 'NEXT_ROUND': {
       // A round is only ever left through the reveal screen: correct,
       // allWrong, timeout, or skipped. The host's "next song" control only
       // renders once the phase is 'revealed', so a NEXT_ROUND arriving while
-      // still 'playing' or 'buzzed' means it was dispatched out of order
-      // upstream; ignore it rather than cutting a round short.
+      // still 'waiting', 'playing' or 'buzzed' means it was dispatched out of
+      // order upstream; ignore it rather than cutting a round short.
       if (state.phase.kind !== 'revealed') return state
       const gameOver = state.roundsPlayed >= state.roundsTotal || state.deck.length === 0
       if (gameOver) return { ...state, phase: { kind: 'finished' }, currentSongId: null }
@@ -127,7 +163,8 @@ export function reduce(state: GameState, event: GameEvent): GameState {
     }
 
     case 'SKIP_SONG': {
-      if (state.phase.kind !== 'playing' && state.phase.kind !== 'buzzed') return state
+      const { kind } = state.phase
+      if (kind !== 'waiting' && kind !== 'playing' && kind !== 'buzzed') return state
       return { ...state, phase: { kind: 'revealed', outcome: 'skipped', winnerId: null } }
     }
 

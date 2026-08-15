@@ -13,6 +13,12 @@ fuera de esa canción.
 3. Pulsa **Empezar partida**. El jugador que pulsa dice su respuesta en voz
    alta y tú juzgas con ✅ o ❌.
 
+Tú decides cuándo suena cada tramo: entre uno y otro la pantalla se queda
+esperando con un botón que dice qué va a hacer (**Sonar 10 segundos**,
+**Retomar donde se cortó**). Ese silencio es parte de la ronda — los celulares
+siguen activos y una pulsación ahí vale lo mismo que el tramo que acaba de
+sonar.
+
 Inicia sesión en YouTube en ese navegador para que Premium quite los anuncios.
 
 ## Desplegar
@@ -36,10 +42,14 @@ Con dos celulares reales, antes de jugar en serio:
 - [ ] el audio suena sin anuncios y sin demora perceptible
 - [ ] pulsar corta la música al instante y bloquea al otro celular
 - [ ] ✅ otorga los puntos que muestra la pantalla
-- [ ] ❌ resta un punto, tacha al jugador en el marcador y **la música
-      retoma justo donde se cortó**
-- [ ] sin que nadie pulse, la canción se reinicia a los 5 s y a los 15 s
-      (tramos 2 y 3)
+- [ ] ❌ resta un punto, tacha al jugador en el marcador y el botón pasa a
+      decir **Retomar donde se cortó**; al pulsarlo **la música retoma justo
+      donde se cortó**
+- [ ] sin que nadie pulse, al acabarse un tramo la música para sola y espera
+      tu botón para el siguiente
+- [ ] pulsar el buzzer durante esa espera vale los puntos del tramo que acaba
+      de sonar
+- [ ] la cuenta atrás del celular baja al mismo ritmo que la de la laptop
 - [ ] no hay silencio audible entre canciones
 - [ ] bloquear y desbloquear un celular a mitad de ronda lo trae de vuelta
       con su nombre y su puntaje

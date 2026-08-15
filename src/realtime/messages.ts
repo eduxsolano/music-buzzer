@@ -18,10 +18,21 @@ function isFiniteNumber(value: unknown): value is number {
   return typeof value === 'number' && Number.isFinite(value)
 }
 
-const PHASES = new Set(['lobby', 'playing', 'buzzed', 'revealed', 'finished'])
+const PHASES = new Set(['lobby', 'waiting', 'playing', 'buzzed', 'revealed', 'finished'])
 
 function isPhase(value: unknown): value is PublicState['phase'] {
   return typeof value === 'string' && PHASES.has(value)
+}
+
+const OUTCOMES = new Set(['correct', 'allWrong', 'timeout', 'skipped'])
+
+function isOutcome(value: unknown): value is NonNullable<PublicState['outcome']> {
+  return typeof value === 'string' && OUTCOMES.has(value)
+}
+
+/** A field that is either absent-as-null or a finite number, never anything else. */
+function isNullableNumber(value: unknown): value is number | null {
+  return value === null || isFiniteNumber(value)
 }
 
 function parsePublicPlayer(raw: unknown): PublicState['players'][number] | null {
@@ -53,6 +64,15 @@ function parsePublicState(raw: unknown): PublicState | null {
   if (state.buzzedPlayerId !== null && !nonEmptyString(state.buzzedPlayerId)) return null
   const buzzedPlayerId = state.buzzedPlayerId as string | null
 
+  if (state.winnerId !== null && !nonEmptyString(state.winnerId)) return null
+  const winnerId = state.winnerId as string | null
+
+  if (state.outcome !== null && !isOutcome(state.outcome)) return null
+  const outcome = state.outcome as PublicState['outcome']
+
+  if (!isNullableNumber(state.pointsAtStake) || !isNullableNumber(state.remainingMs)) return null
+  if (!isNullableNumber(state.tierDurationMs)) return null
+
   if (!isFiniteNumber(state.roundsPlayed) || !isFiniteNumber(state.roundsTotal)) return null
 
   return {
@@ -60,6 +80,11 @@ function parsePublicState(raw: unknown): PublicState | null {
     players,
     lockedOut,
     buzzedPlayerId,
+    outcome,
+    winnerId,
+    pointsAtStake: state.pointsAtStake,
+    tierDurationMs: state.tierDurationMs,
+    remainingMs: state.remainingMs,
     roundsPlayed: state.roundsPlayed,
     roundsTotal: state.roundsTotal,
   }

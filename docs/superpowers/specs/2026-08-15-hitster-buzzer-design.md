@@ -36,15 +36,15 @@ Estas cosas quedan explícitamente fuera de esta versión:
 | Acierto válido | Título **y** artista, ambos | Exige saberse la canción de verdad. |
 | Fallo | −1 punto y eliminado de esa canción | Desincentiva pulsar a ciegas. |
 | Progresión de tramos | Reinicia desde el principio, más largo | El reconocimiento musical funciona sobre el mismo gancho con más contexto. |
-| Pausa entre tramos | Ninguna, encadenado | El corte y rearranque de la canción ya señala el cambio de tramo. |
+| Pausa entre tramos | El anfitrión lanza cada tramo | *Revisado tras usarlo:* encadenar no funcionaba. Entre tramos la sala está discutiendo qué canción es, y una música que rearranca sola es indistinguible de la que ya sonaba — nadie sabía en qué tramo estaba. El anfitrión sostiene la sala y arranca cada tramo a propósito. Se puede pulsar durante la espera, y vale lo que valía el tramo que acaba de sonar. |
 
 ## 3. Reglas del juego
 
 ### La ronda
 
 Se saca una canción al azar del mazo, sin repetir dentro de la partida. El
-audio arranca en `startSeconds` y avanza por tres tramos encadenados, sin
-silencio entre ellos:
+audio arranca en `startSeconds` y avanza por tres tramos, cada uno lanzado a
+mano por el anfitrión:
 
 | Tramo | Suena | Vale |
 |---|---|---|
@@ -54,6 +54,11 @@ silencio entre ellos:
 
 Cada tramo **vuelve a empezar** en `startSeconds`, no continúa donde quedó el
 anterior. La canción suena unos 45 segundos en total si nadie pulsa.
+
+Entre un tramo y el siguiente la ronda queda **esperando**: la música para y
+el anfitrión decide cuándo suena el tramo siguiente. Los celulares siguen
+activos durante esa espera y una pulsación vale los puntos del **tramo que
+acaba de sonar**, no del que está por venir.
 
 Los límites son cerrados por abajo y abiertos por arriba, medidos sobre el
 segundo de reproducción del tramo en curso: una pulsación en 4.999 s del tramo
@@ -73,9 +78,11 @@ Si termina el tramo 3 sin pulsaciones, se revela la canción y nadie puntúa.
 revela la carta (título, artista, año) y se pasa a la siguiente canción.
 
 **❌ Fallo** — el jugador pierde 1 punto y queda eliminado **de esa canción**
-(no de la partida). Los demás se desbloquean y el audio **retoma exactamente
-donde se cortó**, dentro del mismo tramo y con el mismo temporizador. Un
-jugador eliminado vuelve a estar disponible en la canción siguiente.
+(no de la partida). Los demás se desbloquean y la ronda vuelve a **esperando**,
+sobre el mismo tramo y con el corte anotado al milisegundo: cuando el anfitrión
+pulsa, el audio **retoma exactamente donde se cortó**, nunca desde el
+principio. Un jugador eliminado vuelve a estar disponible en la canción
+siguiente.
 
 Si todos los jugadores quedan eliminados en una canción, la ronda se cierra de
 inmediato: se revela y nadie puntúa.

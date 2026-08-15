@@ -3,7 +3,14 @@ import { BUTTON_PRESENTATION } from '@/play/buttonPresentation'
 import { buttonState, type ButtonState } from '@/play/playerIdentity'
 import type { PublicState } from '@/game/publicState'
 
-const ALL_STATES: ButtonState[] = ['waiting', 'armed', 'locked', 'won', 'eliminated']
+const ALL_STATES: ButtonState[] = [
+  'connecting',
+  'armed',
+  'locked',
+  'won',
+  'celebrating',
+  'eliminated',
+]
 
 function publicState(overrides: Partial<PublicState> = {}): PublicState {
   return {
@@ -11,6 +18,11 @@ function publicState(overrides: Partial<PublicState> = {}): PublicState {
     players: [{ id: 'p1', name: 'Ana', score: 0 }],
     lockedOut: [],
     buzzedPlayerId: null,
+    outcome: null,
+    winnerId: null,
+    pointsAtStake: 5,
+    tierDurationMs: 5_000,
+    remainingMs: 5_000,
     roundsPlayed: 1,
     roundsTotal: 20,
     ...overrides,
@@ -34,9 +46,9 @@ describe('button presentation', () => {
     expect(breathing).toEqual(['armed'])
   })
 
-  it('celebrates only the state that won the race', () => {
+  it('celebrates winning the race and being right, and nothing else', () => {
     const bursting = ALL_STATES.filter((s) => BUTTON_PRESENTATION[s].motion === 'burst')
-    expect(bursting).toEqual(['won'])
+    expect(bursting).toEqual(['won', 'celebrating'])
   })
 
   it('tells the winner what to do next', () => {
@@ -50,11 +62,13 @@ describe('button presentation', () => {
   it('has a presentation for whatever buttonState actually returns', () => {
     const cases: PublicState[] = [
       publicState({ phase: 'lobby' }),
+      publicState({ phase: 'waiting' }),
       publicState({ phase: 'playing' }),
       publicState({ phase: 'buzzed', buzzedPlayerId: 'p1' }),
       publicState({ phase: 'buzzed', buzzedPlayerId: 'other' }),
       publicState({ lockedOut: ['p1'] }),
       publicState({ phase: 'revealed' }),
+      publicState({ phase: 'revealed', outcome: 'correct', winnerId: 'p1' }),
       publicState({ phase: 'finished' }),
     ]
     for (const state of [null, ...cases]) {

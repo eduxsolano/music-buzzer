@@ -2,12 +2,14 @@ import { describe, expect, it } from 'vitest'
 import type { Phase } from '@/game/types'
 import {
   heroSizeClass,
+  launchLabel,
   moodFor,
   playersConnectedLabel,
   revealHeadline,
   roundLabel,
   tierClockFor,
   tierProgress,
+  waitingNote,
 } from '@/host/ui/stagePresentation'
 
 describe('moodFor', () => {
@@ -17,7 +19,18 @@ describe('moodFor', () => {
   })
 
   it('turns amber the instant someone buzzes', () => {
-    expect(moodFor({ kind: 'buzzed', tier: 2, elapsedMs: 900, playerId: 'p1' }, null)).toBe('buzzed')
+    expect(
+      moodFor(
+        { kind: 'buzzed', playerId: 'p1', worthTier: 2, launchTier: 2, resumeAtMs: 900 },
+        null,
+      ),
+    ).toBe('buzzed')
+  })
+
+  it('holds its breath between tiers rather than looking like the lobby', () => {
+    const held = moodFor({ kind: 'waiting', worthTier: 1, launchTier: 2, resumeAtMs: 0 }, null)
+    expect(held).toBe('hold')
+    expect(held).not.toBe(moodFor({ kind: 'lobby' }, null))
   })
 
   it('shows the judgement even though a wrong answer returns to playing', () => {
@@ -47,10 +60,28 @@ describe('tierClockFor', () => {
   })
 
   it('freezes on a buzz instead of clearing, so the room sees what was left', () => {
-    expect(tierClockFor({ kind: 'buzzed', tier: 1, elapsedMs: 2_100, playerId: 'p1' })).toEqual({
-      tier: 1,
-      elapsedMs: 2_100,
+    expect(
+      tierClockFor({
+        kind: 'buzzed',
+        playerId: 'p1',
+        worthTier: 1,
+        launchTier: 1,
+        resumeAtMs: 2_100,
+      }),
+    ).toEqual({ tier: 1, elapsedMs: 2_100 })
+  })
+
+  it('shows the tier the host is about to launch, full, while waiting', () => {
+    expect(tierClockFor({ kind: 'waiting', worthTier: 1, launchTier: 2, resumeAtMs: 0 })).toEqual({
+      tier: 2,
+      elapsedMs: 0,
     })
+  })
+
+  it('keeps a cut tier drained while the host holds it, so nothing jumps back', () => {
+    expect(
+      tierClockFor({ kind: 'waiting', worthTier: 2, launchTier: 2, resumeAtMs: 3_000 }),
+    ).toEqual({ tier: 2, elapsedMs: 3_000 })
   })
 
   it('is empty in every phase where no tier is in play', () => {
@@ -110,6 +141,31 @@ describe('revealHeadline', () => {
     expect(revealHeadline('allWrong', null)).toBe('Nadie acertó')
     expect(revealHeadline('timeout', null)).toBe('Nadie pulsó')
     expect(revealHeadline('skipped', null)).toBe('Canción saltada')
+  })
+})
+
+describe('launchLabel', () => {
+  it('names the duration of a tier nobody has heard yet', () => {
+    expect(launchLabel(1, 0)).toBe('Sonar 5 segundos')
+    expect(launchLabel(2, 0)).toBe('Sonar 10 segundos')
+    expect(launchLabel(3, 0)).toBe('Sonar 30 segundos')
+  })
+
+  it('says it is picking up a cut tier rather than starting one', () => {
+    expect(launchLabel(2, 3_000)).toBe('Retomar donde se cortó')
+  })
+
+  it('treats a cut at the very first millisecond as a fresh tier', () => {
+    // Buzzing at 0 ms leaves nothing to resume: playing from the start IS the
+    // resume, and promising the room a continuation would be a lie.
+    expect(launchLabel(2, 0)).toBe('Sonar 10 segundos')
+  })
+})
+
+describe('waitingNote', () => {
+  it('pluralises the points still on the table', () => {
+    expect(waitingNote(5)).toBe('puntos en juego ahora')
+    expect(waitingNote(1)).toBe('punto en juego ahora')
   })
 })
 

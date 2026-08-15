@@ -47,6 +47,18 @@
   --stage-bloom: 0.3;
 }
 
+/* The held breath between tiers. The host has stopped the music on purpose
+   and the room is arguing about the song, so this is the `live` family pulled
+   down and drawn in: same steel, a narrower and dimmer bloom. Reads as "we
+   are between two things", never as "something broke". */
+[data-mood="hold"] {
+  --stage-ground: #080b11;
+  --stage-wash: #16263a;
+  --stage-accent: var(--steel);
+  --stage-wash-strength: 0.5;
+  --stage-bloom: 0.22;
+}
+
 /* While the song plays: cool, patient, nothing shouting. */
 [data-mood="live"] {
   --stage-ground: #0a0f16;
@@ -312,6 +324,30 @@ body {
   transition: transform 90ms linear;
 }
 
+/* The tier clock in words. Sits directly under the points at stake, in the
+   same place on the playing screen and the waiting one, so the eye never has
+   to hunt for it when the phase changes. Dimmed while it is holding rather
+   than draining: a still number that looks live is a lie. */
+.countdown {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.1em;
+  font-family: var(--font-display);
+  font-size: 1.7em;
+  line-height: 1;
+  color: var(--stage-accent);
+  opacity: 0.6;
+}
+
+.countdown[data-running="true"] {
+  opacity: 1;
+}
+
+.countdown-unit {
+  font-size: 0.55em;
+  opacity: 0.7;
+}
+
 .tier-dot {
   width: 0.5rem;
   height: 0.5rem;
@@ -419,6 +455,69 @@ body {
   animation: burst 900ms ease-out both;
 }
 
+/* A `box-shadow` animation replaces the shadow outright for its whole run, so
+   the primary button's own glow is repeated in every stop; leaving it out
+   would quietly demote the button while it pulses. */
+@keyframes pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 3rem color-mix(in oklab, var(--stage-accent) 28%, transparent),
+      0 0 0 0 color-mix(in oklab, var(--stage-accent) 45%, transparent);
+  }
+  70% {
+    box-shadow:
+      0 0 3rem color-mix(in oklab, var(--stage-accent) 28%, transparent),
+      0 0 0 1.1rem color-mix(in oklab, var(--stage-accent) 0%, transparent);
+  }
+}
+
+/* The launch button on the waiting screen. The room has to find it fast — the
+   host is holding a conversation while looking for it — but it must not
+   shout, because the screen it lives on is a held breath. */
+.pulse {
+  animation: pulse 2.4s ease-out infinite;
+}
+
+/* ── Confetti ──────────────────────────────────────────────────────── */
+
+/* Two moments only: the winner at the end of the night, and the phone of
+   whoever was just judged correct. Pure CSS transforms — nothing runs per
+   frame on the main thread, which matters on a laptop already decoding a
+   YouTube stream. */
+.confetti {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.confetti-piece {
+  position: absolute;
+  top: 0;
+  display: block;
+  opacity: 0;
+  will-change: transform;
+  animation-name: confetti-fall;
+  animation-timing-function: cubic-bezier(0.35, 0.15, 0.6, 1);
+  animation-fill-mode: both;
+}
+
+@keyframes confetti-fall {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -12vh, 0) rotate(0deg);
+  }
+  6% {
+    opacity: 0.95;
+  }
+  100% {
+    opacity: 0.95;
+    transform: translate3d(var(--drift), 112vh, 0) rotate(var(--spin));
+  }
+}
+
 /* ── The phone ─────────────────────────────────────────────────────── */
 
 /* Held 30 cm from a face in a dark room: same hues as the stage, a fraction
@@ -455,7 +554,7 @@ body {
   pointer-events: none;
 }
 
-.pad[data-state="waiting"] {
+.pad[data-state="connecting"] {
   --pad-core: #10141c;
   --pad-edge: #07090d;
   --pad-ink: #59647a;
@@ -483,6 +582,15 @@ body {
   --pad-ring: #fbbf24;
 }
 
+/* Judged correct. Green rather than the gold of `won`: gold is "you got here
+   first", green is "and you were right". */
+.pad[data-state="celebrating"] {
+  --pad-core: #0a5c3b;
+  --pad-edge: #03120c;
+  --pad-ink: #a6f2cd;
+  --pad-ring: var(--green);
+}
+
 .pad[data-state="eliminated"] {
   --pad-core: #2a0d11;
   --pad-edge: #0c0406;
@@ -498,6 +606,38 @@ body {
   border: 2px solid var(--pad-ring);
   opacity: 0.65;
   pointer-events: none;
+}
+
+/* The tier clock, drawn around the button. Same geometry as the base ring
+   above, so the arc lands exactly on it and reads as that ring emptying
+   rather than as a second ring. Its colour comes from the pad's own state
+   block — no new accent, and no glow: the phone is held in a dark room and a
+   bright halo would undo the luminance the whole screen was designed to. */
+.pad-progress {
+  position: absolute;
+  width: min(74vw, 74vh);
+  aspect-ratio: 1;
+  /* Zero at twelve o'clock, draining clockwise, where an eye looks for a clock. */
+  transform: rotate(-90deg);
+  overflow: visible;
+  pointer-events: none;
+}
+
+.pad-progress-fill {
+  fill: none;
+  stroke: var(--pad-ring);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  /* Matches the phone's redraw interval, so five steps a second read as one
+     continuous drain. Under reduced motion the blanket rule below collapses
+     this and the arc simply steps — still honest, just not animated. */
+  transition: stroke-dashoffset 200ms linear;
+}
+
+.pad-points {
+  font-family: var(--font-display);
+  font-size: 2.6rem;
+  line-height: 1;
 }
 
 .pad-label {
@@ -522,5 +662,12 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
+  }
+
+  /* Confetti IS the motion; with the animation collapsed above it would
+     otherwise snap to a frozen frame of paper across the screen. Removed
+     outright instead — the gold winner screen still reads as a celebration. */
+  .confetti {
+    display: none;
   }
 }
