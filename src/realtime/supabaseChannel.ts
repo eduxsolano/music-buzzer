@@ -31,7 +31,7 @@ export function createSupabaseChannel(room: string): Channel {
       await new Promise<void>((resolve, reject) => {
         channel.subscribe((status) => {
           if (status === 'SUBSCRIBED') resolve()
-          if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
+          if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED') {
             reject(new Error(`Supabase channel failed: ${status}`))
           }
         })
