@@ -3,9 +3,56 @@ import {
   buildRecordingQuery,
   chooseYear,
   extractYear,
+  primaryArtist,
+  stripFeatureCredit,
   toCandidate,
   type MusicBrainzCandidate,
 } from '@/songs/musicbrainz'
+
+describe('primaryArtist', () => {
+  test('leaves a solo artist untouched', () => {
+    expect(primaryArtist('Tate McRae')).toBe('Tate McRae')
+  })
+
+  test('keeps only the first name from a comma-joined credit', () => {
+    expect(primaryArtist('Lady Gaga, Bruno Mars')).toBe('Lady Gaga')
+  })
+
+  test('keeps only the first name from an ampersand-joined credit', () => {
+    expect(primaryArtist('Tinashe & Disco Lines')).toBe('Tinashe')
+  })
+
+  test('strips a trailing "feat." credit', () => {
+    expect(primaryArtist('Darin feat. Eloise')).toBe('Darin')
+  })
+
+  test('strips a trailing "ft." credit, case-insensitively', () => {
+    expect(primaryArtist('CENTRAL CEE FT. LIL BABY')).toBe('CENTRAL CEE')
+  })
+})
+
+describe('stripFeatureCredit', () => {
+  test('leaves a title with no feature credit untouched', () => {
+    expect(stripFeatureCredit('Espresso')).toBe('Espresso')
+  })
+
+  test('strips a parenthetical "ft." credit', () => {
+    expect(stripFeatureCredit('Raindance (ft. Tems)')).toBe('Raindance')
+  })
+
+  test('strips a bare "feat." credit', () => {
+    expect(stripFeatureCredit('Cold feat. Post Malone')).toBe('Cold')
+  })
+
+  test('strips a bracketed "feat." credit', () => {
+    expect(stripFeatureCredit('What I Want (feat. Tate McRae)')).toBe('What I Want')
+  })
+
+  test('does not cut into a word that merely contains "feat" or "ft"', () => {
+    expect(stripFeatureCredit('Defeat')).toBe('Defeat')
+    expect(stripFeatureCredit('wgft')).toBe('wgft')
+  })
+})
 
 describe('buildRecordingQuery', () => {
   test('builds a Lucene query with the title and artist', () => {
@@ -17,6 +64,12 @@ describe('buildRecordingQuery', () => {
   test('escapes Lucene special characters so a stray quote cannot break the query', () => {
     expect(buildRecordingQuery('AC/DC', 'Rock (n\' Roll)')).toBe(
       'recording:"Rock \\(n\' Roll\\)" AND artist:"AC\\/DC"',
+    )
+  })
+
+  test('queries by the primary artist and a feature-stripped title', () => {
+    expect(buildRecordingQuery('Lady Gaga, Bruno Mars', 'Cold feat. Post Malone')).toBe(
+      'recording:"Cold" AND artist:"Lady Gaga"',
     )
   })
 })
@@ -144,5 +197,21 @@ describe('chooseYear', () => {
   test('returns 0 when a matching candidate has no release date', () => {
     const candidates = [highScore({ firstReleaseDate: undefined })]
     expect(chooseYear(candidates, 'Nirvana', 'Smells Like Teen Spirit')).toBe(0)
+  })
+
+  // MusicBrainz indexes a recording by its primary performer, so a
+  // duet/collaboration credit only shows the lead artist in practice.
+  test('matches a duet against a candidate credited to only the primary artist', () => {
+    const candidates = [
+      { title: 'Die With a Smile', artistCredit: 'Lady Gaga', firstReleaseDate: '2024-08-16', score: 100 },
+    ]
+    expect(chooseYear(candidates, 'Lady Gaga, Bruno Mars', 'Die With A Smile')).toBe(2024)
+  })
+
+  test('matches a candidate credited with an "&"-joined pair against a title parsed with "feat."', () => {
+    const candidates = [
+      { title: 'Cold', artistCredit: 'BigXthaPlug & Post Malone', firstReleaseDate: '2025-11-21', score: 100 },
+    ]
+    expect(chooseYear(candidates, 'BigXthaPlug', 'Cold feat. Post Malone')).toBe(2025)
   })
 })

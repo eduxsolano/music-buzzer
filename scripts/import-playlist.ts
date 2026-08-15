@@ -4,7 +4,11 @@
  * Fills videoId, title and a guessed artist. startSeconds is set to a fixed
  * default (past most intros) so the deck is playable immediately; year is
  * looked up on MusicBrainz and left at 0 — pending review — whenever the
- * match is not confident. check-songs reports pending years.
+ * match is not confident. Every run also retries MusicBrainz for any song
+ * already in the deck that is still pending a year, not just newly added
+ * ones, so rerunning the importer is how a better matcher (or a transient
+ * MusicBrainz error) gets a second chance. check-songs reports what is
+ * still pending afterwards.
  *
  * Run with: npm run import-playlist -- <playlist url or id>
  */
@@ -35,6 +39,14 @@ const MUSICBRAINZ_DELAY_MS = 1100
  */
 const MUSICBRAINZ_USER_AGENT = 'HitsterBuzzer/0.1 (eduardoasolanog@gmail.com)'
 
+/**
+ * MusicBrainz occasionally answers a well-behaved, one-per-second client
+ * with a transient 503 (server-side load, not something we caused). Treating
+ * that as "no match" would wrongly send a real song to manual review, so a
+ * 503 gets a couple of backed-off retries before we give up on it.
+ */
+const MUSICBRAINZ_MAX_ATTEMPTS = 3
+
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
@@ -46,11 +58,18 @@ async function lookupYear(artist: string, title: string): Promise<number> {
   url.searchParams.set('fmt', 'json')
   url.searchParams.set('limit', '5')
 
-  const response = await fetch(url, { headers: { 'User-Agent': MUSICBRAINZ_USER_AGENT } })
-  if (!response.ok) return 0
-  const body = (await response.json()) as { recordings?: MusicBrainzRecording[] }
-  const candidates = (body.recordings ?? []).map(toCandidate)
-  return chooseYear(candidates, artist, title)
+  for (let attempt = 1; attempt <= MUSICBRAINZ_MAX_ATTEMPTS; attempt += 1) {
+    const response = await fetch(url, { headers: { 'User-Agent': MUSICBRAINZ_USER_AGENT } })
+    if (response.ok) {
+      const body = (await response.json()) as { recordings?: MusicBrainzRecording[] }
+      const candidates = (body.recordings ?? []).map(toCandidate)
+      return chooseYear(candidates, artist, title)
+    }
+    const canRetry = response.status === 503 && attempt < MUSICBRAINZ_MAX_ATTEMPTS
+    if (!canRetry) return 0
+    await sleep(MUSICBRAINZ_DELAY_MS * attempt)
+  }
+  return 0
 }
 
 interface PlaylistItem {
@@ -134,13 +153,20 @@ async function main(): Promise<void> {
   }
 
   console.log(`${items.length} elementos en la playlist, ${added.length} canciones nuevas.`)
+
+  const merged = [...existing, ...added]
+  // Also retries any song already in the deck that was left pending by a
+  // previous run — a rerun is how a better matcher (or a transient
+  // MusicBrainz hiccup) gets a second chance without a separate script.
+  const pendingYear = merged.filter((s) => s.year === 0)
   console.log(
-    `Buscando el año de cada canción nueva en MusicBrainz (una petición por segundo, esto tarda)...`,
+    `Buscando el año de ${pendingYear.length} canciones sin confirmar en MusicBrainz ` +
+      `(una petición por segundo, esto tarda)...`,
   )
 
   const needsYearReview: Song[] = []
   let yearsFilled = 0
-  for (const song of added) {
+  for (const song of pendingYear) {
     const year = await lookupYear(song.artist, song.title)
     if (year > 0) {
       song.year = year
@@ -151,20 +177,20 @@ async function main(): Promise<void> {
     await sleep(MUSICBRAINZ_DELAY_MS)
   }
 
-  const merged = [...existing, ...added]
   parseSongs(merged) // fail loudly rather than write a broken file
   writeFileSync(file, `${JSON.stringify(merged, null, 2)}\n`)
 
   console.log(`\n${merged.length} canciones en total.`)
   console.log(
-    `Años: ${yearsFilled} encontrados automáticamente, ${needsYearReview.length} requieren revisión manual.`,
+    `Años: ${yearsFilled} encontrados automáticamente en esta pasada, ` +
+      `${needsYearReview.length} siguen requiriendo revisión manual.`,
   )
   if (needsYearReview.length > 0) {
     console.log('Canciones sin año confirmado (revisar year y, si hace falta, startSeconds):')
     for (const song of needsYearReview) console.log(`  ${song.id} — ${song.artist} · ${song.title}`)
   }
   console.log(
-    `\nstartSeconds se dejó en ${DEFAULT_START_SECONDS}s para todas las canciones nuevas. Ajusta a mano las que no arranquen en un punto reconocible.`,
+    `\nstartSeconds se dejó en ${DEFAULT_START_SECONDS}s para las canciones nuevas. Ajusta a mano las que no arranquen en un punto reconocible.`,
   )
 }
 
