@@ -114,6 +114,26 @@ export function reduce(state: GameState, event: GameEvent): GameState {
       return { ...state, players, lockedOut, phase: { kind: 'playing', tier, elapsedMs } }
     }
 
+    case 'NEXT_ROUND': {
+      // Allowed once the round is fully revealed, or once at least one
+      // player has been judged out mid-round (lockedOut is non-empty) even
+      // if other players never got a turn. Blocked while a judgement is
+      // pending, or while the round is still playing and nobody has been
+      // judged yet.
+      const canAdvance =
+        state.phase.kind === 'revealed' ||
+        (state.phase.kind === 'playing' && state.lockedOut.length > 0)
+      if (!canAdvance) return state
+      const gameOver = state.roundsPlayed >= state.roundsTotal || state.deck.length === 0
+      if (gameOver) return { ...state, phase: { kind: 'finished' }, currentSongId: null }
+      return dealRound(state)
+    }
+
+    case 'SKIP_SONG': {
+      if (state.phase.kind !== 'playing' && state.phase.kind !== 'buzzed') return state
+      return { ...state, phase: { kind: 'revealed', outcome: 'skipped', winnerId: null } }
+    }
+
     default:
       return state
   }
