@@ -1,0 +1,42 @@
+[
+  {
+    "id": "smells-like-teen-spirit",
+    "videoId": "hTWKbfoikeg",
+    "title": "Smells Like Teen Spirit",
+    "artist": "Nirvana",
+    "year": 1991,
+    "startSeconds": 0
+  },
+  {
+    "id": "billie-jean",
+    "videoId": "Zi_XLOBDo_Y",
+    "title": "Billie Jean",
+    "artist": "Michael Jackson",
+    "year": 1982,
+    "startSeconds": 0
+  },
+  {
+    "id": "rolling-in-the-deep",
+    "videoId": "rYEDA3JcQqw",
+    "title": "Rolling in the Deep",
+    "artist": "Adele",
+    "year": 2010,
+    "startSeconds": 0
+  },
+  {
+    "id": "despacito",
+    "videoId": "kJQP7kiw5Fk",
+    "title": "Despacito",
+    "artist": "Luis Fonsi",
+    "year": 2017,
+    "startSeconds": 0
+  },
+  {
+    "id": "bohemian-rhapsody",
+    "videoId": "fJ9rUzIMcZQ",
+    "title": "Bohemian Rhapsody",
+    "artist": "Queen",
+    "year": 1975,
+    "startSeconds": 0
+  }
+]
