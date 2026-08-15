@@ -6,6 +6,16 @@
  * Only when YOUTUBE_API_KEY is set: the video is long enough for the third
  * tier, i.e. duration > startSeconds + 30.
  *
+ * year and startSeconds both use 0 as a "needs a human" sentinel. The
+ * importer never writes year: 0 unless MusicBrainz could not confirm it, and
+ * it never writes startSeconds: 0 at all (it defaults to 30, a real,
+ * deliberate value past most intros) — so an explicit 0 in the file always
+ * means someone still has to listen and decide. There is no separate flag
+ * for "reviewed and kept at 30 on purpose" vs. "still at the default,
+ * nobody has listened yet": both look identical in songs.json, and telling
+ * them apart would need a field the game itself has no use for, so that
+ * distinction is intentionally not tracked.
+ *
  * Run with: npm run check-songs
  */
 import { readFileSync } from 'node:fs'
@@ -37,25 +47,25 @@ async function checkSong(song: Song, apiKey: string | undefined): Promise<string
   const problems: string[] = []
 
   if (!(await isEmbeddable(song.videoId))) {
-    problems.push('video missing, private, or embedding disabled')
+    problems.push('video no disponible, privado o con embebido deshabilitado')
   }
 
   if (apiKey) {
     const seconds = await durationSeconds(song.videoId, apiKey)
     if (seconds === null) {
-      problems.push('could not read duration from the YouTube Data API')
+      problems.push('no se pudo leer la duración desde la YouTube Data API')
     } else if (seconds <= song.startSeconds + LONGEST_TIER_SECONDS) {
       problems.push(
-        `too short: ${seconds}s, needs more than ${song.startSeconds + LONGEST_TIER_SECONDS}s`,
+        `demasiado corto: ${seconds}s, necesita más de ${song.startSeconds + LONGEST_TIER_SECONDS}s`,
       )
     }
   }
 
   if (song.year === 0) {
-    problems.push('year not filled in yet (imported songs start at 0)')
+    problems.push('year sin confirmar (MusicBrainz no encontró una coincidencia segura)')
   }
   if (song.startSeconds === 0) {
-    problems.push('startSeconds still 0 — pick the moment the song becomes recognisable')
+    problems.push('startSeconds en 0 — falta elegir el momento en que la canción se reconoce')
   }
 
   return problems
@@ -67,7 +77,7 @@ async function main(): Promise<void> {
 
   const apiKey = process.env.YOUTUBE_API_KEY
   if (!apiKey) {
-    console.warn('YOUTUBE_API_KEY not set — skipping duration checks.\n')
+    console.warn('YOUTUBE_API_KEY no definida — se omiten los chequeos de duración.\n')
   }
 
   let failures = 0
@@ -77,11 +87,11 @@ async function main(): Promise<void> {
       console.log(`ok   ${song.id}`)
     } else {
       failures += 1
-      console.error(`FAIL ${song.id}: ${problems.join('; ')}`)
+      console.error(`FALLA ${song.id}: ${problems.join('; ')}`)
     }
   }
 
-  console.log(`\n${songs.length - failures}/${songs.length} songs usable.`)
+  console.log(`\n${songs.length - failures}/${songs.length} canciones utilizables.`)
   if (failures > 0) process.exit(1)
 }
 

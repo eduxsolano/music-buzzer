@@ -10,8 +10,8 @@
     "lint": "eslint",
     "test": "vitest run",
     "test:watch": "vitest",
-    "check-songs": "tsx scripts/check-songs.ts",
-    "import-playlist": "tsx scripts/import-playlist.ts"
+    "check-songs": "tsx --env-file-if-exists=.env.local scripts/check-songs.ts",
+    "import-playlist": "tsx --env-file-if-exists=.env.local scripts/import-playlist.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.112.3",
