@@ -52,7 +52,7 @@
     "videoId": "u2ah9tWTkmk",
     "title": "Ordinary",
     "artist": "Alex Warren",
-    "year": 2024,
+    "year": 2025,
     "startSeconds": 30
   },
   {
@@ -212,7 +212,7 @@
     "videoId": "jBKJbedSrA0",
     "title": "girl, get up.",
     "artist": "Doechii, SZA",
-    "year": 0,
+    "year": 2025,
     "startSeconds": 30
   },
   {
@@ -316,7 +316,7 @@
     "videoId": "YNwmYliuUfE",
     "title": "I See Why",
     "artist": "Moneybagg Yo",
-    "year": 0,
+    "year": 2026,
     "startSeconds": 30
   },
   {
@@ -324,7 +324,7 @@
     "videoId": "0ijm2Xui5N8",
     "title": "Ain't In LA",
     "artist": "ADÉLA",
-    "year": 0,
+    "year": 2026,
     "startSeconds": 30
   },
   {
@@ -556,7 +556,7 @@
     "videoId": "O7Dt2L_rAhI",
     "title": "Sorry I'm Here For Someone Else",
     "artist": "Benson Boone",
-    "year": 0,
+    "year": 2025,
     "startSeconds": 30
   },
   {
@@ -612,7 +612,7 @@
     "videoId": "3cVD96Kva7Q",
     "title": "Bar None",
     "artist": "Jordan Davis",
-    "year": 0,
+    "year": 2025,
     "startSeconds": 30
   },
   {
@@ -668,7 +668,7 @@
     "videoId": "PcIpyTFfeuo",
     "title": "Somewhere Over Laredo",
     "artist": "Lainey Wilson",
-    "year": 0,
+    "year": 2025,
     "startSeconds": 30
   },
   {
@@ -900,7 +900,7 @@
     "videoId": "5vZcZRutaos",
     "title": "The One That Got Away",
     "artist": "Katy Perry",
-    "year": 0,
+    "year": 2011,
     "startSeconds": 30
   },
   {
@@ -964,7 +964,7 @@
     "videoId": "mh4AQkw4Jjc",
     "title": "Self Aware",
     "artist": "Temper City",
-    "year": 0,
+    "year": 2026,
     "startSeconds": 30
   },
   {
@@ -988,7 +988,7 @@
     "videoId": "_pDTiszST3E",
     "title": "Need Your Love",
     "artist": "OneRepublic",
-    "year": 0,
+    "year": 2026,
     "startSeconds": 30
   },
   {
@@ -1004,7 +1004,7 @@
     "videoId": "8iT9DRe3cHE",
     "title": "Gone Gone Gone",
     "artist": "David Guetta, Teddy Swims, Tones and I",
-    "year": 0,
+    "year": 2025,
     "startSeconds": 30
   },
   {
@@ -1020,7 +1020,7 @@
     "videoId": "fcnDmrtj6Sk",
     "title": "Dai Dai",
     "artist": "Shakira, Burna Boy",
-    "year": 0,
+    "year": 2026,
     "startSeconds": 30
   },
   {
@@ -1108,7 +1108,7 @@
     "videoId": "Dg47eNL_Usw",
     "title": "Be Her",
     "artist": "Ella Langley",
-    "year": 0,
+    "year": 2026,
     "startSeconds": 30
   },
   {
@@ -1156,7 +1156,7 @@
     "videoId": "agu22bqGHto",
     "title": "party 4 u",
     "artist": "Charli xcx",
-    "year": 0,
+    "year": 2025,
     "startSeconds": 30
   },
   {
@@ -1212,7 +1212,7 @@
     "videoId": "VSXT4a2kRHA",
     "title": "The Door",
     "artist": "Teddy Swims",
-    "year": 0,
+    "year": 2024,
     "startSeconds": 30
   },
   {
@@ -1316,7 +1316,7 @@
     "videoId": "Sf9NZF5qBak",
     "title": "Repeat It",
     "artist": "Martin Garrix & Ed Sheeran",
-    "year": 0,
+    "year": 2026,
     "startSeconds": 30
   },
   {
@@ -1904,14 +1904,6 @@
     "startSeconds": 30
   },
   {
-    "id": "la-puta-electrica-30-segundos-re-mastering",
-    "videoId": "Vd_ubhDXS3Y",
-    "title": "30 SEGUNDOS RE/MASTERING",
-    "artist": "LA PUTA ELECTRICA",
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
     "id": "la-puta-electrica-juan-pope",
     "videoId": "TZLpnvdMaRo",
     "title": "Juan Pope",
@@ -2168,14 +2160,6 @@
     "startSeconds": 30
   },
   {
-    "id": "caramelos-de-cianuro-compilado-de-temas-2014",
-    "videoId": "UG7KfIOj1LI",
-    "title": "Compilado de Temas #2014",
-    "artist": "Caramelos de Cianuro",
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
     "id": "channel-dividido-official-lyric-video",
     "videoId": "HNWfjTMgP9Y",
     "title": "Dividido - Official Lyric Video",
@@ -2412,14 +2396,6 @@
     "videoId": "BjzbQpvcRYA",
     "title": "amigos invisibles ver 2",
     "artist": "Malditos Hippies",
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
-    "id": "gustavo-cerati-llegaste",
-    "videoId": "oLNfgkLRpuM",
-    "title": "Llegaste",
-    "artist": "Gustavo Cerati",
     "year": 0,
     "startSeconds": 30
   },
