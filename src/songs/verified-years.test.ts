@@ -52,7 +52,7 @@ describe('verifiedYearsById', () => {
 
 describe('unknownVerifiedIds', () => {
   const songs: Song[] = [
-    { id: 'billie-jean', videoId: 'Zi_XLOBDo_Y', title: 'Billie Jean', artist: 'Michael Jackson', year: 1982, startSeconds: 30 },
+    { id: 'billie-jean', videoId: 'Zi_XLOBDo_Y', title: 'Billie Jean', artist: 'Michael Jackson', artists: ['Michael Jackson'], year: 1982, startSeconds: 30 },
   ]
 
   test('returns nothing when every verified id matches a song in the deck', () => {

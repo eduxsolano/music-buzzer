@@ -9,8 +9,12 @@ const song: Song = {
   videoId: 'hTWKbfoikeg',
   title: 'Smells Like Teen Spirit',
   artist: 'Nirvana',
+  artists: ['Nirvana'],
   year: 1991,
   startSeconds: 42,
+  releaseGroupId: 'd42503ec-54fd-3ac7-83ac-a5e37425509c',
+  genres: ['grunge'],
+  cover: '/covers/smells-like-teen-spirit.jpg',
 }
 
 const start: GameEvent[] = [
@@ -122,11 +126,27 @@ describe('the anti-cheat boundary', () => {
       expect(published).not.toContain(song.videoId)
       expect(published).not.toContain(String(song.year))
       expect(published).not.toContain('s1')
+      // A sleeve names a song faster than a word does, so it is held to the
+      // same line as the title — and so are the catalogue facts beside it.
+      expect(published).not.toContain(song.cover as string)
+      expect(published).not.toContain('covers')
+      expect(published).not.toContain(song.releaseGroupId as string)
+      expect(published).not.toContain('grunge')
     }
   })
 
   test('the host phone is told exactly what the players are not', () => {
     const state = play([...start, { type: 'LAUNCH_TIER' }])
     expect(JSON.stringify(toControlState(state, song, 'KZTR', false))).toContain(song.title)
+  })
+
+  test('not even the host phone carries the sleeve — it belongs to the television alone', () => {
+    // Not a secrecy rule (the panel is already told the answer) but a scope
+    // one: the cover exists to be seen from the sofa, the panel is held at
+    // arm's length, and the private channel stays as small as it started.
+    const state = play([...start, { type: 'LAUNCH_TIER' }])
+    const control = JSON.stringify(toControlState(state, song, 'KZTR', false))
+    expect(control).not.toContain('covers')
+    expect(control).not.toContain(song.releaseGroupId as string)
   })
 })

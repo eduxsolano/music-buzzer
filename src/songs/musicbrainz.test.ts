@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest'
 import {
+  artistCreditMatches,
   artistNames,
   buildRecordingQuery,
   buildReleaseGroupQuery,
@@ -64,6 +65,29 @@ describe('primaryArtist', () => {
 
   test('keeps only the first name from a "with"-joined credit', () => {
     expect(primaryArtist('Kendrick Lamar with SZA')).toBe('Kendrick Lamar')
+  })
+})
+
+describe('artistCreditMatches', () => {
+  test('a solo credit matches a candidate credited to that artist', () => {
+    expect(artistCreditMatches('Nirvana', ['nirvana'])).toBe(true)
+  })
+
+  test('a solo credit does not match an artist whose name merely contains it', () => {
+    expect(artistCreditMatches('Nirvana UK Tribute', ['nirvana'])).toBe(false)
+  })
+
+  test('a solo credit still matches when the candidate adds a feature credit', () => {
+    expect(artistCreditMatches('Darin feat. Eloise', ['darin'])).toBe(true)
+  })
+
+  test('a collaboration needs every name present, whatever joins them', () => {
+    expect(artistCreditMatches('Kendrick Lamar with SZA', ['kendrick lamar', 'sza'])).toBe(true)
+    expect(artistCreditMatches('Lady Gaga & Bruno Mars', ['lady gaga', 'bruno mars'])).toBe(true)
+  })
+
+  test('a collaboration rejects a candidate crediting only one of them', () => {
+    expect(artistCreditMatches('Lady Gaga', ['lady gaga', 'bruno mars'])).toBe(false)
   })
 })
 

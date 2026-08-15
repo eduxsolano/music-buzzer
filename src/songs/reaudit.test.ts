@@ -9,6 +9,7 @@ function song(overrides: Partial<Song>): Song {
     videoId: 'aaaaaaaaaaa',
     title: 'Title',
     artist: 'Artist',
+    artists: ['Artist'],
     year: 0,
     startSeconds: 30,
     ...overrides,

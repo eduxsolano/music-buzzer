@@ -9,6 +9,7 @@ const song: Song = {
   videoId: 'hTWKbfoikeg',
   title: 'Smells Like Teen Spirit',
   artist: 'Nirvana',
+  artists: ['Nirvana'],
   year: 1991,
   startSeconds: 42,
 }

@@ -12,6 +12,38 @@ import {
 } from '@/host/ui/stagePresentation'
 
 /**
+ * The sleeve, when the deck has one.
+ *
+ * Rendered as a plain `<img>` rather than `next/image`: this is a 250px
+ * thumbnail already downloaded into `public/covers` at exactly the size it is
+ * shown, so an optimisation pipeline has nothing left to optimise, and the
+ * whole reason the file is in the repository is that the reveal must not wait
+ * on anything at all.
+ *
+ * Absence is the common case — most of the deck has no cover — so it renders
+ * nothing at all rather than a placeholder. The card is a centred column with
+ * a gap between its rows; a row that isn't there simply closes up, and the
+ * reveal looks deliberate rather than broken.
+ */
+function Cover({ src, title }: { src: string | undefined; title: string }) {
+  if (!src) return null
+  return (
+    // eslint-disable-next-line @next/next/no-img-element -- see the note above
+    <img
+      src={src}
+      alt={`Portada de ${title}`}
+      // Height-bound, not width-bound, and deliberately modest: the card
+      // already carries a verdict, a title that can run to three lines, an
+      // artist, a year and two buttons, and the reveal panel does not scroll.
+      // At 15vh a long title pushed "Siguiente canción" off the bottom of a
+      // 800px-tall window; the sleeve is the card's illustration, not its
+      // protagonist.
+      className="enter enter-1 h-[clamp(4.5rem,15vh,10rem)] w-auto rounded-xl object-contain shadow-2xl"
+    />
+  )
+}
+
+/**
  * The card turned over. The title is the protagonist; the year gets its own
  * weight because guessing decades out loud is half the fun of the game.
  *
@@ -19,6 +51,10 @@ import {
  * room can see the card and still have no idea whether anybody got it, who
  * scored, or whether the clock simply ran out. The colour already says it —
  * green, red, or neutral — but colour alone does not name the person.
+ *
+ * The sleeve appears here and on no other screen in the room. A cover names a
+ * song from across the sofa in less time than it takes to read a word, which
+ * is exactly why the phones never receive one — see `toPublicState`.
  */
 export function RevealedPanel({
   view,
@@ -43,6 +79,7 @@ export function RevealedPanel({
           >
             {revealHeadline(phase.outcome, winner)}
           </p>
+          <Cover src={song?.cover} title={title} />
           <Hero sizeClass={heroSizeClass(title)}>{title}</Hero>
           <p
             className="enter enter-1 text-[clamp(1.25rem,2.6vw,2.75rem)] font-semibold"

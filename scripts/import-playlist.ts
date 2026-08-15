@@ -92,7 +92,10 @@ function toSong(item: PlaylistItem, takenIds: Set<string>): Song | null {
   }
   takenIds.add(id)
 
-  return { id, videoId, title, artist, year: 0, startSeconds: DEFAULT_START_SECONDS }
+  // One entry, the whole credit: a YouTube-derived string split on punctuation
+  // would invent artists that do not exist ("Earth, Wind & Fire"). Only a
+  // MusicBrainz match may fill a real list — see scripts/enrich-songs.ts.
+  return { id, videoId, title, artist, artists: [artist], year: 0, startSeconds: DEFAULT_START_SECONDS }
 }
 
 async function main(): Promise<void> {

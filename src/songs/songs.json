@@ -4,30 +4,63 @@
     "videoId": "hTWKbfoikeg",
     "title": "Smells Like Teen Spirit",
     "artist": "Nirvana",
+    "artists": [
+      "Nirvana"
+    ],
     "year": 1991,
-    "startSeconds": 20
+    "startSeconds": 20,
+    "releaseGroupId": "03345972-d2f8-36bb-b49a-03a9ceccb7a7",
+    "genres": [
+      "grunge",
+      "rock",
+      "alternative rock"
+    ],
+    "cover": "/covers/smells-like-teen-spirit.jpg"
   },
   {
     "id": "billie-jean",
     "videoId": "Zi_XLOBDo_Y",
     "title": "Billie Jean",
     "artist": "Michael Jackson",
+    "artists": [
+      "Michael Jackson"
+    ],
     "year": 1982,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "d42503ec-54fd-3ac7-83ac-a5e37425509c",
+    "genres": [
+      "pop",
+      "electronic",
+      "dance"
+    ],
+    "cover": "/covers/billie-jean.jpg"
   },
   {
     "id": "rolling-in-the-deep",
     "videoId": "rYEDA3JcQqw",
     "title": "Rolling in the Deep",
     "artist": "Adele",
+    "artists": [
+      "Adele"
+    ],
     "year": 2010,
-    "startSeconds": 15
+    "startSeconds": 15,
+    "releaseGroupId": "b5801cd8-c309-48fa-a449-02167a047a17",
+    "genres": [
+      "pop",
+      "electronic",
+      "ballad"
+    ],
+    "cover": "/covers/rolling-in-the-deep.jpg"
   },
   {
     "id": "despacito",
     "videoId": "kJQP7kiw5Fk",
     "title": "Despacito",
     "artist": "Luis Fonsi",
+    "artists": [
+      "Luis Fonsi"
+    ],
     "year": 2017,
     "startSeconds": 42
   },
@@ -36,38 +69,77 @@
     "videoId": "fJ9rUzIMcZQ",
     "title": "Bohemian Rhapsody",
     "artist": "Queen",
+    "artists": [
+      "Queen"
+    ],
     "year": 1975,
-    "startSeconds": 175
+    "startSeconds": 175,
+    "releaseGroupId": "361a28b7-4588-44a6-8c96-86c1efb8258f",
+    "genres": [
+      "pop rock",
+      "rock"
+    ],
+    "cover": "/covers/bohemian-rhapsody.jpg"
   },
   {
     "id": "lady-gaga-bruno-mars-die-with-a-smile",
     "videoId": "kPa7bsKwL-c",
-    "title": "Die With A Smile",
-    "artist": "Lady Gaga, Bruno Mars",
+    "title": "Die With a Smile",
+    "artist": "Lady Gaga & Bruno Mars",
+    "artists": [
+      "Lady Gaga",
+      "Bruno Mars"
+    ],
     "year": 2024,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "f6e835d9-9b01-4ad9-adeb-dc85b7f72c02",
+    "genres": [
+      "pop rock",
+      "piano rock",
+      "pop soul"
+    ],
+    "cover": "/covers/lady-gaga-bruno-mars-die-with-a-smile.jpg"
   },
   {
     "id": "alex-warren-ordinary",
     "videoId": "u2ah9tWTkmk",
     "title": "Ordinary",
     "artist": "Alex Warren",
+    "artists": [
+      "Alex Warren"
+    ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "fd4181e0-495b-430d-9751-5d1885f6781e",
+    "genres": [
+      "ballad"
+    ],
+    "cover": "/covers/alex-warren-ordinary.jpg"
   },
   {
     "id": "taylor-swift-the-fate-of-ophelia",
     "videoId": "ko70cExuzZM",
     "title": "The Fate of Ophelia",
     "artist": "Taylor Swift",
+    "artists": [
+      "Taylor Swift"
+    ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "7ac47cb3-7776-4f18-8f94-2647c1cd5400",
+    "genres": [
+      "pop"
+    ],
+    "cover": "/covers/taylor-swift-the-fate-of-ophelia.jpg"
   },
   {
     "id": "sony-pictures-animation-golden-official-lyric-video-kpop-demon-hunters-sony-animation",
     "videoId": "yebNIHKAC4A",
     "title": "“Golden” Official Lyric Video | KPop Demon Hunters | Sony Animation",
     "artist": "Sony Pictures Animation",
+    "artists": [
+      "Sony Pictures Animation"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -76,6 +148,9 @@
     "videoId": "hNrwlzBeFN8",
     "title": "What I Want (feat. Tate McRae)",
     "artist": "Morgan Wallen",
+    "artists": [
+      "Morgan Wallen"
+    ],
     "year": 2025,
     "startSeconds": 30
   },
@@ -84,22 +159,35 @@
     "videoId": "7sxVHYZ_PnA",
     "title": "Aperture",
     "artist": "Harry Styles",
+    "artists": [
+      "Harry Styles"
+    ],
     "year": 2026,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "3acb8595-9a19-49f2-b3d4-843bd032759a",
+    "cover": "/covers/harry-styles-aperture.jpg"
   },
   {
     "id": "justin-bieber-daisies",
     "videoId": "msGuqelopMA",
-    "title": "DAISIES",
+    "title": "Daisies",
     "artist": "Justin Bieber",
+    "artists": [
+      "Justin Bieber"
+    ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "e8335c23-5d68-47e6-898b-3117be067195",
+    "cover": "/covers/justin-bieber-daisies.jpg"
   },
   {
     "id": "bruno-mars-risk-it-all",
     "videoId": "lY5V4hSLWY8",
     "title": "Risk It All",
     "artist": "Bruno Mars",
+    "artists": [
+      "Bruno Mars"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -108,46 +196,81 @@
     "videoId": "5RNy_1odv20",
     "title": "Die On This Hill",
     "artist": "SIENNA SPIRO",
+    "artists": [
+      "SIENNA SPIRO"
+    ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "c5d27497-e67b-4f73-a69c-4bd68fab945d",
+    "cover": "/covers/sienna-spiro-die-on-this-hill.jpg"
   },
   {
     "id": "teddy-swims-lose-control",
     "videoId": "QvvhiIevsX8",
     "title": "Lose Control",
     "artist": "Teddy Swims",
+    "artists": [
+      "Teddy Swims"
+    ],
     "year": 2023,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "bc163bf6-8ae7-40cb-8958-32065642db92",
+    "genres": [
+      "alternative rock",
+      "soul"
+    ],
+    "cover": "/covers/teddy-swims-lose-control.jpg"
   },
   {
     "id": "sabrina-carpenter-tears",
     "videoId": "V9vuCByb6js",
     "title": "Tears",
     "artist": "Sabrina Carpenter",
+    "artists": [
+      "Sabrina Carpenter"
+    ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "eede2032-240e-4e4c-be36-d87206199e25",
+    "cover": "/covers/sabrina-carpenter-tears.jpg"
   },
   {
     "id": "olivia-rodrigo-drop-dead",
     "videoId": "78wrful9cVU",
     "title": "drop dead",
     "artist": "Olivia Rodrigo",
+    "artists": [
+      "Olivia Rodrigo"
+    ],
     "year": 2026,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "6084af50-a1ab-42fe-9a27-fb67f517c02a",
+    "genres": [
+      "pop"
+    ],
+    "cover": "/covers/olivia-rodrigo-drop-dead.jpg"
   },
   {
     "id": "zep-nobody",
     "videoId": "AYD1m8Fn3LU",
     "title": "NOBODY",
     "artist": "ZEP",
+    "artists": [
+      "ZEP"
+    ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "53fea274-2ee8-43f9-93dc-67be72b86615",
+    "cover": "/covers/zep-nobody.jpg"
   },
   {
     "id": "morgan-wallen-i-got-better",
     "videoId": "zLhDdFGkvzI",
     "title": "I Got Better",
     "artist": "Morgan Wallen",
+    "artists": [
+      "Morgan Wallen"
+    ],
     "year": 2025,
     "startSeconds": 30
   },
@@ -156,14 +279,26 @@
     "videoId": "Oa_RSwwpPaA",
     "title": "Beautiful Things",
     "artist": "Benson Boone",
+    "artists": [
+      "Benson Boone"
+    ],
     "year": 2024,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "f22e11df-598d-48a3-8e5d-893647708c3b",
+    "genres": [
+      "pop",
+      "rock"
+    ],
+    "cover": "/covers/benson-boone-beautiful-things.jpg"
   },
   {
     "id": "laufey-madwoman",
     "videoId": "yNa8jP4zoJo",
     "title": "Madwoman",
     "artist": "Laufey",
+    "artists": [
+      "Laufey"
+    ],
     "year": 2026,
     "startSeconds": 30
   },
@@ -172,6 +307,9 @@
     "videoId": "SOJpE1KMUbo",
     "title": "Raindance (ft. Tems)",
     "artist": "Dave",
+    "artists": [
+      "Dave"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -180,6 +318,9 @@
     "videoId": "Hit9ip4uuso",
     "title": "Rangin Bells",
     "artist": "Stunna 4 Vegas",
+    "artists": [
+      "Stunna 4 Vegas"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -188,46 +329,86 @@
     "videoId": "ejEzHE5ZMT8",
     "title": "MUTT",
     "artist": "Leon Thomas",
+    "artists": [
+      "Leon Thomas"
+    ],
     "year": 2024,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "d1dc70e7-20e8-4fb5-b0f5-01e1fe25a196",
+    "cover": "/covers/leon-thomas-mutt.jpg"
   },
   {
     "id": "tyla-chanel",
     "videoId": "xiZUf98A1Ts",
     "title": "CHANEL",
     "artist": "Tyla",
+    "artists": [
+      "Tyla"
+    ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "a4976cc2-fe82-45b1-8896-7f5da764ec34",
+    "genres": [
+      "pop"
+    ],
+    "cover": "/covers/tyla-chanel.jpg"
   },
   {
     "id": "gabriel-jacoby-the-one",
     "videoId": "JWr6m8xXqhk",
     "title": "the one",
     "artist": "Gabriel Jacoby",
+    "artists": [
+      "Gabriel Jacoby"
+    ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "d4f989e0-a884-4ceb-a30e-1541d72bc4ab",
+    "genres": [
+      "neo soul"
+    ],
+    "cover": "/covers/gabriel-jacoby-the-one.jpg"
   },
   {
     "id": "doechii-sza-girl-get-up",
     "videoId": "jBKJbedSrA0",
     "title": "girl, get up.",
-    "artist": "Doechii, SZA",
+    "artist": "Doechii & SZA",
+    "artists": [
+      "Doechii",
+      "SZA"
+    ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "7ce52482-5f17-427c-892e-124011af0635",
+    "genres": [
+      "alté",
+      "conscious hip hop",
+      "contemporary r&b"
+    ],
+    "cover": "/covers/doechii-sza-girl-get-up.jpg"
   },
   {
     "id": "shaboozey-a-bar-song-tipsy",
     "videoId": "t7bQwwqW-Hc",
     "title": "A Bar Song (Tipsy)",
     "artist": "Shaboozey",
+    "artists": [
+      "Shaboozey"
+    ],
     "year": 2024,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "6c473425-fd8c-4638-894f-efad1a264d67",
+    "cover": "/covers/shaboozey-a-bar-song-tipsy.jpg"
   },
   {
     "id": "luh-tee-if-heaven-had-a-phone",
     "videoId": "cw2i9BeKh3k",
     "title": "If Heaven Had A Phone",
     "artist": "Luh Tee",
+    "artists": [
+      "Luh Tee"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -236,14 +417,22 @@
     "videoId": "63k0kNuCPak",
     "title": "Kingdom of Fear",
     "artist": "Cameron Whitcomb",
+    "artists": [
+      "Cameron Whitcomb"
+    ],
     "year": 2026,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "cb04c487-cbd4-4f84-9590-94ccfbf05170",
+    "cover": "/covers/cameron-whitcomb-kingdom-of-fear.jpg"
   },
   {
     "id": "ye-father-feat-travis-scott",
     "videoId": "HBMy-y2wb4I",
     "title": "FATHER (feat. TRAVIS SCOTT)",
     "artist": "YE",
+    "artists": [
+      "YE"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -252,30 +441,51 @@
     "videoId": "Vlo1mb5f5p8",
     "title": "Not Like You",
     "artist": "Cat Serrano",
+    "artists": [
+      "Cat Serrano"
+    ],
     "year": 0,
     "startSeconds": 30
   },
   {
     "id": "tyla-she-did-it-again-ft-zara-larsson",
     "videoId": "rtwpk9rb1Dc",
-    "title": "SHE DID IT AGAIN ft. Zara Larsson",
-    "artist": "Tyla",
+    "title": "SHE DID IT AGAIN",
+    "artist": "Tyla feat. Zara Larsson",
+    "artists": [
+      "Tyla",
+      "Zara Larsson"
+    ],
     "year": 2026,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "1b4994d3-0894-40f1-9695-822a59c667b9",
+    "genres": [
+      "new jack swing"
+    ],
+    "cover": "/covers/tyla-she-did-it-again-ft-zara-larsson.jpg"
   },
   {
     "id": "bebe-rexha-faithless-new-religion",
     "videoId": "366CV87TguE",
     "title": "New Religion",
     "artist": "Bebe Rexha & Faithless",
+    "artists": [
+      "Bebe Rexha",
+      "Faithless"
+    ],
     "year": 2026,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "c95309c4-65f4-47d4-b4d8-fcdf67db2b42",
+    "cover": "/covers/bebe-rexha-faithless-new-religion.jpg"
   },
   {
     "id": "nuke2stiff-headache",
     "videoId": "nnqRA9UO6Kg",
     "title": "Headache",
     "artist": "Nuke2Stiff",
+    "artists": [
+      "Nuke2Stiff"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -284,6 +494,9 @@
     "videoId": "m6r6nbMxcA8",
     "title": "like it was.",
     "artist": "Brent Faiyaz",
+    "artists": [
+      "Brent Faiyaz"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -292,22 +505,40 @@
     "videoId": "4FUIEcnvT04",
     "title": "Opalite",
     "artist": "Taylor Swift",
+    "artists": [
+      "Taylor Swift"
+    ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "d8072326-3f01-42a6-b70f-44301d9bb77e",
+    "genres": [
+      "dance-pop",
+      "europop",
+      "pop"
+    ],
+    "cover": "/covers/taylor-swift-opalite.jpg"
   },
   {
     "id": "bigxthaplug-cold-feat-post-malone",
     "videoId": "-KjOMY_zxrA",
-    "title": "Cold feat. Post Malone",
-    "artist": "BigXthaPlug",
+    "title": "Cold",
+    "artist": "BigXthaPlug feat. Post Malone",
+    "artists": [
+      "BigXthaPlug",
+      "Post Malone"
+    ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "1afa87eb-7712-4bb5-907e-aaef65d5d6c0"
   },
   {
     "id": "shutchadown-my-whole-team",
     "videoId": "vY06EF0g9Ik",
     "title": "My Whole Team",
     "artist": "SHUTchaDOWN",
+    "artists": [
+      "SHUTchaDOWN"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -316,30 +547,47 @@
     "videoId": "YNwmYliuUfE",
     "title": "I See Why",
     "artist": "Moneybagg Yo",
+    "artists": [
+      "Moneybagg Yo"
+    ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "6bcb2832-da6d-40fc-9383-f16fdbeadd44"
   },
   {
     "id": "adela-ain-t-in-la",
     "videoId": "0ijm2Xui5N8",
-    "title": "Ain't In LA",
+    "title": "Ain’t in LA",
     "artist": "ADÉLA",
+    "artists": [
+      "ADÉLA"
+    ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "4578f9c0-28c8-4e20-b331-575cfff7cba6",
+    "cover": "/covers/adela-ain-t-in-la.jpg"
   },
   {
     "id": "morgan-wallen-just-in-case",
     "videoId": "cLnl73R9gMc",
-    "title": "Just In Case",
+    "title": "Just in Case",
     "artist": "Morgan Wallen",
+    "artists": [
+      "Morgan Wallen"
+    ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "56aaa6de-2425-4fa1-af43-5a0b740906ef",
+    "cover": "/covers/morgan-wallen-just-in-case.jpg"
   },
   {
     "id": "harry-styles-american-girls",
     "videoId": "o6jQo3-iCao",
     "title": "American Girls",
     "artist": "Harry Styles",
+    "artists": [
+      "Harry Styles"
+    ],
     "year": 2026,
     "startSeconds": 30
   },
@@ -348,6 +596,9 @@
     "videoId": "eEwMOxqHL-4",
     "title": "Calendar",
     "artist": "Manana",
+    "artists": [
+      "Manana"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -356,6 +607,9 @@
     "videoId": "b4iVv91Z6lY",
     "title": "BTS (방탄소년단) ‘SWIM’ Official MV",
     "artist": "HYBE LABELS",
+    "artists": [
+      "HYBE LABELS"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -364,14 +618,22 @@
     "videoId": "KWoTyfPsqbE",
     "title": "House Tour",
     "artist": "Sabrina Carpenter",
+    "artists": [
+      "Sabrina Carpenter"
+    ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "345f389c-3cc3-476f-a64d-51bd84d92ade",
+    "cover": "/covers/sabrina-carpenter-house-tour.jpg"
   },
   {
     "id": "hoodtrophy-bino-god-made-a-way",
     "videoId": "tzxlYepJRG0",
     "title": "God Made A Way",
     "artist": "HoodTrophy Bino",
+    "artists": [
+      "HoodTrophy Bino"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -380,22 +642,40 @@
     "videoId": "CtRn6eqVnvY",
     "title": "undressed",
     "artist": "sombr",
+    "artists": [
+      "sombr"
+    ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "a410b3ca-566f-4715-be3a-efeeb3d0d886",
+    "genres": [
+      "indie pop",
+      "indie rock",
+      "new wave"
+    ],
+    "cover": "/covers/sombr-undressed.jpg"
   },
   {
     "id": "bruno-mars-i-just-might",
     "videoId": "mrV8kK5t0V8",
     "title": "I Just Might",
     "artist": "Bruno Mars",
+    "artists": [
+      "Bruno Mars"
+    ],
     "year": 2026,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "604c10d8-bd25-46f0-83d5-ceaf5af5381d",
+    "cover": "/covers/bruno-mars-i-just-might.jpg"
   },
   {
     "id": "rjmrla-joe-moses-selena",
     "videoId": "XjWpI0fS5Oc",
     "title": "Selena",
     "artist": "RJmrLA & Joe Moses",
+    "artists": [
+      "RJmrLA & Joe Moses"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -404,22 +684,35 @@
     "videoId": "WBDpb7SwSgU",
     "title": "Good News",
     "artist": "Shaboozey",
+    "artists": [
+      "Shaboozey"
+    ],
     "year": 2024,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "e4218a2b-be8c-4d58-b578-5e45e9085086",
+    "cover": "/covers/shaboozey-good-news.jpg"
   },
   {
     "id": "ariana-grande-hate-that-i-made-you-love-me",
     "videoId": "82-jTNka3uc",
     "title": "hate that i made you love me",
     "artist": "Ariana Grande",
+    "artists": [
+      "Ariana Grande"
+    ],
     "year": 2026,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "7484a082-882d-4c7a-a59b-d2714282ec55",
+    "cover": "/covers/ariana-grande-hate-that-i-made-you-love-me.jpg"
   },
   {
     "id": "morgan-wallen-i-m-the-problem-the-shop-sessions",
     "videoId": "HwThuMZ80RA",
     "title": "I’m The Problem (The Shop Sessions)",
     "artist": "Morgan Wallen",
+    "artists": [
+      "Morgan Wallen"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -428,6 +721,9 @@
     "videoId": "yUhA4QXHi40",
     "title": "120 PROOF",
     "artist": "EDDY BAKER",
+    "artists": [
+      "EDDY BAKER"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -436,30 +732,53 @@
     "videoId": "U8QhB8_0t2g",
     "title": "Mystical Magical",
     "artist": "Benson Boone",
+    "artists": [
+      "Benson Boone"
+    ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "4db99fa5-bd71-4912-b31e-8b2d56d0d2c3",
+    "cover": "/covers/benson-boone-mystical-magical.jpg"
   },
   {
     "id": "chappell-roan-pink-pony-club",
     "videoId": "GR3Liudev18",
     "title": "Pink Pony Club",
     "artist": "Chappell Roan",
+    "artists": [
+      "Chappell Roan"
+    ],
     "year": 2020,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "c7085645-091f-4680-a348-521fe8a0ec7f",
+    "genres": [
+      "alternative pop",
+      "pop",
+      "dance-pop"
+    ],
+    "cover": "/covers/chappell-roan-pink-pony-club.jpg"
   },
   {
     "id": "alex-warren-eternity",
     "videoId": "jXqf3uqLkkU",
     "title": "Eternity",
     "artist": "Alex Warren",
+    "artists": [
+      "Alex Warren"
+    ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "9ae401f3-75b7-4bae-8d9f-7ce7e0455553",
+    "cover": "/covers/alex-warren-eternity.jpg"
   },
   {
     "id": "maddy-byrnes-lollipop",
     "videoId": "kgiN_gcGkwk",
     "title": "Lollipop",
     "artist": "Maddy Byrnes",
+    "artists": [
+      "Maddy Byrnes"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -468,14 +787,27 @@
     "videoId": "c8zq4kAn_O0",
     "title": "back to friends",
     "artist": "sombr",
+    "artists": [
+      "sombr"
+    ],
     "year": 2024,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "fc89624d-1a45-452e-aa83-3786c747cfbe",
+    "genres": [
+      "alternative pop",
+      "dream pop",
+      "indie rock"
+    ],
+    "cover": "/covers/sombr-back-to-friends.jpg"
   },
   {
     "id": "kendrick-lamar-sza-luther",
     "videoId": "sNY_2TEmzho",
     "title": "luther",
     "artist": "Kendrick Lamar, SZA",
+    "artists": [
+      "Kendrick Lamar, SZA"
+    ],
     "year": 2024,
     "startSeconds": 30
   },
@@ -484,6 +816,9 @@
     "videoId": "m7k9UMcHbr0",
     "title": "KATSEYE (캣츠아이) \"Animal\" Official MV",
     "artist": "HYBE LABELS",
+    "artists": [
+      "HYBE LABELS"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -492,54 +827,90 @@
     "videoId": "oIv_Y2RPQ_A",
     "title": "Man I Need",
     "artist": "Olivia Dean",
+    "artists": [
+      "Olivia Dean"
+    ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "ea4812e1-baee-4669-9df7-6099fb50f775",
+    "cover": "/covers/olivia-dean-man-i-need.jpg"
   },
   {
     "id": "russell-dickerson-happen-to-me",
     "videoId": "8JYJJRxMOZs",
-    "title": "Happen To Me",
+    "title": "Happen to Me",
     "artist": "Russell Dickerson",
+    "artists": [
+      "Russell Dickerson"
+    ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "fd850df3-549b-406c-af86-c476642a20a1",
+    "cover": "/covers/russell-dickerson-happen-to-me.jpg"
   },
   {
     "id": "raye-click-clack-symphony-feat-hans-zimmer",
     "videoId": "HtVcltkn3HI",
-    "title": "'Click Clack Symphony.' feat. Hans Zimmer",
-    "artist": "RAYE",
+    "title": "Click Clack Symphony.",
+    "artist": "RAYE feat. Hans Zimmer",
+    "artists": [
+      "RAYE",
+      "Hans Zimmer"
+    ],
     "year": 2026,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "a0888b67-a2bc-4006-acb9-bfc408341141",
+    "cover": "/covers/raye-click-clack-symphony-feat-hans-zimmer.jpg"
   },
   {
     "id": "justin-bieber-yukon",
     "videoId": "fXivMSJm_kA",
     "title": "YUKON",
     "artist": "Justin Bieber",
+    "artists": [
+      "Justin Bieber"
+    ],
     "year": 2025,
     "startSeconds": 30
   },
   {
     "id": "chris-brown-it-depends-ft-bryson-tiller",
     "videoId": "Kjof9tYTqD0",
-    "title": "It Depends ft. Bryson Tiller",
-    "artist": "Chris Brown",
+    "title": "It Depends",
+    "artist": "Chris Brown feat. Bryson Tiller",
+    "artists": [
+      "Chris Brown",
+      "Bryson Tiller"
+    ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "0140f2f7-f69e-41ea-a87a-98e5ba98057f",
+    "cover": "/covers/chris-brown-it-depends-ft-bryson-tiller.jpg"
   },
   {
     "id": "katy-perry-bandaids",
     "videoId": "2kelRnwRA4w",
     "title": "bandaids",
     "artist": "Katy Perry",
+    "artists": [
+      "Katy Perry"
+    ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "85dcddac-a7a6-48d4-9067-efbe98b46edf",
+    "genres": [
+      "pop"
+    ],
+    "cover": "/covers/katy-perry-bandaids.jpg"
   },
   {
     "id": "olivia-dean-so-easy-to-fall-in-love",
     "videoId": "3sur4BmjQt8",
     "title": "So Easy (To Fall In Love)",
     "artist": "Olivia Dean",
+    "artists": [
+      "Olivia Dean"
+    ],
     "year": 2025,
     "startSeconds": 30
   },
@@ -548,22 +919,35 @@
     "videoId": "Jx9h3iWudTU",
     "title": "Burning Blue",
     "artist": "Mariah the Scientist",
+    "artists": [
+      "Mariah the Scientist"
+    ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "7a26146c-786a-49d2-b0fb-528a0d5ff0bf",
+    "cover": "/covers/mariah-the-scientist-burning-blue.jpg"
   },
   {
     "id": "benson-boone-sorry-i-m-here-for-someone-else",
     "videoId": "O7Dt2L_rAhI",
     "title": "Sorry I'm Here For Someone Else",
     "artist": "Benson Boone",
+    "artists": [
+      "Benson Boone"
+    ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "71e73dbe-25b0-45d1-8955-97aa75f0a449",
+    "cover": "/covers/benson-boone-sorry-i-m-here-for-someone-else.jpg"
   },
   {
     "id": "tinashe-disco-lines-no-broke-boys-live-from-liv-beach-las-vegas",
     "videoId": "bT9pjCnIA-c",
     "title": "No Broke Boys (Live from LIV Beach Las Vegas)",
     "artist": "Tinashe & Disco Lines",
+    "artists": [
+      "Tinashe & Disco Lines"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -572,6 +956,9 @@
     "videoId": "cX3c1ItAH6o",
     "title": "You Broke Me",
     "artist": "Sierra",
+    "artists": [
+      "Sierra"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -580,6 +967,9 @@
     "videoId": "fjOeJssZX_Q",
     "title": "\"Free\" | Official Lyric Video | Sony Animation",
     "artist": "Sony Pictures Animation",
+    "artists": [
+      "Sony Pictures Animation"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -588,6 +978,9 @@
     "videoId": "5q9EjSUovc4",
     "title": "“Internet Girl” Visualizer | KATSEYE",
     "artist": "KATSEYE",
+    "artists": [
+      "KATSEYE"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -596,6 +989,9 @@
     "videoId": "htToA3wcFl4",
     "title": "SOMEBODY LOVES ME",
     "artist": "PARTYNEXTDOOR, Drake",
+    "artists": [
+      "PARTYNEXTDOOR, Drake"
+    ],
     "year": 2025,
     "startSeconds": 30
   },
@@ -604,22 +1000,39 @@
     "videoId": "cZgUiR31m-Y",
     "title": "12 to 12",
     "artist": "sombr",
+    "artists": [
+      "sombr"
+    ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "55679dcf-5857-4c8f-99d2-bbd9075929bc",
+    "genres": [
+      "boogie",
+      "dance-pop",
+      "new wave"
+    ],
+    "cover": "/covers/sombr-12-to-12.jpg"
   },
   {
     "id": "jordan-davis-bar-none",
     "videoId": "3cVD96Kva7Q",
     "title": "Bar None",
     "artist": "Jordan Davis",
+    "artists": [
+      "Jordan Davis"
+    ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "9b16acb3-b096-4d96-bd26-eb95c07625cd"
   },
   {
     "id": "katseye-gabriela-performance-video-katseye",
     "videoId": "co-TFLbaZAE",
     "title": "“Gabriela” Performance Video | KATSEYE",
     "artist": "KATSEYE",
+    "artists": [
+      "KATSEYE"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -628,6 +1041,9 @@
     "videoId": "rwlFWWGaZ5Y",
     "title": "Revolving door",
     "artist": "Tate McRae",
+    "artists": [
+      "Tate McRae"
+    ],
     "year": 2025,
     "startSeconds": 30
   },
@@ -636,6 +1052,9 @@
     "videoId": "-xq36F92BDY",
     "title": "It All Goes",
     "artist": "Eloise",
+    "artists": [
+      "Eloise"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -644,6 +1063,9 @@
     "videoId": "nb39Ym4YwVs",
     "title": "Falling In love",
     "artist": "Darin feat. Eloise",
+    "artists": [
+      "Darin feat. Eloise"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -652,30 +1074,48 @@
     "videoId": "zhaTJhpzfm8",
     "title": "Worst Way",
     "artist": "Riley Green",
+    "artists": [
+      "Riley Green"
+    ],
     "year": 2024,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "dc7caa95-ad5e-49d3-b739-e847ccda25c3",
+    "cover": "/covers/riley-green-worst-way.jpg"
   },
   {
     "id": "hudson-westbrook-house-again",
     "videoId": "5i7lrVrvykI",
     "title": "House Again",
     "artist": "Hudson Westbrook",
+    "artists": [
+      "Hudson Westbrook"
+    ],
     "year": 2024,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "2615b70c-a100-4836-9c78-88a3149a16cc",
+    "cover": "/covers/hudson-westbrook-house-again.jpg"
   },
   {
     "id": "lainey-wilson-somewhere-over-laredo",
     "videoId": "PcIpyTFfeuo",
     "title": "Somewhere Over Laredo",
     "artist": "Lainey Wilson",
+    "artists": [
+      "Lainey Wilson"
+    ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "5d35c6e6-154a-4a9b-9dee-ecb4f8a22a10",
+    "cover": "/covers/lainey-wilson-somewhere-over-laredo.jpg"
   },
   {
     "id": "miley-cyrus-younger-you-from-the-hannah-montana-20th-anniversary-special",
     "videoId": "s-dr_KJvmO4",
     "title": "Younger You (From the \"Hannah Montana 20th Anniversary Special\")",
     "artist": "Miley Cyrus",
+    "artists": [
+      "Miley Cyrus"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -684,46 +1124,90 @@
     "videoId": "vBynw9Isr28",
     "title": "Abracadabra",
     "artist": "Lady Gaga",
+    "artists": [
+      "Lady Gaga"
+    ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "95883863-9bc8-4808-9b06-57736f07ef11",
+    "genres": [
+      "dance-pop",
+      "acid house",
+      "electro house"
+    ],
+    "cover": "/covers/lady-gaga-abracadabra.jpg"
   },
   {
     "id": "sabrina-carpenter-please-please-please",
     "videoId": "cF1Na4AIecM",
     "title": "Please Please Please",
     "artist": "Sabrina Carpenter",
+    "artists": [
+      "Sabrina Carpenter"
+    ],
     "year": 2024,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "af70c0a3-85da-4905-b0cc-93221c9b4d67",
+    "genres": [
+      "boogie",
+      "pop",
+      "soft rock"
+    ],
+    "cover": "/covers/sabrina-carpenter-please-please-please.jpg"
   },
   {
     "id": "billie-eilish-birds-of-a-feather",
     "videoId": "d5gf9dXbPi0",
     "title": "BIRDS OF A FEATHER",
     "artist": "Billie Eilish",
+    "artists": [
+      "Billie Eilish"
+    ],
     "year": 2024,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "a8efafac-7cea-4ccf-889e-60d08a7eadb5",
+    "genres": [
+      "pop",
+      "ballad",
+      "new wave"
+    ],
+    "cover": "/covers/billie-eilish-birds-of-a-feather.jpg"
   },
   {
     "id": "jisoo-x-zayn-eyes-closed",
     "videoId": "EN1tMeXQii0",
     "title": "EYES CLOSED",
-    "artist": "JISOO X ZAYN",
+    "artist": "JISOO & ZAYN",
+    "artists": [
+      "JISOO",
+      "ZAYN"
+    ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "bd0804dd-f371-42f7-8961-da80ec5df2c9",
+    "cover": "/covers/jisoo-x-zayn-eyes-closed.jpg"
   },
   {
     "id": "morgan-wallen-love-somebody",
     "videoId": "zxMo0CZZzyg",
     "title": "Love Somebody",
     "artist": "Morgan Wallen",
+    "artists": [
+      "Morgan Wallen"
+    ],
     "year": 2024,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "790c8610-2855-43a9-ad32-8a037b30b190",
+    "cover": "/covers/morgan-wallen-love-somebody.jpg"
   },
   {
     "id": "gunna-wgft-feat-burna-boy",
     "videoId": "mANvg9R1xeI",
     "title": "wgft (feat. Burna Boy)",
     "artist": "Gunna",
+    "artists": [
+      "Gunna"
+    ],
     "year": 2025,
     "startSeconds": 30
   },
@@ -731,15 +1215,24 @@
     "id": "central-cee-ft-lil-baby-band4band",
     "videoId": "pDddlvCfTiw",
     "title": "BAND4BAND",
-    "artist": "CENTRAL CEE FT. LIL BABY",
+    "artist": "Central Cee & Lil Baby",
+    "artists": [
+      "Central Cee",
+      "Lil Baby"
+    ],
     "year": 2024,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "ac3a7d23-559e-4ca5-9bc4-b752ab414121",
+    "cover": "/covers/central-cee-ft-lil-baby-band4band.jpg"
   },
   {
     "id": "dominic-fike-dominic-fike-babydoll",
     "videoId": "nb8CnIo_-_A",
     "title": "Dominic Fike \"Babydoll\"",
     "artist": "Dominic Fike",
+    "artists": [
+      "Dominic Fike"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -748,14 +1241,22 @@
     "videoId": "Qh8QwVYOSVU",
     "title": "Bad Dreams",
     "artist": "Teddy Swims",
+    "artists": [
+      "Teddy Swims"
+    ],
     "year": 2024,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "cc906a32-ab9b-46f9-b1dd-cc7701b0ca29",
+    "cover": "/covers/teddy-swims-bad-dreams.jpg"
   },
   {
     "id": "tate-mcrae-just-keep-watching-from-f1-the-movie",
     "videoId": "dpvQqmX6SUI",
     "title": "Just Keep Watching (From F1® The Movie)",
     "artist": "Tate McRae",
+    "artists": [
+      "Tate McRae"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -763,63 +1264,122 @@
     "id": "rose-bruno-mars-apt",
     "videoId": "ekr2nIex040",
     "title": "APT.",
-    "artist": "ROSÉ & Bruno Mars",
+    "artist": "ROSÉ & Bruno Mars",
+    "artists": [
+      "ROSÉ",
+      "Bruno Mars"
+    ],
     "year": 2024,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "95dc0226-b92f-444e-a503-5ef844f3cff1",
+    "genres": [
+      "pop",
+      "dance-rock",
+      "pop punk"
+    ],
+    "cover": "/covers/rose-bruno-mars-apt.jpg"
   },
   {
     "id": "tommy-richman-million-dollar-baby",
     "videoId": "Zf1d8SGuxfs",
     "title": "MILLION DOLLAR BABY",
     "artist": "Tommy Richman",
+    "artists": [
+      "Tommy Richman"
+    ],
     "year": 2024,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "95e953b8-451a-43d0-91a2-eec3c375b021",
+    "genres": [
+      "house",
+      "trap"
+    ],
+    "cover": "/covers/tommy-richman-million-dollar-baby.jpg"
   },
   {
     "id": "lola-young-messy",
     "videoId": "k-k2_Liofy8",
     "title": "Messy",
     "artist": "Lola Young",
+    "artists": [
+      "Lola Young"
+    ],
     "year": 2024,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "7a7ecae9-b72c-4e98-92e5-ce29ff8358cc",
+    "cover": "/covers/lola-young-messy.jpg"
   },
   {
     "id": "wizthemc-bees-honey-show-me-love",
     "videoId": "Z3aduh5fxCo",
     "title": "Show Me Love",
-    "artist": "WizTheMc, bees & honey",
+    "artist": "WizTheMc & bees & honey",
+    "artists": [
+      "WizTheMc",
+      "bees & honey"
+    ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "e59cbe23-fd61-4adf-9845-67ae8fb6e3ca",
+    "cover": "/covers/wizthemc-bees-honey-show-me-love.jpg"
   },
   {
     "id": "sabrina-carpenter-espresso",
     "videoId": "eVli-tstM5E",
     "title": "Espresso",
     "artist": "Sabrina Carpenter",
+    "artists": [
+      "Sabrina Carpenter"
+    ],
     "year": 2024,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "faa3efa0-150a-4394-ae76-a9ddfa13424e",
+    "genres": [
+      "pop",
+      "boogie",
+      "dance-pop"
+    ],
+    "cover": "/covers/sabrina-carpenter-espresso.jpg"
   },
   {
     "id": "morgan-wallen-smile",
     "videoId": "F7KdQ8CTe5E",
     "title": "Smile",
     "artist": "Morgan Wallen",
+    "artists": [
+      "Morgan Wallen"
+    ],
     "year": 2024,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "aee32cb3-07e0-4c23-930d-e989bf9e84bb",
+    "cover": "/covers/morgan-wallen-smile.jpg"
   },
   {
     "id": "sabrina-carpenter-manchild",
     "videoId": "aSugSGCC12I",
     "title": "Manchild",
     "artist": "Sabrina Carpenter",
+    "artists": [
+      "Sabrina Carpenter"
+    ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "2d225f25-a92d-43cd-b0ef-a12f65a696c5",
+    "genres": [
+      "pop",
+      "country pop",
+      "pop rock"
+    ],
+    "cover": "/covers/sabrina-carpenter-manchild.jpg"
   },
   {
     "id": "ravyn-lenae-love-me-not",
     "videoId": "cswfR85D7jM",
     "title": "Love Me Not",
     "artist": "Ravyn Lenae",
+    "artists": [
+      "Ravyn Lenae"
+    ],
     "year": 2024,
     "startSeconds": 30
   },
@@ -828,6 +1388,9 @@
     "videoId": "GEk4jHwfFTA",
     "title": "BTS (방탄소년단) ‘NORMAL’ Official MV",
     "artist": "HYBE LABELS",
+    "artists": [
+      "HYBE LABELS"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -836,6 +1399,9 @@
     "videoId": "gDb91xKfa4E",
     "title": "Big Guy from (\"The SpongeBob Movie: Search for SquarePants”)",
     "artist": "Ice Spice",
+    "artists": [
+      "Ice Spice"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -844,6 +1410,9 @@
     "videoId": "lIxQe1R5hs0",
     "title": "Stateside + Zara Larsson",
     "artist": "PinkPantheress",
+    "artists": [
+      "PinkPantheress"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -852,6 +1421,9 @@
     "videoId": "C_OiWCF4zE0",
     "title": "Leverage",
     "artist": "NoCap",
+    "artists": [
+      "NoCap"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -860,30 +1432,51 @@
     "videoId": "tKml80alH3Y",
     "title": "Stargazing",
     "artist": "Myles Smith",
+    "artists": [
+      "Myles Smith"
+    ],
     "year": 2024,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "9cde989e-2153-44ee-b9c8-6869a18f95e2",
+    "cover": "/covers/myles-smith-stargazing.jpg"
   },
   {
     "id": "olivia-rodrigo-stupid-song",
     "videoId": "Rt9tW3cMLhI",
     "title": "stupid song",
     "artist": "Olivia Rodrigo",
+    "artists": [
+      "Olivia Rodrigo"
+    ],
     "year": 2026,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "733de4db-e503-4cb2-8d30-216a907ca16e",
+    "cover": "/covers/olivia-rodrigo-stupid-song.jpg"
   },
   {
     "id": "ed-sheeran-sapphire",
     "videoId": "JgDNFQ2RaLQ",
     "title": "Sapphire",
     "artist": "Ed Sheeran",
+    "artists": [
+      "Ed Sheeran"
+    ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "ed97b11d-5178-4986-b98e-6a86fd4bfc8e",
+    "genres": [
+      "pop"
+    ],
+    "cover": "/covers/ed-sheeran-sapphire.jpg"
   },
   {
     "id": "malcolm-todd-earrings",
     "videoId": "r9Etc8HcMFA",
     "title": "Earrings",
     "artist": "Malcolm Todd",
+    "artists": [
+      "Malcolm Todd"
+    ],
     "year": 2024,
     "startSeconds": 30
   },
@@ -892,6 +1485,9 @@
     "videoId": "J9abt3xpdDU",
     "title": "Justin Bieber, Nicki Minaj – Beauty And A Beat",
     "artist": "Latin City",
+    "artists": [
+      "Latin City"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -900,22 +1496,39 @@
     "videoId": "5vZcZRutaos",
     "title": "The One That Got Away",
     "artist": "Katy Perry",
+    "artists": [
+      "Katy Perry"
+    ],
     "year": 2010,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "be2b1194-fdc3-4eb0-a629-8fcbc72cd729",
+    "genres": [
+      "pop",
+      "progressive house"
+    ],
+    "cover": "/covers/katy-perry-the-one-that-got-away.jpg"
   },
   {
     "id": "alex-warren-fever-dream",
     "videoId": "hkUSnrHQJHg",
     "title": "FEVER DREAM",
     "artist": "Alex Warren",
+    "artists": [
+      "Alex Warren"
+    ],
     "year": 2026,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "7894a899-adbc-40ba-afd2-3468e9398899",
+    "cover": "/covers/alex-warren-fever-dream.jpg"
   },
   {
     "id": "taylor-swift-i-knew-it-i-knew-you-from-toy-story-5",
     "videoId": "hDU4GB1PTxc",
     "title": "I Knew It, I Knew You (from Toy Story 5)",
     "artist": "Taylor Swift",
+    "artists": [
+      "Taylor Swift"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -924,6 +1537,9 @@
     "videoId": "HfWLgELllZs",
     "title": "luther",
     "artist": "Kendrick Lamar",
+    "artists": [
+      "Kendrick Lamar"
+    ],
     "year": 2024,
     "startSeconds": 30
   },
@@ -932,6 +1548,9 @@
     "videoId": "QRidtXn0u7k",
     "title": "Michael Jackson",
     "artist": "Billie Jean",
+    "artists": [
+      "Billie Jean"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -940,6 +1559,9 @@
     "videoId": "iJg7NmMtm4Q",
     "title": "Wine & Jiggle",
     "artist": "Popcaan",
+    "artists": [
+      "Popcaan"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -948,14 +1570,22 @@
     "videoId": "rK5TyISxZ_M",
     "title": "WHERE IS MY HUSBAND!",
     "artist": "RAYE",
+    "artists": [
+      "RAYE"
+    ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "0b17e3ac-1bf2-4df9-9eef-e12babb3e56f",
+    "cover": "/covers/raye-where-is-my-husband.jpg"
   },
   {
     "id": "lil-uzi-vert-what-you-saying",
     "videoId": "s_TUESTU7_4",
     "title": "What You Saying -",
     "artist": "Lil Uzi Vert",
+    "artists": [
+      "Lil Uzi Vert"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -964,70 +1594,117 @@
     "videoId": "mh4AQkw4Jjc",
     "title": "Self Aware",
     "artist": "Temper City",
+    "artists": [
+      "Temper City"
+    ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "fb56de2f-d2a4-4bb5-9151-fec75571cc4c",
+    "cover": "/covers/temper-city-self-aware.jpg"
   },
   {
     "id": "taylor-swift-elizabeth-taylor",
     "videoId": "WqbJT_vC0rs",
     "title": "Elizabeth Taylor",
     "artist": "Taylor Swift",
+    "artists": [
+      "Taylor Swift"
+    ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "08de34c3-3b2c-41ec-9b7f-ce333bfd4c9f",
+    "cover": "/covers/taylor-swift-elizabeth-taylor.jpg"
   },
   {
     "id": "olivia-rodrigo-the-cure",
     "videoId": "B402rKl4bUg",
     "title": "the cure",
     "artist": "Olivia Rodrigo",
+    "artists": [
+      "Olivia Rodrigo"
+    ],
     "year": 2026,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "ed290506-e7e4-416e-a7a5-c541e55eba20",
+    "genres": [
+      "pop"
+    ],
+    "cover": "/covers/olivia-rodrigo-the-cure.jpg"
   },
   {
     "id": "onerepublic-need-your-love",
     "videoId": "_pDTiszST3E",
     "title": "Need Your Love",
     "artist": "OneRepublic",
+    "artists": [
+      "OneRepublic"
+    ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "abe4081b-2b35-460b-a0fb-86781fe12abf",
+    "cover": "/covers/onerepublic-need-your-love.jpg"
   },
   {
     "id": "michael-jackson-chicago",
     "videoId": "-VGuP4wAyPE",
     "title": "Chicago",
     "artist": "Michael Jackson",
+    "artists": [
+      "Michael Jackson"
+    ],
     "year": 2014,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "3222df0a-8bdb-4ce1-99cb-a418d1155618",
+    "cover": "/covers/michael-jackson-chicago.jpg"
   },
   {
     "id": "david-guetta-teddy-swims-tones-and-i-gone-gone-gone",
     "videoId": "8iT9DRe3cHE",
     "title": "Gone Gone Gone",
-    "artist": "David Guetta, Teddy Swims, Tones and I",
+    "artist": "David Guetta, Teddy Swims & Tones and I",
+    "artists": [
+      "David Guetta",
+      "Teddy Swims",
+      "Tones and I"
+    ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "2100868f-2c7a-4aa7-9e92-184a6fe9a46f",
+    "cover": "/covers/david-guetta-teddy-swims-tones-and-i-gone-gone-gone.jpg"
   },
   {
     "id": "hybe-labels-katseye-pinky-up-official-mv",
     "videoId": "7F1ET2XHQfk",
     "title": "KATSEYE (캣츠아이) \"PINKY UP\" Official MV",
     "artist": "HYBE LABELS",
+    "artists": [
+      "HYBE LABELS"
+    ],
     "year": 0,
     "startSeconds": 30
   },
   {
     "id": "shakira-burna-boy-dai-dai",
     "videoId": "fcnDmrtj6Sk",
-    "title": "Dai Dai",
-    "artist": "Shakira, Burna Boy",
+    "title": "Dai dai",
+    "artist": "Shakira x Burna Boy",
+    "artists": [
+      "Shakira",
+      "Burna Boy"
+    ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "8f539b56-4e11-4da1-ac72-3776aadb9518",
+    "cover": "/covers/shakira-burna-boy-dai-dai.jpg"
   },
   {
     "id": "lady-gaga-the-dead-dance",
     "videoId": "xGaZBfJOyAc",
     "title": "The Dead Dance",
     "artist": "Lady Gaga",
+    "artists": [
+      "Lady Gaga"
+    ],
     "year": 2025,
     "startSeconds": 30
   },
@@ -1036,14 +1713,22 @@
     "videoId": "twLhSqabby0",
     "title": "SS26",
     "artist": "Charli xcx",
+    "artists": [
+      "Charli xcx"
+    ],
     "year": 2026,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "a754e1bf-1c77-455d-8392-76d96da7e98a",
+    "cover": "/covers/charli-xcx-ss26.jpg"
   },
   {
     "id": "anyma-lisa-bad-angel-with-lisa",
     "videoId": "dKmPEhJ4wjY",
     "title": "Bad Angel (with LISA)",
     "artist": "Anyma, LISA",
+    "artists": [
+      "Anyma, LISA"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1052,86 +1737,160 @@
     "videoId": "G7KNmW9a75Y",
     "title": "Flowers",
     "artist": "Miley Cyrus",
+    "artists": [
+      "Miley Cyrus"
+    ],
     "year": 2023,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "95ff5306-2b74-46c4-9f7a-a9d5c439efa6",
+    "genres": [
+      "pop"
+    ],
+    "cover": "/covers/miley-cyrus-flowers.jpg"
   },
   {
     "id": "f3miii-noble",
     "videoId": "Pz-SZlU4C10",
     "title": "NOBLE",
     "artist": "F3miii",
+    "artists": [
+      "F3miii"
+    ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "367839fd-4c24-45e4-a005-6bf6f04ac0cd",
+    "cover": "/covers/f3miii-noble.jpg"
   },
   {
     "id": "tyla-x-wizkid-dynamite",
     "videoId": "CQIYbytAyVQ",
     "title": "DYNAMITE",
-    "artist": "Tyla x Wizkid",
+    "artist": "Tyla & Wizkid",
+    "artists": [
+      "Tyla",
+      "Wizkid"
+    ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "49fcf2d4-2772-4e57-9ab0-a8241df9ad83"
   },
   {
     "id": "doja-cat-jealous-type",
     "videoId": "lv1MwS56aCo",
     "title": "Jealous Type",
     "artist": "Doja Cat",
+    "artists": [
+      "Doja Cat"
+    ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "c1796f5a-6a74-456c-a6ce-b62d3f662a37",
+    "genres": [
+      "pop rap",
+      "dance-pop",
+      "freestyle"
+    ],
+    "cover": "/covers/doja-cat-jealous-type.jpg"
   },
   {
     "id": "bigxthaplug-all-the-way-feat-bailey-zimmerman",
     "videoId": "7kyHvPNbugk",
-    "title": "All The Way feat. Bailey Zimmerman",
-    "artist": "BigXthaPlug",
+    "title": "All the Way",
+    "artist": "BigXthaPlug feat. Bailey Zimmerman",
+    "artists": [
+      "BigXthaPlug",
+      "Bailey Zimmerman"
+    ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "6e4b5677-ce6a-4a87-b9ed-8f5434927942",
+    "cover": "/covers/bigxthaplug-all-the-way-feat-bailey-zimmerman.jpg"
   },
   {
     "id": "noah-kahan-stick-season",
     "videoId": "kEqefSD9Vc4",
     "title": "Stick Season",
     "artist": "Noah Kahan",
+    "artists": [
+      "Noah Kahan"
+    ],
     "year": 2022,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "b423b12f-6960-4985-b9ca-3be05904d3b9",
+    "cover": "/covers/noah-kahan-stick-season.jpg"
   },
   {
     "id": "sienna-spiro-the-visitor",
     "videoId": "LiYb4WGbp5Y",
     "title": "The Visitor",
     "artist": "SIENNA SPIRO",
+    "artists": [
+      "SIENNA SPIRO"
+    ],
     "year": 2026,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "9dd70b30-2113-42d1-aca1-e81c006013bc",
+    "genres": [
+      "classical crossover",
+      "pop",
+      "pop soul"
+    ],
+    "cover": "/covers/sienna-spiro-the-visitor.jpg"
   },
   {
     "id": "ella-langley-be-her",
     "videoId": "Dg47eNL_Usw",
     "title": "Be Her",
     "artist": "Ella Langley",
+    "artists": [
+      "Ella Langley"
+    ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "ff8c5dfe-5f12-4b7c-a901-af414c791d44",
+    "cover": "/covers/ella-langley-be-her.jpg"
   },
   {
     "id": "damiano-david-tyla-nile-rodgers-talk-to-me",
     "videoId": "PLTJeyrvdaA",
     "title": "Talk to Me",
-    "artist": "Damiano David, Tyla, Nile Rodgers",
+    "artist": "Damiano David feat. Tyla, Nile Rodgers",
+    "artists": [
+      "Damiano David",
+      "Tyla",
+      "Nile Rodgers"
+    ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "867cc340-4e21-4473-9d5f-5a911b300e26",
+    "cover": "/covers/damiano-david-tyla-nile-rodgers-talk-to-me.jpg"
   },
   {
     "id": "ariana-grande-we-can-t-be-friends-wait-for-your-love",
     "videoId": "KNtJGQkC-WI",
-    "title": "we can't be friends (wait for your love)",
+    "title": "we can’t be friends (wait for your love)",
     "artist": "Ariana Grande",
+    "artists": [
+      "Ariana Grande"
+    ],
     "year": 2024,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "59743aaf-907c-44ba-a314-5c602069b6bb",
+    "genres": [
+      "hi-nrg",
+      "pop",
+      "synth-pop"
+    ],
+    "cover": "/covers/ariana-grande-we-can-t-be-friends-wait-for-your-love.jpg"
   },
   {
     "id": "anotr-ft-54-ultra-talk-to-you-no-art",
     "videoId": "ajUMhpotf8k",
     "title": "Talk To You [No Art]",
     "artist": "ANOTR ft. 54 Ultra",
+    "artists": [
+      "ANOTR ft. 54 Ultra"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1140,14 +1899,25 @@
     "videoId": "CXBFU97X61I",
     "title": "End of the World",
     "artist": "Miley Cyrus",
+    "artists": [
+      "Miley Cyrus"
+    ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "0c5e69b9-b3d6-4662-9b96-6639797d4a82",
+    "genres": [
+      "pop"
+    ],
+    "cover": "/covers/miley-cyrus-end-of-the-world.jpg"
   },
   {
     "id": "don-toliver-yeat-rendezvous",
     "videoId": "_yHlFQqFLS0",
     "title": "Rendezvous",
     "artist": "Don Toliver & Yeat",
+    "artists": [
+      "Don Toliver & Yeat"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1156,14 +1926,22 @@
     "videoId": "agu22bqGHto",
     "title": "party 4 u",
     "artist": "Charli xcx",
+    "artists": [
+      "Charli xcx"
+    ],
     "year": 2020,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "1d26fed3-35b9-47ed-88c4-fc37d0c10940",
+    "cover": "/covers/charli-xcx-party-4-u.jpg"
   },
   {
     "id": "connie-francis-pretty-little-baby",
     "videoId": "LTsR3LfhdxI",
     "title": "Pretty Little Baby",
     "artist": "Connie Francis",
+    "artists": [
+      "Connie Francis"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1172,14 +1950,22 @@
     "videoId": "O_0Wn73AnC8",
     "title": "A Little More",
     "artist": "Ed Sheeran",
+    "artists": [
+      "Ed Sheeran"
+    ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "35bbb386-480a-4f93-acb0-c2a92317c6dc",
+    "cover": "/covers/ed-sheeran-a-little-more.jpg"
   },
   {
     "id": "rose-messy-from-f1-the-movie",
     "videoId": "ia2Ph61bYzc",
     "title": "Messy (From F1® The Movie)",
     "artist": "ROSÉ",
+    "artists": [
+      "ROSÉ"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1188,14 +1974,27 @@
     "videoId": "JLJcHbYSlB8",
     "title": "Cruel Summer",
     "artist": "Taylor Swift",
+    "artists": [
+      "Taylor Swift"
+    ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "e2a3933e-ef12-4279-bfb3-9a02b0ded904",
+    "genres": [
+      "electropop",
+      "pop",
+      "synth-pop"
+    ],
+    "cover": "/covers/taylor-swift-cruel-summer.jpg"
   },
   {
     "id": "morgan-wallen-tate-mcrae-what-i-want",
     "videoId": "Y6jyPJ8QJK8",
     "title": "What I Want",
     "artist": "Morgan Wallen, Tate McRae",
+    "artists": [
+      "Morgan Wallen, Tate McRae"
+    ],
     "year": 2025,
     "startSeconds": 30
   },
@@ -1204,14 +2003,26 @@
     "videoId": "FkOpwodhROI",
     "title": "Lose Control",
     "artist": "Teddy Swims",
+    "artists": [
+      "Teddy Swims"
+    ],
     "year": 2023,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "bc163bf6-8ae7-40cb-8958-32065642db92",
+    "genres": [
+      "alternative rock",
+      "soul"
+    ],
+    "cover": "/covers/teddy-swims-lose-control-2.jpg"
   },
   {
     "id": "teddy-swims-the-door",
     "videoId": "VSXT4a2kRHA",
     "title": "The Door",
     "artist": "Teddy Swims",
+    "artists": [
+      "Teddy Swims"
+    ],
     "year": 2023,
     "startSeconds": 30
   },
@@ -1220,14 +2031,27 @@
     "videoId": "xaPNR-_Cfn0",
     "title": "HOT TO GO!",
     "artist": "Chappell Roan",
+    "artists": [
+      "Chappell Roan"
+    ],
     "year": 2023,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "e9aca295-5f4a-4200-81c3-2cd0bafd3ad1",
+    "genres": [
+      "bitpop",
+      "dance-pop",
+      "synth-pop"
+    ],
+    "cover": "/covers/chappell-roan-hot-to-go.jpg"
   },
   {
     "id": "sza-30-for-30-feat-kendrick-lamar",
     "videoId": "NEnephbahLA",
     "title": "30 For 30 feat. Kendrick Lamar",
     "artist": "SZA",
+    "artists": [
+      "SZA"
+    ],
     "year": 2024,
     "startSeconds": 30
   },
@@ -1236,14 +2060,27 @@
     "videoId": "1FVF-9KQiPo",
     "title": "Opalite",
     "artist": "Taylor Swift",
+    "artists": [
+      "Taylor Swift"
+    ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "d8072326-3f01-42a6-b70f-44301d9bb77e",
+    "genres": [
+      "dance-pop",
+      "europop",
+      "pop"
+    ],
+    "cover": "/covers/taylor-swift-opalite-2.jpg"
   },
   {
     "id": "sabrina-carpenter-busy-woman",
     "videoId": "3m6NBnqLc-g",
     "title": "Busy Woman",
     "artist": "Sabrina Carpenter",
+    "artists": [
+      "Sabrina Carpenter"
+    ],
     "year": 2024,
     "startSeconds": 30
   },
@@ -1252,30 +2089,54 @@
     "videoId": "7InTkBxPtK4",
     "title": "Sports car",
     "artist": "Tate McRae",
+    "artists": [
+      "Tate McRae"
+    ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "b1d42e45-c3d0-4f98-a8ce-ac9007067349",
+    "cover": "/covers/tate-mcrae-sports-car.jpg"
   },
   {
     "id": "tyla-water",
     "videoId": "XoiOOiuH8iI",
     "title": "Water",
     "artist": "Tyla",
+    "artists": [
+      "Tyla"
+    ],
     "year": 2023,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "44bcaf13-f6a1-48a5-bda5-e975958a37dc",
+    "genres": [
+      "contemporary r&b",
+      "amapiano",
+      "afrobeats"
+    ],
+    "cover": "/covers/tyla-water.jpg"
   },
   {
     "id": "bebe-rexha-david-guetta-sad-girls",
     "videoId": "P8UqZ5IF-QE",
     "title": "Sad Girls",
     "artist": "Bebe Rexha & David Guetta",
+    "artists": [
+      "Bebe Rexha",
+      "David Guetta"
+    ],
     "year": 2026,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "43da569b-f13e-4c60-b1af-e4f1ddbfae88",
+    "cover": "/covers/bebe-rexha-david-guetta-sad-girls.jpg"
   },
   {
     "id": "rema-selena-gomez-calm-down",
     "videoId": "WcIcVapfqXw",
     "title": "Calm Down",
     "artist": "Rema, Selena Gomez",
+    "artists": [
+      "Rema, Selena Gomez"
+    ],
     "year": 2022,
     "startSeconds": 30
   },
@@ -1284,30 +2145,50 @@
     "videoId": "aezstCBHOPQ",
     "title": "Too Sweet",
     "artist": "Hozier",
+    "artists": [
+      "Hozier"
+    ],
     "year": 2024,
     "startSeconds": 30
   },
   {
     "id": "post-malone-i-had-some-help-feat-morgan-wallen",
     "videoId": "4QIZE708gJ4",
-    "title": "I Had Some Help (feat. Morgan Wallen)",
-    "artist": "Post Malone",
+    "title": "I Had Some Help",
+    "artist": "Post Malone feat. Morgan Wallen",
+    "artists": [
+      "Post Malone",
+      "Morgan Wallen"
+    ],
     "year": 2024,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "c1173819-46b2-4213-bab6-a0e60098ed7d",
+    "genres": [
+      "country"
+    ],
+    "cover": "/covers/post-malone-i-had-some-help-feat-morgan-wallen.jpg"
   },
   {
     "id": "sombr-homewrecker",
     "videoId": "mQezde_qeXw",
     "title": "Homewrecker",
     "artist": "sombr",
+    "artists": [
+      "sombr"
+    ],
     "year": 2026,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "8839d9e1-2e93-4ea3-a29e-3b7ba9a46c98",
+    "cover": "/covers/sombr-homewrecker.jpg"
   },
   {
     "id": "lady-gaga-doechii-runway",
     "videoId": "XXIX2WnfbpE",
     "title": "RUNWAY",
     "artist": "Lady Gaga, Doechii",
+    "artists": [
+      "Lady Gaga, Doechii"
+    ],
     "year": 2026,
     "startSeconds": 30
   },
@@ -1316,22 +2197,36 @@
     "videoId": "Sf9NZF5qBak",
     "title": "Repeat It",
     "artist": "Martin Garrix & Ed Sheeran",
+    "artists": [
+      "Martin Garrix",
+      "Ed Sheeran"
+    ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "b27269a8-6160-41db-ae52-3d04f789a5f7",
+    "cover": "/covers/martin-garrix-ed-sheeran-repeat-it.jpg"
   },
   {
     "id": "ariana-grande-hate-that-i-made-you-love-me-2",
     "videoId": "v1t4MTqdfyI",
     "title": "hate that i made you love me",
     "artist": "Ariana Grande",
+    "artists": [
+      "Ariana Grande"
+    ],
     "year": 2026,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "releaseGroupId": "7484a082-882d-4c7a-a59b-d2714282ec55",
+    "cover": "/covers/ariana-grande-hate-that-i-made-you-love-me-2.jpg"
   },
   {
     "id": "gabriel-jacoby-baby",
     "videoId": "LOlzbrt7hUw",
     "title": "baby",
     "artist": "Gabriel Jacoby",
+    "artists": [
+      "Gabriel Jacoby"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1340,6 +2235,9 @@
     "videoId": "zFHo7CN46G0",
     "title": "DOWNTOWN DREAMIN' (Prod. Sefru)",
     "artist": "The 046",
+    "artists": [
+      "The 046"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1348,6 +2246,9 @@
     "videoId": "wC17LiykXhk",
     "title": "MOVE | Lil Don Young Boss",
     "artist": "Lil Don Young Boss",
+    "artists": [
+      "Lil Don Young Boss"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1356,6 +2257,9 @@
     "videoId": "qUjVo8b_FGc",
     "title": "Too Many People",
     "artist": "Kids That Fly",
+    "artists": [
+      "Kids That Fly"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1364,6 +2268,9 @@
     "videoId": "LQNCppLdVsc",
     "title": "MAN ØN THE MØØN",
     "artist": "diamond*",
+    "artists": [
+      "diamond*"
+    ],
     "year": 2026,
     "startSeconds": 30
   },
@@ -1372,6 +2279,9 @@
     "videoId": "j7ibEQsZXTM",
     "title": "FØURS (feat. Young Thug)",
     "artist": "diamond*",
+    "artists": [
+      "diamond*"
+    ],
     "year": 2026,
     "startSeconds": 30
   },
@@ -1380,6 +2290,9 @@
     "videoId": "0kn2a9kfHrU",
     "title": "Entrada de Bala",
     "artist": "Zapato 3",
+    "artists": [
+      "Zapato 3"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1388,6 +2301,9 @@
     "videoId": "Uwl0BwiMfyA",
     "title": "Dejo Las Llaves /1996",
     "artist": "Pablo Dagnino",
+    "artists": [
+      "Pablo Dagnino"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1396,6 +2312,9 @@
     "videoId": "A4TY0hKyRc0",
     "title": "Astronauta",
     "artist": "La Nave",
+    "artists": [
+      "La Nave"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1404,6 +2323,9 @@
     "videoId": "U9mLbJ1aktk",
     "title": "La Vecina",
     "artist": "Los Amigos Invisibles",
+    "artists": [
+      "Los Amigos Invisibles"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1412,6 +2334,9 @@
     "videoId": "b6n8n7W-3mw",
     "title": "Secreto ᴴᴰ",
     "artist": "Caramelos de Cianuro",
+    "artists": [
+      "Caramelos de Cianuro"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1420,6 +2345,9 @@
     "videoId": "HTdDeWYL5Uo",
     "title": "Zorra",
     "artist": "Dermis Tatu",
+    "artists": [
+      "Dermis Tatu"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1428,6 +2356,9 @@
     "videoId": "sN6hUolR7FI",
     "title": "Sutíl Sonido (Amor)",
     "artist": "Pacifica",
+    "artists": [
+      "Pacifica"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1436,6 +2367,9 @@
     "videoId": "eHaqE4I8BH8",
     "title": "Silicon Valley (2001)",
     "artist": "Fauna Crepuscular",
+    "artists": [
+      "Fauna Crepuscular"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1444,6 +2378,9 @@
     "videoId": "CZ6I3K0n3q4",
     "title": "sin ti",
     "artist": "King chango",
+    "artists": [
+      "King chango"
+    ],
     "year": 2000,
     "startSeconds": 30
   },
@@ -1452,6 +2389,9 @@
     "videoId": "DzsMr21Z8Ao",
     "title": "Cabeza",
     "artist": "Sentimiento Muerto",
+    "artists": [
+      "Sentimiento Muerto"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1460,6 +2400,9 @@
     "videoId": "9QuYHcfGwJE",
     "title": "Tiembla",
     "artist": "Desorden Público",
+    "artists": [
+      "Desorden Público"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1468,6 +2411,9 @@
     "videoId": "Uu7WeuoBPMs",
     "title": "dime que si",
     "artist": "Cangrejo y Dermis tatu",
+    "artists": [
+      "Cangrejo y Dermis tatu"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1476,6 +2422,9 @@
     "videoId": "uw2KBm93NeI",
     "title": "Solo ~ Caracas Pop Festival 2002",
     "artist": "Candy 66",
+    "artists": [
+      "Candy 66"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1484,6 +2433,9 @@
     "videoId": "0HFy4hsTHLA",
     "title": "La leche Frank Black ( Punk Venezuela )",
     "artist": "FRANCO VIDEO",
+    "artists": [
+      "FRANCO VIDEO"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1492,6 +2444,9 @@
     "videoId": "tzIqhHMFyxo",
     "title": "Resiste",
     "artist": "Sentimiento Muerto",
+    "artists": [
+      "Sentimiento Muerto"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1500,6 +2455,9 @@
     "videoId": "A0n_ndun9uY",
     "title": "Nada que decir (1995)",
     "artist": "Los Amigos Invisibles",
+    "artists": [
+      "Los Amigos Invisibles"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1508,6 +2466,9 @@
     "videoId": "D0f45zrVM2E",
     "title": "Terrenal",
     "artist": "Dermis Tatú",
+    "artists": [
+      "Dermis Tatú"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1516,6 +2477,9 @@
     "videoId": "lCrUBctZ9fQ",
     "title": "Taj Mahal",
     "artist": "ChuckNorris",
+    "artists": [
+      "ChuckNorris"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1524,6 +2488,9 @@
     "videoId": "LxDhlzJR4XQ",
     "title": "Vivire para ti (Natalia Lafourcade)",
     "artist": "Los Amigos Invisibles",
+    "artists": [
+      "Los Amigos Invisibles"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1532,6 +2499,9 @@
     "videoId": "jotr9DtJrYM",
     "title": "Big Times",
     "artist": "La Puta Electrica",
+    "artists": [
+      "La Puta Electrica"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1540,6 +2510,9 @@
     "videoId": "OPiKnEDjAts",
     "title": "Uñas Asesinas",
     "artist": "YATU",
+    "artists": [
+      "YATU"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1548,6 +2521,9 @@
     "videoId": "9RtVSg-j-lk",
     "title": "La Luna",
     "artist": "YATU",
+    "artists": [
+      "YATU"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1556,6 +2532,9 @@
     "videoId": "3e7L1M0oCbU",
     "title": "Carnaval (Version Original",
     "artist": "La Leche",
+    "artists": [
+      "La Leche"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1564,6 +2543,9 @@
     "videoId": "SkDQ6c8nsa8",
     "title": "Zapato 3",
     "artist": "Pienso Perdonarte",
+    "artists": [
+      "Pienso Perdonarte"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1572,6 +2554,9 @@
     "videoId": "mjKBjRevfq0",
     "title": "Rubia Sol Morena Luna ᴴᴰ",
     "artist": "Caramelos de Cianuro",
+    "artists": [
+      "Caramelos de Cianuro"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1580,6 +2565,9 @@
     "videoId": "GXk7ZTi_Cxg",
     "title": "Verdad",
     "artist": "Fauna Crepuscular",
+    "artists": [
+      "Fauna Crepuscular"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1588,6 +2576,9 @@
     "videoId": "DWreuNv2-9I",
     "title": "Tu Silencio",
     "artist": "Solares",
+    "artists": [
+      "Solares"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1596,6 +2587,9 @@
     "videoId": "n3ZFr4Pa1tA",
     "title": "Verónica",
     "artist": "Caramelos De Cianuro",
+    "artists": [
+      "Caramelos De Cianuro"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1604,6 +2598,9 @@
     "videoId": "HpREjOxA1RU",
     "title": "Canción Suave (Despecho # 2)",
     "artist": "Caramelos De Cianuro",
+    "artists": [
+      "Caramelos De Cianuro"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1612,6 +2609,9 @@
     "videoId": "0OuDHYrfFFk",
     "title": "MALABARES / album \"Incandescente\"",
     "artist": "Chucknorris",
+    "artists": [
+      "Chucknorris"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1620,6 +2620,9 @@
     "videoId": "tcIW3woaLe0",
     "title": "Culebron",
     "artist": "Sentimiento Muerto",
+    "artists": [
+      "Sentimiento Muerto"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1628,6 +2631,9 @@
     "videoId": "HkDGFhtt4FU",
     "title": "azul azul",
     "artist": "zapato 3",
+    "artists": [
+      "zapato 3"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1636,6 +2642,9 @@
     "videoId": "PHt08fD7Ql4",
     "title": "SOLARES hermana y como un fantasmas en vivo.",
     "artist": "geiler cesar melendez daza",
+    "artists": [
+      "geiler cesar melendez daza"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1644,6 +2653,9 @@
     "videoId": "ur9CbchSGJo",
     "title": "cascabel",
     "artist": "solares",
+    "artists": [
+      "solares"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1652,6 +2664,9 @@
     "videoId": "Pn_hTSSF9BE",
     "title": "Luz Verde \"Sin Sombra No Hay Luz\" (versión de Sentimiento Muerto)",
     "artist": "Luz Verde",
+    "artists": [
+      "Luz Verde"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1660,6 +2675,9 @@
     "videoId": "xws8l0e9dvg",
     "title": "Lejos de Aqui",
     "artist": "Sur Carabela",
+    "artists": [
+      "Sur Carabela"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1668,6 +2686,9 @@
     "videoId": "TavSRORek60",
     "title": "ZAPATO3 ¨LA RAZÓN DE ESTAR AQUÍ¨ VIDEO OFICIAL 2016",
     "artist": "Fernando Batoni",
+    "artists": [
+      "Fernando Batoni"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1676,6 +2697,9 @@
     "videoId": "T6IIb3WO0HE",
     "title": "01 Separación Zapato 3 última cruzada",
     "artist": "Gabriel Maldonado",
+    "artists": [
+      "Gabriel Maldonado"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1684,6 +2708,9 @@
     "videoId": "afpNUDkhZgY",
     "title": "Cayayo / Dermis Tatu / Dirección Opuesta / Fotografías de Iván Gabaldón",
     "artist": "Oswaldo Grillet TV",
+    "artists": [
+      "Oswaldo Grillet TV"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1692,6 +2719,9 @@
     "videoId": "7xSOS1wXLTI",
     "title": "El Chillido de los Taxis",
     "artist": "Dermis Tatú",
+    "artists": [
+      "Dermis Tatú"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1700,6 +2730,9 @@
     "videoId": "vu2EBHPk0WU",
     "title": "Transparente",
     "artist": "Sentimiento Muerto",
+    "artists": [
+      "Sentimiento Muerto"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1708,6 +2741,9 @@
     "videoId": "2p2fFRI6mOs",
     "title": "Sentimiento Muerto",
     "artist": "Un Agradable Calor",
+    "artists": [
+      "Un Agradable Calor"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1716,6 +2752,9 @@
     "videoId": "OxTqlLzk3Vw",
     "title": "Antisocial (single)",
     "artist": "Candy66",
+    "artists": [
+      "Candy66"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1724,6 +2763,9 @@
     "videoId": "DMoH3iyCPug",
     "title": "El Nino",
     "artist": "SONICA",
+    "artists": [
+      "SONICA"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1732,6 +2774,9 @@
     "videoId": "mCStct2zYDM",
     "title": "PORQUE?",
     "artist": "SONICA",
+    "artists": [
+      "SONICA"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1740,6 +2785,9 @@
     "videoId": "sbDhi6hRHiY",
     "title": "Candy 66 Madre",
     "artist": "Franklin Prieto",
+    "artists": [
+      "Franklin Prieto"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1748,6 +2796,9 @@
     "videoId": "6Q-NpfRDGPk",
     "title": "Plataforma de Despegue/ Electrobotic",
     "artist": "Caramelos de Cianuro",
+    "artists": [
+      "Caramelos de Cianuro"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1756,6 +2807,9 @@
     "videoId": "Vov967TD0iI",
     "title": "SOLARES ANTONIN ARTAUD",
     "artist": "tjmapex",
+    "artists": [
+      "tjmapex"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1764,6 +2818,9 @@
     "videoId": "0LraeAhbIcA",
     "title": "Entrada de bala/Uñas asesinas/Pantaletas Negras",
     "artist": "Zapato 3",
+    "artists": [
+      "Zapato 3"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1772,6 +2829,9 @@
     "videoId": "CmSsB-Sg4EI",
     "title": "Nada Sigue Igual",
     "artist": "Sentimiento Muerto (EUS 31)",
+    "artists": [
+      "Sentimiento Muerto (EUS 31)"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1780,6 +2840,9 @@
     "videoId": "K3iQVW2ANfk",
     "title": "Las Estrellas",
     "artist": "Caramelos de Cianuro",
+    "artists": [
+      "Caramelos de Cianuro"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1788,6 +2851,9 @@
     "videoId": "JSOYeu3j8Ys",
     "title": "desorden publico-politicos paraliticos",
     "artist": "daniel velez",
+    "artists": [
+      "daniel velez"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1796,6 +2862,9 @@
     "videoId": "Fb2VrVgEU1Y",
     "title": "Desorden Público",
     "artist": "Skápate",
+    "artists": [
+      "Skápate"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1804,6 +2873,9 @@
     "videoId": "lvOqPo8T-Uo",
     "title": "Verano ᴴᴰ",
     "artist": "Caramelos de Cianuro",
+    "artists": [
+      "Caramelos de Cianuro"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1812,6 +2884,9 @@
     "videoId": "HZ9E-CrRijs",
     "title": "sanitarios",
     "artist": "caramelos de cianuro",
+    "artists": [
+      "caramelos de cianuro"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1820,6 +2895,9 @@
     "videoId": "oHlklDwlmtY",
     "title": "Tú eres de esas",
     "artist": "Caramelos de Cianuro",
+    "artists": [
+      "Caramelos de Cianuro"
+    ],
     "year": 2015,
     "startSeconds": 30
   },
@@ -1828,6 +2906,9 @@
     "videoId": "BHaOyRCdw2I",
     "title": "Miraflores",
     "artist": "Sentimiento Muerto",
+    "artists": [
+      "Sentimiento Muerto"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1836,6 +2917,9 @@
     "videoId": "KLjeP-G0dnQ",
     "title": "A la hora justa",
     "artist": "Sentimiento Muerto",
+    "artists": [
+      "Sentimiento Muerto"
+    ],
     "year": 1995,
     "startSeconds": 30
   },
@@ -1844,6 +2928,9 @@
     "videoId": "1uTz00d6MIY",
     "title": "Estirame el Tiempo (1991)",
     "artist": "Sentimiento Muerto",
+    "artists": [
+      "Sentimiento Muerto"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1852,6 +2939,9 @@
     "videoId": "HDGlq5JDtdc",
     "title": "SENTIMIENTO MUERTO/ TEMA: TROPIEZOS",
     "artist": "ESTUDIOPLAY1",
+    "artists": [
+      "ESTUDIOPLAY1"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1860,6 +2950,9 @@
     "videoId": "c8TVe4zexP0",
     "title": "Eva",
     "artist": "Sentimiento Muerto",
+    "artists": [
+      "Sentimiento Muerto"
+    ],
     "year": 1991,
     "startSeconds": 30
   },
@@ -1868,6 +2961,9 @@
     "videoId": "oycDGu9hvOE",
     "title": "Quien Moriría",
     "artist": "Los Pixel",
+    "artists": [
+      "Los Pixel"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1876,6 +2972,9 @@
     "videoId": "YxpoIE5qjYw",
     "title": "Pixel IMAGÍNATE",
     "artist": "david reveron",
+    "artists": [
+      "david reveron"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1884,6 +2983,9 @@
     "videoId": "2Vn-68PCD1Q",
     "title": "Los Pixel",
     "artist": "Rosas cortan tu destino",
+    "artists": [
+      "Rosas cortan tu destino"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1892,6 +2994,9 @@
     "videoId": "ufRqzsvDfn0",
     "title": "Los Pixel",
     "artist": "Imagínate",
+    "artists": [
+      "Imagínate"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1900,6 +3005,9 @@
     "videoId": "R6-GpFPQkR8",
     "title": "LA PUTA ELECTRICA / TREN",
     "artist": "Musica Norton",
+    "artists": [
+      "Musica Norton"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1908,6 +3016,9 @@
     "videoId": "TZLpnvdMaRo",
     "title": "Juan Pope",
     "artist": "La Puta Electrica",
+    "artists": [
+      "La Puta Electrica"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1916,6 +3027,9 @@
     "videoId": "jzWE3K0Mifs",
     "title": "Suet (En Vivo en Coro)",
     "artist": "La Puta Eléctrica",
+    "artists": [
+      "La Puta Eléctrica"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1924,6 +3038,9 @@
     "videoId": "L4iNStNBacQ",
     "title": "LA PUTA ELECTRICA / EL SURF DE LOS MARES DE JUPITER",
     "artist": "Musica Norton",
+    "artists": [
+      "Musica Norton"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1932,6 +3049,9 @@
     "videoId": "rbLLeTDYMD8",
     "title": "LA PUTA ELECTRICA / BLIND",
     "artist": "Musica Norton",
+    "artists": [
+      "Musica Norton"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1940,6 +3060,9 @@
     "videoId": "yc0FzXu_Sdw",
     "title": "DaDa (Re- Master)",
     "artist": "LA PUTA ELECTRICA",
+    "artists": [
+      "LA PUTA ELECTRICA"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1948,6 +3071,9 @@
     "videoId": "WBEUQpwUMSc",
     "title": "LA PUTA ELECTRICA / MISION",
     "artist": "Musica Norton",
+    "artists": [
+      "Musica Norton"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1956,6 +3082,9 @@
     "videoId": "oU1yiQy0Avc",
     "title": "LA PUTA ELECTRICA / CERO CERO",
     "artist": "Musica Norton",
+    "artists": [
+      "Musica Norton"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1964,6 +3093,9 @@
     "videoId": "HT_fSgUIzfo",
     "title": "LA PUTA ELECTRICA / MAQUINA / EN VIVO BAR \"SPACIO\" / 2003",
     "artist": "Musica Norton",
+    "artists": [
+      "Musica Norton"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1972,6 +3104,9 @@
     "videoId": "rPDsbYuGP1U",
     "title": "Mariposas de plata",
     "artist": "Zapato 3",
+    "artists": [
+      "Zapato 3"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1980,6 +3115,9 @@
     "videoId": "nem_nwKgo_U",
     "title": "sentimiento muerto me duele la cabeza",
     "artist": "gurrufiogurrufio",
+    "artists": [
+      "gurrufiogurrufio"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1988,6 +3126,9 @@
     "videoId": "sGbWjrit8yU",
     "title": "Hermana",
     "artist": "Zapato 3",
+    "artists": [
+      "Zapato 3"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -1996,6 +3137,9 @@
     "videoId": "n1fHbpKvuRk",
     "title": "Caramelos de cianuro Veterana",
     "artist": "Juan M Acacio D.",
+    "artists": [
+      "Juan M Acacio D."
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2004,6 +3148,9 @@
     "videoId": "KbHsoiAjsS4",
     "title": "Wo No Noo Papashanty Version Completa",
     "artist": "kuyatazito",
+    "artists": [
+      "kuyatazito"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2012,6 +3159,9 @@
     "videoId": "oezlUnBRnxE",
     "title": "Caramelos de cianuro- La terraza",
     "artist": "sirkaliru44",
+    "artists": [
+      "sirkaliru44"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2020,6 +3170,9 @@
     "videoId": "evsACSlEW08",
     "title": "tus manos son frias",
     "artist": "Juan Bustamante",
+    "artists": [
+      "Juan Bustamante"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2028,6 +3181,9 @@
     "videoId": "h68BylIh35k",
     "title": "Valle de balas",
     "artist": "Desorden Público",
+    "artists": [
+      "Desorden Público"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2036,6 +3192,9 @@
     "videoId": "CLIeTCEK4bw",
     "title": "Zapato 3",
     "artist": "Tan Cerca De Ti",
+    "artists": [
+      "Tan Cerca De Ti"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2044,6 +3203,9 @@
     "videoId": "apGHbb5zoQE",
     "title": "baby cohete",
     "artist": "caramelos de cianuro",
+    "artists": [
+      "caramelos de cianuro"
+    ],
     "year": 2006,
     "startSeconds": 30
   },
@@ -2052,6 +3214,9 @@
     "videoId": "vFX4JttZJnI",
     "title": "Combate-Desorden Publico",
     "artist": "jxk25",
+    "artists": [
+      "jxk25"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2060,6 +3225,9 @@
     "videoId": "z-AMan1YkgI",
     "title": "Muriendo Por Ti",
     "artist": "Zapato 3",
+    "artists": [
+      "Zapato 3"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2068,6 +3236,9 @@
     "videoId": "c6dNudlz3G8",
     "title": "danza de los esqueletos cumbia desorden público",
     "artist": "morokobuska",
+    "artists": [
+      "morokobuska"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2076,6 +3247,9 @@
     "videoId": "a7TrL_Xl50o",
     "title": "Adios amor",
     "artist": "Caramelos de Cianuro",
+    "artists": [
+      "Caramelos de Cianuro"
+    ],
     "year": 2010,
     "startSeconds": 30
   },
@@ -2084,6 +3258,9 @@
     "videoId": "cASnPeqCiw8",
     "title": "Venezuelan in New York",
     "artist": "King Changó",
+    "artists": [
+      "King Changó"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2092,6 +3269,9 @@
     "videoId": "HoFgk2ZNnAA",
     "title": "Veneno (Kyle xy)",
     "artist": "Caramelos de cianuro",
+    "artists": [
+      "Caramelos de cianuro"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2100,6 +3280,9 @@
     "videoId": "naTClEXp9sk",
     "title": "Las Notas",
     "artist": "Caramelos De Cianuro",
+    "artists": [
+      "Caramelos De Cianuro"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2108,6 +3291,9 @@
     "videoId": "JrBDIcODm0k",
     "title": "Caramelos de Cianuro-Misteriosa (kopitox)",
     "artist": "SolracxKun",
+    "artists": [
+      "SolracxKun"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2116,6 +3302,9 @@
     "videoId": "K5ZpUVnfegM",
     "title": "cloroformo",
     "artist": "Caramelos de cianuro",
+    "artists": [
+      "Caramelos de cianuro"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2124,6 +3313,9 @@
     "videoId": "Yu36CBrDgWc",
     "title": "Perra Infiel",
     "artist": "Caramelos De Cianuro",
+    "artists": [
+      "Caramelos De Cianuro"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2132,6 +3324,9 @@
     "videoId": "JyEN6kZMeSM",
     "title": "La Llama",
     "artist": "Caramelos de Cianuro",
+    "artists": [
+      "Caramelos de Cianuro"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2140,6 +3335,9 @@
     "videoId": "uiqAlSOjiGE",
     "title": "Adiós a las armas",
     "artist": "Caramelos de Cianuro",
+    "artists": [
+      "Caramelos de Cianuro"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2148,6 +3346,9 @@
     "videoId": "3fRZkS4OxMk",
     "title": "El instante pasó",
     "artist": "Caramelos de Cianuro",
+    "artists": [
+      "Caramelos de Cianuro"
+    ],
     "year": 2015,
     "startSeconds": 30
   },
@@ -2156,6 +3357,9 @@
     "videoId": "ORNUipGDFjE",
     "title": "Euforia",
     "artist": "Caramelos de Cianuro",
+    "artists": [
+      "Caramelos de Cianuro"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2164,6 +3368,9 @@
     "videoId": "HNWfjTMgP9Y",
     "title": "Dividido - Official Lyric Video",
     "artist": "Channel",
+    "artists": [
+      "Channel"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2172,6 +3379,9 @@
     "videoId": "3tYKyaPe92U",
     "title": "QUE BELLO",
     "artist": "SONICA",
+    "artists": [
+      "SONICA"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2180,6 +3390,9 @@
     "videoId": "p8xmiKNrgKM",
     "title": "Zapato 3 Gira Separacion Pto Ordaz 1993",
     "artist": "Un Strider",
+    "artists": [
+      "Un Strider"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2188,6 +3401,9 @@
     "videoId": "qGmp5LVapoI",
     "title": "Miércoles Insólitos (1998) || Full Album ||",
     "artist": "Various Artists",
+    "artists": [
+      "Various Artists"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2196,6 +3412,9 @@
     "videoId": "WUmBW6qZcd0",
     "title": "EÚS31: El Último Sentimiento Eléctrico (2004) || Full Album ||",
     "artist": "Pablo Dagnino",
+    "artists": [
+      "Pablo Dagnino"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2204,6 +3423,9 @@
     "videoId": "RA0pVzi-yJs",
     "title": "Zapato 3 Gira Amor furia y languidez",
     "artist": "gatoslashccs",
+    "artists": [
+      "gatoslashccs"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2212,6 +3434,9 @@
     "videoId": "DC7gNk5Y5T8",
     "title": "Zapato 3 Gira Amor furia y languidez Segunda Parte",
     "artist": "gatoslashccs",
+    "artists": [
+      "gatoslashccs"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2220,6 +3445,9 @@
     "videoId": "eHqrW0NxBOU",
     "title": "Gira Capsula para volar 1996",
     "artist": "Zapato 3",
+    "artists": [
+      "Zapato 3"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2228,6 +3456,9 @@
     "videoId": "C3kwKUKZaSg",
     "title": "Zapato 3",
     "artist": "Amaranto (Nuevo Single) 2017",
+    "artists": [
+      "Amaranto (Nuevo Single) 2017"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2236,6 +3467,9 @@
     "videoId": "xSQcq-ZZDxg",
     "title": "Sentimiento Muerto en vivo Mata de Coco",
     "artist": "Krishnan Das",
+    "artists": [
+      "Krishnan Das"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2244,6 +3478,9 @@
     "videoId": "NG16eDpo5Uo",
     "title": "IV Festival Nuevas Bandas (1994) || Full Album ||",
     "artist": "Dermis Tatú",
+    "artists": [
+      "Dermis Tatú"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2252,6 +3489,9 @@
     "videoId": "dUhu4tmRQoI",
     "title": "II Festival Nuevas Bandas (1992) || Full Album ||",
     "artist": "Sentimiento Muerto",
+    "artists": [
+      "Sentimiento Muerto"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2260,6 +3500,9 @@
     "videoId": "UaMVMhOyH40",
     "title": "Tributo Lo-Fi A Sentimiento Muerto (2002) || Full Album ||",
     "artist": "Various Artists",
+    "artists": [
+      "Various Artists"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2268,6 +3511,9 @@
     "videoId": "wZvzaCnYP1w",
     "title": "Sentimiento Muerto en vivo Caracas",
     "artist": "Krishnan Das",
+    "artists": [
+      "Krishnan Das"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2276,6 +3522,9 @@
     "videoId": "6Of_zn6pbL8",
     "title": "Transformer [EP] (2004) || Full Album ||",
     "artist": "Elektra",
+    "artists": [
+      "Elektra"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2284,6 +3533,9 @@
     "videoId": "mhviPP1JoP4",
     "title": "Venus Mixes (2001) || Full Album ||",
     "artist": "Dioslepague",
+    "artists": [
+      "Dioslepague"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2292,6 +3544,9 @@
     "videoId": "lYXEpBaPiTo",
     "title": "Demos (2000) || Full Album ||",
     "artist": "Submarino",
+    "artists": [
+      "Submarino"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2300,6 +3555,9 @@
     "videoId": "6h4a0zRDE3o",
     "title": "Submarino (2001) || Full Album ||",
     "artist": "Submarino",
+    "artists": [
+      "Submarino"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2308,6 +3566,9 @@
     "videoId": "Rmj-gHuxjS0",
     "title": "Uñas Asesinas",
     "artist": "Zapato 3",
+    "artists": [
+      "Zapato 3"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2316,6 +3577,9 @@
     "videoId": "-gR-ZzzBhJs",
     "title": "25 años [DVD FULL, 2012]",
     "artist": "Los Cafres",
+    "artists": [
+      "Los Cafres"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2324,6 +3588,9 @@
     "videoId": "z4Tykk0ptXo",
     "title": "Zapato 3 Pienso Perdonarte en vivo.",
     "artist": "Un Strider",
+    "artists": [
+      "Un Strider"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2332,6 +3599,9 @@
     "videoId": "FGQZWYU-Fvs",
     "title": "Sentimiento /Muerto / Mi Bemol.",
     "artist": "elmisionario",
+    "artists": [
+      "elmisionario"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2340,6 +3610,9 @@
     "videoId": "sLxfyp5dD0I",
     "title": "Festival rock a parque 2009 Bogota Colombia candy 66 venezuela",
     "artist": "augusto@asidu",
+    "artists": [
+      "augusto@asidu"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2348,6 +3621,9 @@
     "videoId": "QefqhR3jNZ8",
     "title": "No Más Violencia",
     "artist": "Candy66",
+    "artists": [
+      "Candy66"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2356,6 +3632,9 @@
     "videoId": "CIKXDI_X0VA",
     "title": "Atrapados en el Mar (acústico)",
     "artist": "Susan",
+    "artists": [
+      "Susan"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2364,6 +3643,9 @@
     "videoId": "Zb4EJ9TgW24",
     "title": "Amaranto New Single Zapato3 2017",
     "artist": "Diego Marquez",
+    "artists": [
+      "Diego Marquez"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2372,6 +3654,9 @@
     "videoId": "wksTmW4SRu0",
     "title": "PREMISA ALIENACION - VideoClip Oficial HD",
     "artist": "IN73RZON4",
+    "artists": [
+      "IN73RZON4"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2380,6 +3665,9 @@
     "videoId": "Y2ZRCKt1as8",
     "title": "Jai (1999) || Full Album ||",
     "artist": "La Hermandad",
+    "artists": [
+      "La Hermandad"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2388,6 +3676,9 @@
     "videoId": "uhVjixEZLgw",
     "title": "Te Prendo Como Mirra",
     "artist": "Zapato 3",
+    "artists": [
+      "Zapato 3"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2396,6 +3687,9 @@
     "videoId": "BjzbQpvcRYA",
     "title": "amigos invisibles ver 2",
     "artist": "Malditos Hippies",
+    "artists": [
+      "Malditos Hippies"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2404,6 +3698,9 @@
     "videoId": "ZWIXmPwnns0",
     "title": "Festival Mutek (Completo Inédito 2016)",
     "artist": "ROKEN (Cerati Etcheto Leandro)",
+    "artists": [
+      "ROKEN (Cerati Etcheto Leandro)"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2412,6 +3709,9 @@
     "videoId": "zosXS8F2Je4",
     "title": "En vivo en la Av. 9 de Julio (14 de Diciembre de 1991)",
     "artist": "Soda Stereo",
+    "artists": [
+      "Soda Stereo"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2420,6 +3720,9 @@
     "videoId": "5kckhBCWHcU",
     "title": "Zapato 3-Mariposas de Plata",
     "artist": "Juan Jose Avellaneda",
+    "artists": [
+      "Juan Jose Avellaneda"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2428,6 +3731,9 @@
     "videoId": "fQemeRTKdBA",
     "title": "Zapato 3 Pide mas",
     "artist": "JC",
+    "artists": [
+      "JC"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2436,6 +3742,9 @@
     "videoId": "GAo51KVJmjU",
     "title": "Elefantes Marinos",
     "artist": "Zapato3",
+    "artists": [
+      "Zapato3"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2444,6 +3753,9 @@
     "videoId": "5s_K3zTuqK0",
     "title": "LOS PIXEL- ¨Corazón Espichado ¨",
     "artist": "Los Pixel",
+    "artists": [
+      "Los Pixel"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2452,6 +3764,9 @@
     "videoId": "jbaGYLcGT3g",
     "title": "The Mad Spoilers || Vulpes Fraga",
     "artist": "The Mad Spoilers",
+    "artists": [
+      "The Mad Spoilers"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2460,6 +3775,9 @@
     "videoId": "i8m6PVzKRdw",
     "title": "DORIAN / La tormenta de arena / Sonido Directo.tv",
     "artist": "Sonido Directo.tv",
+    "artists": [
+      "Sonido Directo.tv"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2468,6 +3786,9 @@
     "videoId": "WbC2U48HhvQ",
     "title": "Duele ft. León Larregui",
     "artist": "Dorian",
+    "artists": [
+      "Dorian"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2476,6 +3797,9 @@
     "videoId": "W84zp1bZ4mY",
     "title": "ARA (Diez años y un día)",
     "artist": "DORIAN",
+    "artists": [
+      "DORIAN"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2484,6 +3808,9 @@
     "videoId": "JA68m1IRabU",
     "title": "Candy66 Ceniza Acústico en Bits Session",
     "artist": "Jean De Oliveira",
+    "artists": [
+      "Jean De Oliveira"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2492,6 +3819,9 @@
     "videoId": "SQRiGpf49Ow",
     "title": "Banda \"Platonico\"/ Tema: \"FIN ETERNO\"",
     "artist": "Jonathan Leal",
+    "artists": [
+      "Jonathan Leal"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2500,6 +3830,9 @@
     "videoId": "npJQovPLYXI",
     "title": "MEGA ROCK NACIONAL EL MEJOR DEL MUNDO DJSUPER",
     "artist": "Guillermo Cristian Ariel justiniano",
+    "artists": [
+      "Guillermo Cristian Ariel justiniano"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2508,6 +3841,9 @@
     "videoId": "KlCv4LtvrIA",
     "title": "Héroes (DVD Actual)",
     "artist": "Richard Coleman",
+    "artists": [
+      "Richard Coleman"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2516,6 +3852,9 @@
     "videoId": "9EoT0EKtjCQ",
     "title": "JACKTURBO / Sexy Sue",
     "artist": "Musica Norton",
+    "artists": [
+      "Musica Norton"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2524,6 +3863,9 @@
     "videoId": "G7fhjyI4AAU",
     "title": "Jackturbo",
     "artist": "Altaveu 2010",
+    "artists": [
+      "Altaveu 2010"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2532,6 +3874,9 @@
     "videoId": "Af8TCxn5pYk",
     "title": "Contempopranea 2018",
     "artist": "DORIAN",
+    "artists": [
+      "DORIAN"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2540,6 +3885,9 @@
     "videoId": "J_Re3cH-BI0",
     "title": "Carretera",
     "artist": "Equilibrio .Net",
+    "artists": [
+      "Equilibrio .Net"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2548,6 +3896,9 @@
     "videoId": "G0IUaS7qb7U",
     "title": "Unión y Separación",
     "artist": "Yatu",
+    "artists": [
+      "Yatu"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2556,6 +3907,9 @@
     "videoId": "ZPtNBH_nzfA",
     "title": "Entrevista al grupo Zapato 3",
     "artist": "Luis Chataing",
+    "artists": [
+      "Luis Chataing"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2564,6 +3918,9 @@
     "videoId": "Fbx-4FtG-lk",
     "title": "El Show de GH 11 de Oct 2018 Parte 7 Ft Karina & Pedro Castillo",
     "artist": "El George Harris",
+    "artists": [
+      "El George Harris"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2572,6 +3929,9 @@
     "videoId": "kfr7su7rx5U",
     "title": "En Mata de Coco (En Vivo)",
     "artist": "Sentimiento Muerto",
+    "artists": [
+      "Sentimiento Muerto"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2580,6 +3940,9 @@
     "videoId": "zudvLMZk9w8",
     "title": "El Instante Pasó",
     "artist": "Caramelos de Cianuro (feat. Los Enanitos Verdes)",
+    "artists": [
+      "Caramelos de Cianuro (feat. Los Enanitos Verdes)"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2588,6 +3951,9 @@
     "videoId": "Kujn4yGpVRA",
     "title": "Encuentro En El Ruedo (1989) || Full Album ||",
     "artist": "Various Artists",
+    "artists": [
+      "Various Artists"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2596,6 +3962,9 @@
     "videoId": "IU3vSec8pWU",
     "title": "Zapato 3 “Uñas Asesinas” Salt Lake City Mayo 11Asfalto Tour",
     "artist": "Lcarolina29",
+    "artists": [
+      "Lcarolina29"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2604,6 +3973,9 @@
     "videoId": "F7FXQnnzSis",
     "title": "Elefantes Marinos",
     "artist": "Zapato 3 Buenos Aires",
+    "artists": [
+      "Zapato 3 Buenos Aires"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2612,6 +3984,9 @@
     "videoId": "wQzcCYRGfLQ",
     "title": "Octavio Suñe Alguna Vez",
     "artist": "octaviosune",
+    "artists": [
+      "octaviosune"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2620,6 +3995,9 @@
     "videoId": "75ecKjxhQ-Q",
     "title": "Esto ya lo toqué mañana",
     "artist": "Octavio Suñé",
+    "artists": [
+      "Octavio Suñé"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2628,6 +4006,9 @@
     "videoId": "xoKyM0FbVm0",
     "title": "Pulsar (En Vivo en Monterrey)",
     "artist": "Gustavo Cerati",
+    "artists": [
+      "Gustavo Cerati"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2636,6 +4017,9 @@
     "videoId": "50j63cIBcvs",
     "title": "Sal (En Vivo en Monterrey)",
     "artist": "Gustavo Cerati",
+    "artists": [
+      "Gustavo Cerati"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2644,6 +4028,9 @@
     "videoId": "WTlwg1IoXp8",
     "title": "Tirado En El Suelo (En Vivo / Caracas / 2007)",
     "artist": "Solares",
+    "artists": [
+      "Solares"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2652,6 +4039,9 @@
     "videoId": "T1QJkqVC_H4",
     "title": "El Sol y la Luna - Santiago 2019",
     "artist": "ZAPATO 3",
+    "artists": [
+      "ZAPATO 3"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2660,6 +4050,9 @@
     "videoId": "8qMQLum40T4",
     "title": "ASV Yatu 2/7",
     "artist": "albertonegron",
+    "artists": [
+      "albertonegron"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2668,6 +4061,9 @@
     "videoId": "krxuek7y--U",
     "title": "Zapato 3 Separación, Asfalto Tour 2019 Barcelona España.",
     "artist": "Leudobik Tv",
+    "artists": [
+      "Leudobik Tv"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2676,6 +4072,9 @@
     "videoId": "IMj8I2iKYy0",
     "title": "Zapato 3.. Te prendo como mirra, Si no estás conmigo, intro Vuelo sobre ti.",
     "artist": "Leudobik Tv",
+    "artists": [
+      "Leudobik Tv"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2684,6 +4083,9 @@
     "videoId": "hJFhMAF0ApI",
     "title": "Octavio Suñé en vivo en Trasnocho Parte 1",
     "artist": "octaviosune",
+    "artists": [
+      "octaviosune"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2692,6 +4094,9 @@
     "videoId": "pgBG2YcXE58",
     "title": "Octavio Suñé en vivo en Trasnocho Parte 2",
     "artist": "octaviosune",
+    "artists": [
+      "octaviosune"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2700,6 +4105,9 @@
     "videoId": "zcm2Y3e0gwI",
     "title": "Kurrent Live Sessions... Octavio Suñé",
     "artist": "KURRENT MUSIC LATAM",
+    "artists": [
+      "KURRENT MUSIC LATAM"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2708,6 +4116,9 @@
     "videoId": "t7w0YwZBRvs",
     "title": "La Nave en vivo 01-10-1995 abriendo el show de Soda Stereo",
     "artist": "octaviosune",
+    "artists": [
+      "octaviosune"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2716,6 +4127,9 @@
     "videoId": "z4RhdyxfnCI",
     "title": "Octavio Suñé EN VIVO Premios Pepsi Music 2015 Día 2",
     "artist": "octaviosune",
+    "artists": [
+      "octaviosune"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2724,6 +4138,9 @@
     "videoId": "_c4csnyqWpA",
     "title": "Girasol (El Teatro Bar)",
     "artist": "Octavio Suñe",
+    "artists": [
+      "Octavio Suñe"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2732,6 +4149,9 @@
     "videoId": "iTQQdEvkDO8",
     "title": "Zapato 3, Muriendo por ti, Asfalto Tour 2019",
     "artist": "Leudobik Tv",
+    "artists": [
+      "Leudobik Tv"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2740,6 +4160,9 @@
     "videoId": "_832LRenJ_I",
     "title": "Zapato 3 Amor de hierro, Asfalto Tour 2019, Barcelona España",
     "artist": "Leudobik Tv",
+    "artists": [
+      "Leudobik Tv"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2748,6 +4171,9 @@
     "videoId": "odZKbfRUiyc",
     "title": "Soda estéreo unplugged",
     "artist": "Rubisel Lopez Alfaro",
+    "artists": [
+      "Rubisel Lopez Alfaro"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2756,6 +4182,9 @@
     "videoId": "I1-UqJdVeD0",
     "title": "Pinamar 2001 (Recital Completo).",
     "artist": "Gustavo Cerati",
+    "artists": [
+      "Gustavo Cerati"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2764,6 +4193,9 @@
     "videoId": "9rz4R3wzgEs",
     "title": "Estadio Víctor Jara, Chile [11/05/2003] | Gira Siempre es Hoy",
     "artist": "Gustavo Cerati",
+    "artists": [
+      "Gustavo Cerati"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2772,6 +4204,9 @@
     "videoId": "ZynFWkNfH5Y",
     "title": "Gustavo Cerati @ Club Ciudad de Bs. As. (20-12-09) (Fuerza Natural)",
     "artist": "Adrián S",
+    "artists": [
+      "Adrián S"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2780,6 +4215,9 @@
     "videoId": "4Ey1FyVKexE",
     "title": "Un Agradable Calor.rm",
     "artist": "Sentimiento Muerto",
+    "artists": [
+      "Sentimiento Muerto"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2788,6 +4226,9 @@
     "videoId": "urNnDoppR6I",
     "title": "Error Por Cometer",
     "artist": "Dermis Tatú",
+    "artists": [
+      "Dermis Tatú"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2796,6 +4237,9 @@
     "videoId": "EPPLzSQo6ZU",
     "title": "Un Agradable Calor 1988",
     "artist": "Sentimiento Muerto",
+    "artists": [
+      "Sentimiento Muerto"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2804,6 +4248,9 @@
     "videoId": "MP3H2HILfTE",
     "title": "Rock Crepuscular HD 720p",
     "artist": "Candy66 Vivimos por Vivir en vivo (live)",
+    "artists": [
+      "Candy66 Vivimos por Vivir en vivo (live)"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2812,6 +4259,9 @@
     "videoId": "2DGRc32WkiU",
     "title": "Rock Crepuscular HD 720p",
     "artist": "Candy66 Somos Otros + Entrevista en vivo (live)",
+    "artists": [
+      "Candy66 Somos Otros + Entrevista en vivo (live)"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2820,6 +4270,9 @@
     "videoId": "VT7aBbaca84",
     "title": "\" SIN MIEDO \"",
     "artist": "LOS PIXEL",
+    "artists": [
+      "LOS PIXEL"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2828,6 +4281,9 @@
     "videoId": "pLbunS7uEC4",
     "title": "Huele a Tristeza (Mi Casa, Tu Casa)",
     "artist": "Maná",
+    "artists": [
+      "Maná"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2836,6 +4292,9 @@
     "videoId": "sQ6Cn7DOmqM",
     "title": "Camuflaje",
     "artist": "Siddhartha",
+    "artists": [
+      "Siddhartha"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2844,6 +4303,9 @@
     "videoId": "xyv9PXzYpUw",
     "title": "Me Hace Falta (Cap. 2) (Cap. 2)",
     "artist": "Siddhartha",
+    "artists": [
+      "Siddhartha"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2852,6 +4314,9 @@
     "videoId": "cWaGnCNT3Ks",
     "title": "Anfiteatro Sambil (En Vivo / Caracas / 2013)",
     "artist": "Caramelos De Cianuro",
+    "artists": [
+      "Caramelos De Cianuro"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2860,6 +4325,9 @@
     "videoId": "Qq4xH7gaFTI",
     "title": "Muy Drunk Tu Punk",
     "artist": "La Leche",
+    "artists": [
+      "La Leche"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2868,6 +4336,9 @@
     "videoId": "boTGfPok5CA",
     "title": "Artificial",
     "artist": "Dermis Tatú",
+    "artists": [
+      "Dermis Tatú"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2876,6 +4347,9 @@
     "videoId": "6_vVpb02r7U",
     "title": "Música x Medicinas en solidaridad con los jubilados y pensionados venezolanos",
     "artist": "PROVEA ONG",
+    "artists": [
+      "PROVEA ONG"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2884,6 +4358,9 @@
     "videoId": "a7Y0qOLy0zk",
     "title": "La Leche Grabaciones En Vivo 2000",
     "artist": "Un Strider",
+    "artists": [
+      "Un Strider"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2892,6 +4369,9 @@
     "videoId": "PqJdaDy57n0",
     "title": "Festival Nuevas Bandas 20 Años En Vivo (2010) || Full Album ||",
     "artist": "Various Artists",
+    "artists": [
+      "Various Artists"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2900,6 +4380,9 @@
     "videoId": "1xO0bRe5DZ4",
     "title": "La Puta Eléctrica : Suet Programa especial Televen (El Sonido de la Tormenta)",
     "artist": "Musica Norton",
+    "artists": [
+      "Musica Norton"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2908,6 +4391,9 @@
     "videoId": "zXck85JoyRQ",
     "title": "NECRONOMISURF",
     "artist": "RECKLESS",
+    "artists": [
+      "RECKLESS"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2916,6 +4402,9 @@
     "videoId": "haAa6AmC8XE",
     "title": "GRUPO TEMPANO GRANDES EXITOS MIX",
     "artist": "pedro flores",
+    "artists": [
+      "pedro flores"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2924,6 +4413,9 @@
     "videoId": "fjU1tdGqcqk",
     "title": "Ep. 3 Setting Guitarras y Voces - Víctor Hugo Mendoza - LatinWMG",
     "artist": "VH Music Xperience",
+    "artists": [
+      "VH Music Xperience"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2932,6 +4424,9 @@
     "videoId": "336t21Yc0eE",
     "title": "Booty Call",
     "artist": "Caramelos de Cianuro",
+    "artists": [
+      "Caramelos de Cianuro"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2940,6 +4435,9 @@
     "videoId": "aeKhj-_u2ug",
     "title": "Ni Una Sola Palabra (Totalmente En Vivo con Jay Leno) HQ",
     "artist": "Paulina Rubio",
+    "artists": [
+      "Paulina Rubio"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2948,6 +4446,9 @@
     "videoId": "jdnQemXRc1M",
     "title": "LOS PIXEL \"Ahora lo Sabes Todo\" Showcase BOD 2018",
     "artist": "Los Pixel",
+    "artists": [
+      "Los Pixel"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2956,6 +4457,9 @@
     "videoId": "OvKGqmY1ZNQ",
     "title": "SodaStereo Grandes Exitos Enganchados | SodaStereo Sus Mejores Éxitos 2020",
     "artist": "Top Bachata",
+    "artists": [
+      "Top Bachata"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2964,6 +4468,9 @@
     "videoId": "aUv23P4Ul6E",
     "title": "Live Desde Pangea",
     "artist": "Los Mesoneros",
+    "artists": [
+      "Los Mesoneros"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2972,6 +4479,9 @@
     "videoId": "Qxfj8BMWfc0",
     "title": "Victoria / Live @ iMPROSESSiON",
     "artist": "Gran Radio Riviera",
+    "artists": [
+      "Gran Radio Riviera"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2980,6 +4490,9 @@
     "videoId": "ZlccbRnlfcs",
     "title": "Surfabilly & Roll (Disco)",
     "artist": "Los Javelin",
+    "artists": [
+      "Los Javelin"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2988,6 +4501,9 @@
     "videoId": "UfzXnjmzq5c",
     "title": "LO MEJOR DE CARAMELOS DE CIANURO 2021 - ROCK VENEZUELA",
     "artist": "MIX ROCK EN ESPAÑOL",
+    "artists": [
+      "MIX ROCK EN ESPAÑOL"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -2996,6 +4512,9 @@
     "videoId": "4X2Y96LZG7c",
     "title": "Zapato 3 - Pacifica - Trance Nuance (1970 - 2022)",
     "artist": "Diego Marquez",
+    "artists": [
+      "Diego Marquez"
+    ],
     "year": 0,
     "startSeconds": 30
   },
@@ -3004,6 +4523,9 @@
     "videoId": "qRTNp4InSPc",
     "title": "Aprende a Tocar BLUES en Guitarra desde CERO | Curso Completo Paso a Paso",
     "artist": "Clases Guitarra Online",
+    "artists": [
+      "Clases Guitarra Online"
+    ],
     "year": 0,
     "startSeconds": 30
   }

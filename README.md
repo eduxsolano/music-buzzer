@@ -88,3 +88,21 @@ que **no se pueden automatizar**:
 
 `npm run check-songs` te los reclama uno por uno hasta que el mazo esté listo,
 y de paso verifica que ningún video esté bloqueado para embebido.
+
+### Enriquecer con MusicBrainz
+
+```bash
+npm run enrich-songs          # solo las canciones sin identificar
+npm run enrich-songs -- --all # vuelve a identificarlas todas
+```
+
+Busca cada canción en MusicBrainz y, **solo cuando la coincidencia es segura**,
+guarda su `releaseGroupId`, el título y el crédito de artista canónicos, la
+lista de artistas (`artists`), los géneros y la portada, que se descarga a
+`public/covers/` para que la carta aparezca al instante sin depender de nadie.
+Lo que no puede identificar se queda exactamente como estaba y se sigue
+jugando igual.
+
+Nunca escribe `year`: los años solo se tocan desde `import-playlist` y
+`reaudit-years`, que pasan por `verified-years.json`. El script lo comprueba y
+aborta si algo lo intenta.

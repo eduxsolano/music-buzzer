@@ -67,7 +67,15 @@ const MAX_YEAR_SPREAD = 5
  */
 const MIN_DATED_MATCHES = 2
 
-function normalize(text: string): string {
+/**
+ * Reduces a title or an artist name to the form two spellings of the same
+ * thing agree on: accents folded, case dropped, every run of punctuation
+ * flattened to one space. Exported because src/songs/enrich.ts has to make
+ * exactly the same comparisons this file makes — a second, subtly different
+ * normalizer is how a matcher starts accepting things the year matcher
+ * rejects.
+ */
+export function normalize(text: string): string {
   return text
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '') // combining marks left behind by NFD
@@ -115,6 +123,35 @@ export function artistNames(artist: string): string[] {
 
 export function primaryArtist(artist: string): string {
   return artistNames(artist)[0] ?? artist.trim()
+}
+
+/**
+ * The artist half of "is this candidate the song we asked about", in the one
+ * place every matcher reads it from — chooseYear, chooseYearFromReleaseGroups
+ * and src/songs/enrich.ts's chooseIdentity all ask the same question and must
+ * not drift into asking it three slightly different ways.
+ *
+ * `names` are the song's credited performers, already normalized. The shape of
+ * the test depends on how many there are, and the asymmetry is deliberate — see
+ * chooseYear's docstring for the two live wrong-year cases that produced it:
+ *
+ * - One performer: the candidate's own credit, reduced to *its* primary
+ *   artist, must equal that name exactly. A loose containment test here would
+ *   accept "Nirvana UK Tribute" for "Nirvana".
+ * - Several performers: every one of their names must appear somewhere in the
+ *   candidate's raw, unreduced credit. Deliberately not an exact comparison,
+ *   because MusicBrainz joins collaborations with join phrases this code has
+ *   no business trying to reproduce ("A & B", "A with B", "A feat. B"), and
+ *   deliberately not primary-artist-reduced, because reducing a joint credit
+ *   to its first name is exactly what made a mistagged solo entry beat the
+ *   correct joint one.
+ */
+export function artistCreditMatches(candidateCredit: string, names: string[]): boolean {
+  if (names.length > 1) {
+    const credit = normalize(candidateCredit)
+    return names.every((name) => credit.includes(name))
+  }
+  return normalize(primaryArtist(candidateCredit)) === names[0]
 }
 
 /**
@@ -220,7 +257,10 @@ export function toReleaseGroupCandidate(releaseGroup: MusicBrainzReleaseGroup): 
  */
 const CLEAN_RELEASE_GROUP_TYPES = new Set(['Single', 'Album', 'EP'])
 
-function isCleanReleaseGroup(candidate: ReleaseGroupCandidate): boolean {
+export function isCleanReleaseGroup(candidate: {
+  primaryType?: string
+  secondaryTypes: string[]
+}): boolean {
   return (
     candidate.primaryType !== undefined &&
     CLEAN_RELEASE_GROUP_TYPES.has(candidate.primaryType) &&
@@ -298,12 +338,8 @@ export function chooseYear(
   const matches = candidates.filter((c) => {
     if (normalize(stripFeatureCredit(cleanTitle(c.title))) !== wantTitle) return false
 
-    if (isMultiArtist) {
-      const candidateArtist = normalize(c.artistCredit)
-      return c.score >= MIN_SCORE_MULTI_ARTIST && names.every((name) => candidateArtist.includes(name))
-    }
-
-    return c.score >= MIN_SCORE && normalize(primaryArtist(c.artistCredit)) === names[0]
+    const floor = isMultiArtist ? MIN_SCORE_MULTI_ARTIST : MIN_SCORE
+    return c.score >= floor && artistCreditMatches(c.artistCredit, names)
   })
 
   const years = matches.map((c) => extractYear(c.firstReleaseDate)).filter((y) => y > 0)
@@ -392,19 +428,13 @@ export function chooseYearFromReleaseGroups(
 ): ReleaseGroupYearResult {
   const wantTitle = normalize(stripFeatureCredit(cleanTitle(title)))
   const names = artistNames(artist).map(normalize)
-  const isMultiArtist = names.length > 1
 
   const matches = candidates.filter((c) => {
     if (c.score < MIN_SCORE_RELEASE_GROUP) return false
     if (!isCleanReleaseGroup(c)) return false
     if (normalize(stripFeatureCredit(cleanTitle(c.title))) !== wantTitle) return false
 
-    if (isMultiArtist) {
-      const candidateArtist = normalize(c.artistCredit)
-      return names.every((name) => candidateArtist.includes(name))
-    }
-
-    return normalize(primaryArtist(c.artistCredit)) === names[0]
+    return artistCreditMatches(c.artistCredit, names)
   })
 
   const dated = matches.filter((c) => extractYear(c.firstReleaseDate) > 0)

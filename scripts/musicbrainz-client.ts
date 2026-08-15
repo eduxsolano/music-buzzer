@@ -17,6 +17,14 @@ import {
   type MusicBrainzReleaseGroup,
   type ReleaseGroupYearResult,
 } from '../src/songs/musicbrainz'
+import {
+  chooseGenres,
+  chooseIdentity,
+  toIdentityCandidate,
+  type MusicBrainzGenre,
+  type MusicBrainzReleaseGroupHit,
+  type SongIdentity,
+} from '../src/songs/enrich'
 
 /**
  * MusicBrainz's own policy: "All users of the API must ensure that each of
@@ -130,4 +138,44 @@ export async function lookupYear(artist: string, title: string): Promise<number>
   await sleep(MUSICBRAINZ_DELAY_MS)
   const fromRecordings = await lookupYearFromRecordings(artist, title)
   return combineYearSources(fromReleaseGroups, fromRecordings)
+}
+
+/**
+ * Finds the release group a song *is*, or null when MusicBrainz is not
+ * confident which one that is (see chooseIdentity). Same search endpoint and
+ * same query the year lookup uses — one request, and the decision is made off
+ * the network in src/songs/enrich.ts.
+ *
+ * `null` is also what a failed request produces, deliberately: the caller
+ * leaves the song exactly as it found it either way, so a MusicBrainz outage
+ * costs coverage on a rerun and never costs correctness.
+ */
+export async function lookupIdentity(artist: string, title: string): Promise<SongIdentity | null> {
+  const url = new URL('https://musicbrainz.org/ws/2/release-group/')
+  url.searchParams.set('query', buildReleaseGroupQuery(artist, title))
+  url.searchParams.set('fmt', 'json')
+  url.searchParams.set('limit', String(MUSICBRAINZ_SEARCH_LIMIT))
+
+  const body = (await fetchMusicBrainzJson(url)) as { 'release-groups'?: MusicBrainzReleaseGroupHit[] } | null
+  if (!body) return null
+  return chooseIdentity((body['release-groups'] ?? []).map(toIdentityCandidate), artist, title)
+}
+
+/**
+ * Reads a release group's genres. The search endpoint cannot return them, so
+ * this is a second request against the entity we just identified — which is
+ * the whole reason the id is worth storing: every enrichment after this one is
+ * this direct lookup rather than another fuzzy search.
+ *
+ * An empty array means both "MusicBrainz has no genres for this" and "the
+ * request failed"; the caller cannot act differently on the two anyway, since
+ * neither is grounds for inventing one.
+ */
+export async function lookupGenres(releaseGroupId: string): Promise<string[]> {
+  const url = new URL(`https://musicbrainz.org/ws/2/release-group/${releaseGroupId}`)
+  url.searchParams.set('fmt', 'json')
+  url.searchParams.set('inc', 'genres')
+
+  const body = (await fetchMusicBrainzJson(url)) as { genres?: MusicBrainzGenre[] } | null
+  return chooseGenres(body?.genres)
 }

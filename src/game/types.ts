@@ -12,9 +12,39 @@ export interface Song {
   id: string
   videoId: string
   title: string
+  /**
+   * The credit as it is read out on the card: "Lady Gaga & Bruno Mars",
+   * "Kendrick Lamar with SZA". Kept beside `artists` rather than rebuilt from
+   * it, because the words between the names are MusicBrainz's editorial choice
+   * per credit and a list joined with a fixed separator reads wrong.
+   */
   artist: string
+  /**
+   * The same credit as separate performers, so filtering by artist is a set
+   * membership test and not a substring search. Never empty. For a song
+   * MusicBrainz could not confidently name it holds the whole credit as its
+   * single entry — splitting a YouTube-derived string on punctuation would
+   * turn "Earth, Wind & Fire" into three artists that do not exist, and this
+   * deck resolves that kind of doubt to nothing rather than to a guess.
+   */
+  artists: string[]
   year: number
   startSeconds: number
+  /**
+   * The MusicBrainz release-group id, when the song was confidently matched.
+   * Absent otherwise. This is the key every later enrichment is a direct fetch
+   * from — see src/songs/enrich.ts for why the release group is the entity
+   * worth keeping and the recording is not.
+   */
+  releaseGroupId?: string
+  /** MusicBrainz's most-voted genres, absent when it has none. Most-voted first. */
+  genres?: string[]
+  /**
+   * Path to the cover downloaded into `public/covers`, absent when there is
+   * none. The television shows it at reveal time; it never crosses into the
+   * public channel or a player page, because a sleeve names a song instantly.
+   */
+  cover?: string
 }
 
 export type RevealOutcome = 'correct' | 'allWrong' | 'timeout' | 'skipped'
