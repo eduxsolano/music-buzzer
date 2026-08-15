@@ -3,15 +3,11 @@ const ROOM_CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ'
 
 const ROOM_CODE_LENGTH = 4
 
-/**
- * Fisher-Yates-style shuffle. The random source is injected so tests stay
- * deterministic. Each swap partner is drawn from [0, i) rather than [0, i]
- * so that a random source returning its maximum value still reorders.
- */
+/** Fisher-Yates. The random source is injected so tests stay deterministic. */
 export function shuffle<T>(items: T[], random: () => number): T[] {
   const result = [...items]
   for (let i = result.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(random() * i)
+    const j = Math.floor(random() * (i + 1))
     ;[result[i], result[j]] = [result[j], result[i]]
   }
   return result

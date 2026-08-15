@@ -20,7 +20,14 @@ describe('shuffle', () => {
   })
 
   test('actually reorders when the random source says so', () => {
-    expect(shuffle(['a', 'b'], fakeRandom([0.99]))).toEqual(['b', 'a'])
+    // At i=1, j = floor(0.1 * 2) = 0 — a real swap.
+    expect(shuffle(['a', 'b'], fakeRandom([0.1]))).toEqual(['b', 'a'])
+  })
+
+  test('leaves an element in place when the draw selects its own slot', () => {
+    // At i=1, j = floor(0.99 * 2) = 1 — a self-swap. This is not a bug: an
+    // element staying put is one of the outcomes an unbiased shuffle must allow.
+    expect(shuffle(['a', 'b'], fakeRandom([0.99]))).toEqual(['a', 'b'])
   })
 })
 
