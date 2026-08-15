@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'vitest'
 import {
+  artistNames,
   buildRecordingQuery,
   chooseYear,
   extractYear,
@@ -8,6 +9,32 @@ import {
   toCandidate,
   type MusicBrainzCandidate,
 } from '@/songs/musicbrainz'
+
+describe('artistNames', () => {
+  test('returns a single-element array for a solo artist', () => {
+    expect(artistNames('Tate McRae')).toEqual(['Tate McRae'])
+  })
+
+  test('splits a comma-joined credit', () => {
+    expect(artistNames('Lady Gaga, Bruno Mars')).toEqual(['Lady Gaga', 'Bruno Mars'])
+  })
+
+  test('splits an ampersand-joined credit', () => {
+    expect(artistNames('Tinashe & Disco Lines')).toEqual(['Tinashe', 'Disco Lines'])
+  })
+
+  test('splits a "with"-joined credit — a real MusicBrainz join phrase', () => {
+    expect(artistNames('Kendrick Lamar with SZA')).toEqual(['Kendrick Lamar', 'SZA'])
+  })
+
+  test('splits an "x"-joined credit', () => {
+    expect(artistNames('Tyla x Wizkid')).toEqual(['Tyla', 'Wizkid'])
+  })
+
+  test('splits a "feat." credit into two names', () => {
+    expect(artistNames('Darin feat. Eloise')).toEqual(['Darin', 'Eloise'])
+  })
+})
 
 describe('primaryArtist', () => {
   test('leaves a solo artist untouched', () => {
@@ -28,6 +55,10 @@ describe('primaryArtist', () => {
 
   test('strips a trailing "ft." credit, case-insensitively', () => {
     expect(primaryArtist('CENTRAL CEE FT. LIL BABY')).toBe('CENTRAL CEE')
+  })
+
+  test('keeps only the first name from a "with"-joined credit', () => {
+    expect(primaryArtist('Kendrick Lamar with SZA')).toBe('Kendrick Lamar')
   })
 })
 
@@ -199,19 +230,54 @@ describe('chooseYear', () => {
     expect(chooseYear(candidates, 'Nirvana', 'Smells Like Teen Spirit')).toBe(0)
   })
 
-  // MusicBrainz indexes a recording by its primary performer, so a
-  // duet/collaboration credit only shows the lead artist in practice.
-  test('matches a duet against a candidate credited to only the primary artist', () => {
-    const candidates = [
-      { title: 'Die With a Smile', artistCredit: 'Lady Gaga', firstReleaseDate: '2024-08-16', score: 100 },
-    ]
-    expect(chooseYear(candidates, 'Lady Gaga, Bruno Mars', 'Die With A Smile')).toBe(2024)
-  })
-
   test('matches a candidate credited with an "&"-joined pair against a title parsed with "feat."', () => {
     const candidates = [
       { title: 'Cold', artistCredit: 'BigXthaPlug & Post Malone', firstReleaseDate: '2025-11-21', score: 100 },
     ]
     expect(chooseYear(candidates, 'BigXthaPlug', 'Cold feat. Post Malone')).toBe(2025)
+  })
+
+  // Regression coverage for two confirmed wrong years that reached
+  // production before the multi-artist matching rule existed — see
+  // chooseYear's docstring for the full story of each.
+  describe('multi-performer credit — regression cases', () => {
+    test('does not accept a mistagged solo credit for a duet, no matter how high its score', () => {
+      // This is exactly the "Lady Gaga, Bruno Mars" / "Die With A Smile"
+      // shape: a mistagged solo entry scores 100 (exact match to a
+      // primary-artist-only query) while the correct joint credit scores
+      // only 83. Score alone must not decide this.
+      const candidates = [
+        { title: 'Die With a Smile', artistCredit: 'Lady Gaga', firstReleaseDate: '2026-04-18', score: 100 },
+        { title: 'Die with a Smile', artistCredit: 'Lady Gaga', firstReleaseDate: '2025-09-01', score: 100 },
+      ]
+      expect(chooseYear(candidates, 'Lady Gaga, Bruno Mars', 'Die With A Smile')).toBe(0)
+    })
+
+    test('accepts a fully co-credited match even at a score below the single-artist bar', () => {
+      const candidates = [
+        { title: 'Die With a Smile', artistCredit: 'Lady Gaga', firstReleaseDate: '2026-04-18', score: 100 },
+        { title: 'Die With a Smile', artistCredit: 'Lady Gaga & Bruno Mars', firstReleaseDate: '2024-08-16', score: 83 },
+      ]
+      expect(chooseYear(candidates, 'Lady Gaga, Bruno Mars', 'Die With A Smile')).toBe(2024)
+    })
+
+    test('rejects a candidate that only shares one of the two credited names', () => {
+      // "Bad Bunny & Lady Gaga" is a real, unrelated collaboration that
+      // also matches on title text; sharing only "Lady Gaga" is not enough.
+      const candidates = [
+        { title: 'Die With a Smile', artistCredit: 'Bad Bunny & Lady Gaga', firstReleaseDate: '2026-02-08', score: 83 },
+      ]
+      expect(chooseYear(candidates, 'Lady Gaga, Bruno Mars', 'Die With A Smile')).toBe(0)
+    })
+
+    test('matches a candidate joined with "with" against a credit parsed with a comma', () => {
+      // This is the "Kendrick Lamar, SZA" / "luther" shape: the correct
+      // earliest recording is credited "Kendrick Lamar with SZA".
+      const candidates = [
+        { title: 'luther', artistCredit: 'Kendrick Lamar & SZA', firstReleaseDate: '2025-11-21', score: 100 },
+        { title: 'luther', artistCredit: 'Kendrick Lamar with SZA', firstReleaseDate: '2024-11-22', score: 100 },
+      ]
+      expect(chooseYear(candidates, 'Kendrick Lamar, SZA', 'luther')).toBe(2024)
+    })
   })
 })

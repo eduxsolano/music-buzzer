@@ -26,8 +26,26 @@ export interface MusicBrainzRecording {
 /**
  * A candidate only counts as a match when both artist and title agree; below
  * this MusicBrainz relevance score the hit is too loose to trust either way.
+ * Only used for a single-performer credit — see MIN_SCORE_MULTI_ARTIST for
+ * why a collaboration needs a different bar.
  */
 const MIN_SCORE = 90
+
+/**
+ * The score floor for a multi-performer credit, deliberately lower than
+ * MIN_SCORE. Evidence from two real, live-verified wrong-year cases (see
+ * chooseYear's docstring) showed MusicBrainz's own relevance score is not a
+ * reliable signal here: querying by one performer's name (searchArtist is
+ * always primaryArtist — see buildRecordingQuery) makes a *correctly*
+ * co-credited recording score in the low 80s purely because the query text
+ * only matches part of its artist-credit field, while an unrelated,
+ * mistagged recording credited to that one performer alone scores 100 for
+ * matching the query text exactly. Score cannot tell those two apart; only
+ * checking that *every* performer's name actually appears in the
+ * candidate's own artist-credit can. That check is the real gate for a
+ * multi-performer credit; this floor only screens out obvious noise.
+ */
+const MIN_SCORE_MULTI_ARTIST = 50
 
 /**
  * How many years apart matching candidates may span before we call them
@@ -50,15 +68,39 @@ function escapeLucene(text: string): string {
 
 /**
  * A YouTube title's artist field is often several performers joined the way
- * the uploader felt like ("A, B", "A & B", "A feat. B"), but MusicBrainz
- * indexes a recording by its primary performer and rarely stores that exact
- * joined phrase. Keeping only the name before the first separator is what
- * actually matches, both for the search query and for judging a hit.
+ * the uploader felt like ("A, B", "A & B", "A feat. B", "A with B", "A x B").
+ * "with" is a real MusicBrainz join phrase too (e.g. "Kendrick Lamar with
+ * SZA") — omitting it from this list was the cause of one confirmed wrong
+ * year (see chooseYear's docstring): a song whose own credit split cleanly
+ * on other separators still needed every one of MusicBrainz's real join
+ * words recognised to split fully. "x" is included for the same reason
+ * (seen in this deck as "Tyla x Wizkid"); the risk is a rare artist name
+ * that is itself just the letter "x" surrounded by spaces (e.g. a band
+ * whose name starts with "X"), which would be mis-split. None of that
+ * shape exists in this deck today, and a mis-split degrades to "no match"
+ * (year stays 0) rather than a wrong one, so it is an acceptable trade.
+ *
+ * "feat"/"ft"/"vs" use `(?:\.|\b)` rather than a trailing `\b` after their
+ * optional period: a `\b` can never match between two non-word characters
+ * (a literal "." followed by a space), so a straightforward `feat\.?\b`
+ * silently fails to match "feat." and matches only the period-less "feat" —
+ * the same bug FEATURE_CREDIT had before it was fixed. Letting the period
+ * itself satisfy the boundary when present, and requiring a real `\b`
+ * boundary only when it's absent (so "ft" doesn't cut into "Ftampa"), gets
+ * both cases right.
  */
-const ARTIST_SEPARATOR = /,|&|\bfeat\.?\b|\bft\.?\b|\bfeaturing\b|\bvs\.?\b|\band\b/i
+const ARTIST_SEPARATOR = /,|&|\b(?:feat|ft|vs)(?:\.|\b)|\bfeaturing\b|\bwith\b|\band\b|\bx\b/i
+
+/** Splits a possibly multi-performer credit into its individual names. */
+export function artistNames(artist: string): string[] {
+  return artist
+    .split(ARTIST_SEPARATOR)
+    .map((name) => name.trim())
+    .filter((name) => name.length > 0)
+}
 
 export function primaryArtist(artist: string): string {
-  return artist.split(ARTIST_SEPARATOR)[0].trim()
+  return artistNames(artist)[0] ?? artist.trim()
 }
 
 /**
@@ -105,33 +147,70 @@ export function toCandidate(recording: MusicBrainzRecording): MusicBrainzCandida
 }
 
 /**
- * Picks a year only when confident. A candidate must have a high MusicBrainz
- * relevance score and an exact (normalized) artist and title match to count
- * at all — matched on the primary artist and feature-stripped title on both
- * sides, since that is what MusicBrainz itself tends to store, regardless
- * of how the YouTube title happened to credit collaborators. MusicBrainz
- * then commonly returns several *recordings* for the same song — the
- * single, a deluxe reissue, a live version — each with its own release date
- * a few months or a year apart; that is not disagreement about the song, so
- * we take the earliest one, which is its original release. Only a wide
- * spread (likely two different works that happen to share an artist and
- * title) or no matches at all fall back to 0, which the caller treats as
- * "leave for a human to review".
+ * Picks a year only when confident. A candidate must have a title match
+ * (normalized, feature-credit stripped) to be considered at all, and then
+ * an artist match whose shape depends on how many performers the song was
+ * actually credited to:
+ *
+ * - A single-performer credit matches a candidate on its primary artist
+ *   (reduced the same way), gated by MIN_SCORE. This is the simple case
+ *   and was never the problem.
+ *
+ * - A multi-performer credit ("A, B", "A & B", "A with B", ...) requires
+ *   the candidate's *raw, unreduced* artist-credit string to contain every
+ *   one of those names, gated by the much lower MIN_SCORE_MULTI_ARTIST.
+ *   This is deliberately NOT a reduced/exact comparison, and deliberately
+ *   NOT primarily score-gated. Two real, live-verified wrong years reached
+ *   production before this rule existed:
+ *
+ *     - "Kendrick Lamar, SZA" / "luther" was confidently filled as 2025.
+ *       The correct earliest recording was credited "Kendrick Lamar with
+ *       SZA" — "with" was missing from the separator list, so it never
+ *       reduced to a name this code recognised, and got silently dropped,
+ *       leaving only later-dated candidates to agree with each other.
+ *     - "Lady Gaga, Bruno Mars" / "Die With A Smile" was confidently filled
+ *       as 2025. Querying MusicBrainz by primary artist alone surfaces
+ *       mistagged solo "Lady Gaga" entries (score 100 — exact match to the
+ *       query text) ahead of the correct joint "Lady Gaga & Bruno Mars"
+ *       credit (score 83 — the query text only matches part of it).
+ *       Reducing every candidate to its primary artist and comparing
+ *       against MIN_SCORE made the wrong, higher-scoring solo entry win.
+ *
+ *   Requiring every credited name to actually appear on the candidate is
+ *   what a human would do to catch a mistagged or wrong-pairing entry
+ *   (e.g. "Bad Bunny & Lady Gaga" for a different, unrelated collab that
+ *   also matches on title); score alone cannot make that distinction, so
+ *   score is only a low floor here, not the gate.
+ *
+ * Once a candidate is accepted, MusicBrainz commonly returns several
+ * *recordings* of the same song — the single, a deluxe reissue, a live
+ * version — each with its own release date a few months or a year apart;
+ * that is not disagreement about the song, so the earliest one is taken as
+ * the original release. A spread of more than MAX_YEAR_SPREAD years between
+ * accepted candidates is treated as an accidental collision between two
+ * different works and falls back to 0, same as no candidates at all.
+ * Ambiguity always resolves to 0 here, never to a guess — the caller treats
+ * 0 as "leave for a human to review".
  */
 export function chooseYear(
   candidates: MusicBrainzCandidate[],
   artist: string,
   title: string,
 ): number {
-  const wantArtist = normalize(primaryArtist(artist))
   const wantTitle = normalize(stripFeatureCredit(cleanTitle(title)))
+  const names = artistNames(artist).map(normalize)
+  const isMultiArtist = names.length > 1
 
-  const matches = candidates.filter(
-    (c) =>
-      c.score >= MIN_SCORE &&
-      normalize(primaryArtist(c.artistCredit)) === wantArtist &&
-      normalize(stripFeatureCredit(cleanTitle(c.title))) === wantTitle,
-  )
+  const matches = candidates.filter((c) => {
+    if (normalize(stripFeatureCredit(cleanTitle(c.title))) !== wantTitle) return false
+
+    if (isMultiArtist) {
+      const candidateArtist = normalize(c.artistCredit)
+      return c.score >= MIN_SCORE_MULTI_ARTIST && names.every((name) => candidateArtist.includes(name))
+    }
+
+    return c.score >= MIN_SCORE && normalize(primaryArtist(c.artistCredit)) === names[0]
+  })
 
   const years = matches.map((c) => extractYear(c.firstReleaseDate)).filter((y) => y > 0)
   if (years.length === 0) return 0

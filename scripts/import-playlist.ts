@@ -7,8 +7,12 @@
  * match is not confident. Every run also retries MusicBrainz for any song
  * already in the deck that is still pending a year, not just newly added
  * ones, so rerunning the importer is how a better matcher (or a transient
- * MusicBrainz error) gets a second chance. check-songs reports what is
- * still pending afterwards.
+ * MusicBrainz error) gets a second chance. A stored year is never trusted
+ * as-is for a multi-performer credit, even one that already has a year —
+ * those are reset to 0 and recomputed every run, since that is exactly the
+ * shape of credit a matcher bug can get confidently wrong (see
+ * src/songs/musicbrainz.ts). check-songs reports what is still pending
+ * afterwards.
  *
  * Run with: npm run import-playlist -- <playlist url or id>
  */
@@ -16,7 +20,13 @@ import { readFileSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 import { parseSongs } from '../src/songs/schema'
 import { playlistIdFromInput, slugify, splitArtistAndTitle } from '../src/songs/import'
-import { buildRecordingQuery, chooseYear, toCandidate, type MusicBrainzRecording } from '../src/songs/musicbrainz'
+import {
+  artistNames,
+  buildRecordingQuery,
+  chooseYear,
+  toCandidate,
+  type MusicBrainzRecording,
+} from '../src/songs/musicbrainz'
 import type { Song } from '../src/game/types'
 
 const PAGE_SIZE = 50
@@ -51,12 +61,20 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
+/**
+ * MusicBrainz's relevance ranking is not date-ordered, and a hot chart song
+ * can have a dozen near-duplicate entries (singles, remixes, live takes,
+ * even mistagged or vandalized ones); a low result count risks the correct
+ * earliest recording simply not being in the page we look at.
+ */
+const MUSICBRAINZ_SEARCH_LIMIT = 15
+
 /** Thin network call: the matching logic lives in src/songs/musicbrainz.ts. */
 async function lookupYear(artist: string, title: string): Promise<number> {
   const url = new URL('https://musicbrainz.org/ws/2/recording/')
   url.searchParams.set('query', buildRecordingQuery(artist, title))
   url.searchParams.set('fmt', 'json')
-  url.searchParams.set('limit', '5')
+  url.searchParams.set('limit', String(MUSICBRAINZ_SEARCH_LIMIT))
 
   for (let attempt = 1; attempt <= MUSICBRAINZ_MAX_ATTEMPTS; attempt += 1) {
     const response = await fetch(url, { headers: { 'User-Agent': MUSICBRAINZ_USER_AGENT } })
@@ -155,24 +173,45 @@ async function main(): Promise<void> {
   console.log(`${items.length} elementos en la playlist, ${added.length} canciones nuevas.`)
 
   const merged = [...existing, ...added]
-  // Also retries any song already in the deck that was left pending by a
-  // previous run — a rerun is how a better matcher (or a transient
-  // MusicBrainz hiccup) gets a second chance without a separate script.
-  const pendingYear = merged.filter((s) => s.year === 0)
+
+  // Two groups get a MusicBrainz lookup this run:
+  //   - every song still pending a year, new or not — a rerun is how a
+  //     better matcher (or a transient MusicBrainz hiccup) gets a second
+  //     chance without a separate script;
+  //   - every multi-performer song that already HAS a year. A stored year
+  //     for a collaboration is never trusted as-is: it may predate a matcher
+  //     fix, and multi-performer credits are exactly where a wrong-but-
+  //     confident year has actually happened (see chooseYear's docstring).
+  //     Its year is reset to 0 before the lookup, so if the fixed matcher
+  //     still can't confirm it, it lands on 0 — never keeps a stale value.
+  const pending = merged.filter((s) => s.year === 0)
+  const multiArtistToRecheck = merged.filter((s) => s.year !== 0 && artistNames(s.artist).length > 1)
+  const beforeYear = new Map(multiArtistToRecheck.map((s) => [s.id, s.year]))
+  for (const song of multiArtistToRecheck) song.year = 0
+
+  const toLookUp = [...pending, ...multiArtistToRecheck]
   console.log(
-    `Buscando el año de ${pendingYear.length} canciones sin confirmar en MusicBrainz ` +
+    `Buscando el año de ${pending.length} canciones sin confirmar y revalidando ` +
+      `${multiArtistToRecheck.length} canciones con varios artistas en MusicBrainz ` +
       `(una petición por segundo, esto tarda)...`,
   )
 
   const needsYearReview: Song[] = []
-  let yearsFilled = 0
-  for (const song of pendingYear) {
+  let newlyFilled = 0
+  let corrected = 0
+  let revertedToZero = 0
+  let confirmedUnchanged = 0
+  for (const song of toLookUp) {
     const year = await lookupYear(song.artist, song.title)
+    const previous = beforeYear.get(song.id)
     if (year > 0) {
       song.year = year
-      yearsFilled += 1
+      if (previous === undefined) newlyFilled += 1
+      else if (previous !== year) corrected += 1
+      else confirmedUnchanged += 1
     } else {
       needsYearReview.push(song)
+      if (previous !== undefined) revertedToZero += 1
     }
     await sleep(MUSICBRAINZ_DELAY_MS)
   }
@@ -182,9 +221,11 @@ async function main(): Promise<void> {
 
   console.log(`\n${merged.length} canciones en total.`)
   console.log(
-    `Años: ${yearsFilled} encontrados automáticamente en esta pasada, ` +
-      `${needsYearReview.length} siguen requiriendo revisión manual.`,
+    `Años nuevos: ${newlyFilled}. Revalidación de canciones con varios artistas: ` +
+      `${corrected} corregidos, ${confirmedUnchanged} confirmados sin cambios, ` +
+      `${revertedToZero} vueltos a 0 por no poder confirmarse con el matcher corregido.`,
   )
+  console.log(`${needsYearReview.length} canciones siguen sin año confirmado en total.`)
   if (needsYearReview.length > 0) {
     console.log('Canciones sin año confirmado (revisar year y, si hace falta, startSeconds):')
     for (const song of needsYearReview) console.log(`  ${song.id} — ${song.artist} · ${song.title}`)
