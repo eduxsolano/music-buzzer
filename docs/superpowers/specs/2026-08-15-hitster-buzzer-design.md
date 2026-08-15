@@ -268,7 +268,60 @@ sin tocar la lógica: duración de los tramos (5/10/30), puntos por tramo
 Variables de entorno en Vercel: `NEXT_PUBLIC_SUPABASE_URL` y
 `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
 
-## 9. Mejoras posibles, fuera de alcance
+## 9. Dirección futura: fuentes de música dinámicas
+
+**Decidido el 2026-08-15, fuera de alcance de esta versión.** El objetivo a
+medio plazo es que al montar la partida se elija la fuente: **YouTube o
+Spotify**, y que añadir una tercera no obligue a tocar las reglas del juego.
+
+### Lo que cambia en el diseño
+
+Hoy `Song` lleva un `videoId` de YouTube y `AudioPlayer` es la única costura.
+Para varias fuentes hacen falta dos abstracciones, no una:
+
+- **`MusicSource`** — de dónde sale el mazo. Devuelve canciones con título,
+  artista, año y una referencia opaca de reproducción. `videoId` pasa a ser
+  `sourceRef: { provider: 'youtube' | 'spotify'; ref: string }`.
+- **`AudioPlayer`** — ya existe y ya es la costura correcta. La implementación
+  de Spotify entra por ahí sin tocar el reducer.
+
+El motor de juego no debería enterarse de nada de esto: sigue recibiendo
+eventos y devolviendo estado.
+
+### Lo que Spotify mejora
+
+- **Metadata automática y correcta.** Título, artista y año de publicación
+  vienen de la API. Desaparece el trabajo manual de rellenar `year`, que hoy
+  es la mitad del esfuerzo de curar el mazo.
+- **El mazo es la playlist.** Sin importador, sin `songs.json`: se elige una
+  playlist propia al empezar y ya está.
+- **Corte preciso.** El Web Playback SDK permite arrancar en `position_ms` y
+  pausar, así que los tramos de 5/10/30 s funcionan igual de bien.
+
+### Lo que Spotify complica
+
+- **Exige cuenta Premium** en el navegador anfitrión, y OAuth con PKCE más una
+  redirect URI registrada en Vercel. Es la primera vez que el proyecto
+  necesitaría gestionar tokens.
+- **`startSeconds` sigue siendo manual.** Los endpoints de *audio-features* y
+  *audio-analysis*, que en teoría permitirían detectar el estribillo, quedaron
+  deprecados para aplicaciones nuevas a finales de 2024. Conviene verificar su
+  estado antes de contar con ellos.
+- **El mazo deja de ser reproducible.** Una playlist puede cambiar entre
+  partidas, y las canciones pueden desaparecer del catálogo por región.
+
+### Camino sugerido
+
+1. Extraer `MusicSource` con la implementación de YouTube actual detrás, sin
+   cambiar comportamiento y con los tests existentes en verde.
+2. Añadir el selector de fuente en la pantalla de lobby.
+3. Implementar `SpotifyMusicSource` + `SpotifyAudioPlayer` detrás de las
+   mismas interfaces.
+
+El paso 1 es el que vale la pena hacer bien: si las interfaces quedan
+limpias, Spotify es trabajo aditivo.
+
+## 10. Otras mejoras posibles, fuera de alcance
 
 - Lista de canciones en una tabla de Supabase, con pantalla para añadir desde
   el móvil, en lugar de editar JSON y redesplegar.
