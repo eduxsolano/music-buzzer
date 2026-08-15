@@ -1,4 +1,5 @@
 import type { Phase, RevealOutcome } from '@/game/types'
+import type { Tier } from '@/game/tiers'
 
 /**
  * The presentation vocabulary of the host screen, kept pure so it can be
@@ -33,6 +34,37 @@ export function moodFor(phase: Phase, judgement: Judgement | null): Mood {
       return phase.outcome === 'allWrong' ? 'wrong' : 'idle'
     case 'finished':
       return 'over'
+  }
+}
+
+/** What the tier meter should show: a running tier, or nothing at all. */
+export interface TierClock {
+  tier: Tier | null
+  elapsedMs: number
+}
+
+/**
+ * Where the tier clock stands in a given phase.
+ *
+ * Written as an exhaustive switch with an annotated return type and no
+ * `default`, rather than as `phase.kind === 'playing' || …`: a boolean test
+ * would let a new phase fall through to "no tier" with nothing to warn
+ * anybody. Here the compiler stops on TS2366 until the new phase says what
+ * its clock does.
+ *
+ * A buzz freezes the tier rather than ending it, so the meter freezes with
+ * it — the room can see exactly how much of the tier was left when the music
+ * cut.
+ */
+export function tierClockFor(phase: Phase): TierClock {
+  switch (phase.kind) {
+    case 'playing':
+    case 'buzzed':
+      return { tier: phase.tier, elapsedMs: phase.elapsedMs }
+    case 'lobby':
+    case 'revealed':
+    case 'finished':
+      return { tier: null, elapsedMs: 0 }
   }
 }
 

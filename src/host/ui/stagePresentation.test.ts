@@ -6,6 +6,7 @@ import {
   playersConnectedLabel,
   revealHeadline,
   roundLabel,
+  tierClockFor,
   tierProgress,
 } from '@/host/ui/stagePresentation'
 
@@ -34,6 +35,29 @@ describe('moodFor', () => {
 
   it('ends the game on its own mood', () => {
     expect(moodFor({ kind: 'finished' }, null)).toBe('over')
+  })
+})
+
+describe('tierClockFor', () => {
+  it('runs while the song plays', () => {
+    expect(tierClockFor({ kind: 'playing', tier: 2, elapsedMs: 1_500 })).toEqual({
+      tier: 2,
+      elapsedMs: 1_500,
+    })
+  })
+
+  it('freezes on a buzz instead of clearing, so the room sees what was left', () => {
+    expect(tierClockFor({ kind: 'buzzed', tier: 1, elapsedMs: 2_100, playerId: 'p1' })).toEqual({
+      tier: 1,
+      elapsedMs: 2_100,
+    })
+  })
+
+  it('is empty in every phase where no tier is in play', () => {
+    const empty = { tier: null, elapsedMs: 0 }
+    expect(tierClockFor({ kind: 'lobby' })).toEqual(empty)
+    expect(tierClockFor({ kind: 'revealed', outcome: 'correct', winnerId: 'p1' })).toEqual(empty)
+    expect(tierClockFor({ kind: 'finished' })).toEqual(empty)
   })
 })
 

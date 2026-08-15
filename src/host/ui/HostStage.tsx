@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactElement } from 'react'
 import type { GameEvent, GameState, Song } from '@/game/types'
 import { Scoreboard } from '@/host/ui/Scoreboard'
 import { TierMeter } from '@/host/ui/TierMeter'
@@ -11,7 +11,7 @@ import { BuzzedPanel } from '@/host/ui/phases/BuzzedPanel'
 import { RevealedPanel } from '@/host/ui/phases/RevealedPanel'
 import { FinishedPanel } from '@/host/ui/phases/FinishedPanel'
 import type { HostView } from '@/host/ui/hostView'
-import { moodFor, type Judgement } from '@/host/ui/stagePresentation'
+import { moodFor, tierClockFor, type Judgement } from '@/host/ui/stagePresentation'
 import { playCue, unlockGameSounds } from '@/sounds/gameSounds'
 
 /** How long the room stays green or red before the game moves on. */
@@ -96,12 +96,7 @@ export function HostStage({ game }: { game: HostGameApi }) {
   }
 
   const phase = state.phase
-  // A buzz freezes the tier rather than ending it, so the meter freezes with
-  // it — the room can see exactly how much of the tier was left when the
-  // music cut.
-  const inTier = phase.kind === 'playing' || phase.kind === 'buzzed'
-  const runningTier = inTier ? phase.tier : null
-  const elapsedMs = inTier ? phase.elapsedMs : 0
+  const tierClock = tierClockFor(phase)
 
   return (
     <main
@@ -109,7 +104,7 @@ export function HostStage({ game }: { game: HostGameApi }) {
       className="stage grid min-h-dvh grid-cols-1 lg:grid-cols-[1fr_clamp(15rem,20vw,24rem)]"
     >
       <section className="relative flex min-h-dvh flex-col lg:min-h-0">
-        <TierMeter tier={runningTier} elapsedMs={elapsedMs} />
+        <TierMeter tier={tierClock.tier} elapsedMs={tierClock.elapsedMs} />
 
         <header className="flex items-center justify-between gap-4 p-[clamp(1rem,1.6vw,2rem)]">
           <span className="chip">
@@ -137,10 +132,15 @@ export function HostStage({ game }: { game: HostGameApi }) {
 }
 
 /**
- * One phase, one panel. The switch is exhaustive over `Phase['kind']`, so a
- * new phase in the engine fails to compile until it is given a panel here.
+ * One phase, one panel.
+ *
+ * The `ReactElement` return type is what makes the switch exhaustive, and it
+ * is not decoration: without it TypeScript infers `… | undefined`, a missing
+ * arm compiles happily, and a new phase renders a blank television in the
+ * middle of a party. `ReactNode` would not do either — it includes
+ * `undefined`. With this annotation a phase without a panel fails on TS2366.
  */
-function phaseStage(view: HostView) {
+function phaseStage(view: HostView): ReactElement {
   const phase = view.state.phase
   switch (phase.kind) {
     case 'lobby':
