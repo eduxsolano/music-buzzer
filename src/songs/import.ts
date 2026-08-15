@@ -1,6 +1,58 @@
 /** Bracketed segments that exist only to advertise the upload, not the song. */
 const PROMO_NOISE =
-  /\s*[([][^()[\]]*\b(?:official|video|audio|lyrics?|hd|hq|4k|8k|remaster(?:ed)?|mv|visuali[sz]er|full song)\b[^()[\]]*[)\]]/gi
+  /\s*[([][^()[\]]*\b(?:official|video|audio|lyrics?|hd|hq|4k|8k|remaster(?:ed)?|mv|visuali[sz]er|full song|no art|dvd full)\b[^()[\]]*[)\]]/gi
+
+/**
+ * The same promotional debris as PROMO_NOISE, but for uploads that announce it
+ * after a dash or a pipe instead of inside brackets — "Song - Official Lyric
+ * Video", "Song | Official MV", the double-piped "Title (1998) || Full Album
+ * ||" convention, and the Spanish "VideoClip Oficial (HD)". Anchored to the
+ * end of the string and applied in a loop by cleanTitle, so multiple trailing
+ * segments (as Sony's uploads stack them, "Title | Official Lyric Video |
+ * Sony Animation") peel off one at a time.
+ */
+const TRAILING_DELIMITED_NOISE = new RegExp(
+  [
+    '\\s*(?:',
+    '\\|\\|\\s*(?:official\\s+)?(?:lyric\\s+)?(?:video|audio|mv|full album)\\s*\\|\\|', // "|| Full Album ||"
+    '|[-|]\\s*video\\s*clip\\s+oficial(?:\\s+\\d{4})?(?:\\s+(?:hd|hq|4k|8k))?', // "- VideoClip Oficial HD"
+    '|[-|]\\s*(?:official\\s+)?(?:lyric\\s+)?(?:video|audio|mv)(?:\\s+\\d{4})?(?:\\s+(?:hd|hq|4k|8k))?', // "- Official Lyric Video"
+    ')\\s*$',
+  ].join(''),
+  'gi',
+)
+
+/**
+ * Quality tags and video-type labels YouTube tacks on with nothing but a
+ * space — no bracket, no dash, no pipe to signal "this part isn't the title".
+ * "Rock Crepuscular HD 720p", "... HQ", "\"Song\" Visualizer".
+ */
+const TRAILING_BARE_NOISE = /\s+(?:HD|HQ|4K|8K|Visuali[sz]ers?|Performance Video|\d{3,4}p)\.?\s*$/gi
+
+/** Matching quote characters wrapping the *entire* remaining string, once the noise around them is gone. */
+const QUOTE_PAIRS: [string, string][] = [
+  ['"', '"'],
+  ['“', '”'],
+  ["'", "'"],
+  ['‘', '’'],
+]
+
+/**
+ * Strips a title down to just the quoted phrase when, after every other
+ * cleaning pass, that quote spans the whole remaining text. A YouTube upload
+ * quoting its own title ("“Song”" or '"Song"') is marking it as a title, not
+ * making the quotes part of it — but only once nothing else is left outside
+ * the quote, so a title that is legitimately quoted throughout (rare, but a
+ * title *inside* other words is a different thing entirely) is untouched.
+ */
+function unwrapFullQuote(text: string): string {
+  for (const [open, close] of QUOTE_PAIRS) {
+    if (text.startsWith(open) && text.endsWith(close) && text.length > open.length + close.length) {
+      return text.slice(open.length, text.length - close.length).trim()
+    }
+  }
+  return text
+}
 
 const UNKNOWN_ARTIST = 'Desconocido'
 
@@ -12,7 +64,40 @@ export function playlistIdFromInput(input: string): string | null {
 }
 
 export function cleanTitle(raw: string): string {
-  return raw.replace(PROMO_NOISE, ' ').replace(/\s+/g, ' ').trim()
+  let title = raw
+  let previous: string
+  do {
+    previous = title
+    title = title
+      .replace(PROMO_NOISE, ' ')
+      .replace(TRAILING_DELIMITED_NOISE, ' ')
+      .replace(TRAILING_BARE_NOISE, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+  } while (title !== previous)
+  const unwrapped = unwrapFullQuote(title)
+  return unwrapped.length > 0 ? unwrapped : title
+}
+
+function escapeRegExp(text: string): string {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
+/**
+ * Drops a trailing "- Artist Name" or "| Artist Name" that repeats the song's
+ * own artist field verbatim — a common YouTube "visualizer" / "performance
+ * video" convention ("Song" Visualizer | Artist). It is pure self-reference:
+ * the deck already stores the artist separately, so the title gains nothing
+ * from repeating it and loses the noise around it. Only an exact
+ * (case-insensitive) match is stripped, and never down to nothing, so this
+ * cannot silently eat a title that happens to end in a word the artist field
+ * also contains.
+ */
+export function stripTrailingArtistSelfReference(title: string, artist: string): string {
+  if (artist.length === 0) return title
+  const pattern = new RegExp(`\\s*[-|]\\s*${escapeRegExp(artist)}\\s*$`, 'i')
+  const stripped = title.replace(pattern, '').trim()
+  return stripped.length > 0 ? stripped : title
 }
 
 /**
