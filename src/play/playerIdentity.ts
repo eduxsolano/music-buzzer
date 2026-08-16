@@ -6,8 +6,10 @@ const NAME_KEY = 'hitster:playerName'
 /**
  * `connecting` used to be called `waiting`. It was renamed the moment the
  * engine gained a phase of that name, because the two mean opposite things:
- * the engine's `waiting` is the host holding the room between tiers, and the
- * button is very much pressable in it.
+ * the engine's `waiting` is the host holding the room, and the button is
+ * pressable in it — except for the round's very first `waiting`, before the
+ * host has launched tier 1 even once, which reads as `locked`. See
+ * `buttonState` below.
  */
 export type ButtonState =
   | 'connecting'
@@ -43,8 +45,17 @@ export function buttonState(state: PublicState | null, playerId: string): Button
   }
   if (state.lockedOut.includes(playerId)) return 'eliminated'
   if (state.phase === 'buzzed' && state.buzzedPlayerId === playerId) return 'won'
-  // `waiting` arms the button too: the host is holding the room between
-  // tiers, and a press during that pause earns whatever the last tier played
-  // was worth. The pause is part of the round, not a gap in it.
-  return state.phase === 'playing' || state.phase === 'waiting' ? 'armed' : 'locked'
+  if (state.phase === 'playing') return 'armed'
+  // `waiting` arms the button too, but only once something has actually
+  // sounded: the host holding the room between tiers is pressable, and a
+  // press during that pause earns whatever the last tier played was worth.
+  // The round's very first wait — before the host has launched tier 1 even
+  // once — is a `waiting` phase where nothing is at stake yet, and
+  // `pointsAtStake` already says so with `null`. Reusing that field here
+  // means a phone never has to be told a song has or hasn't started by any
+  // means other than what a press is worth: a locked button that reuses
+  // `pointsAtStake` cannot end up out of sync with the number the button
+  // itself would show if it were armed.
+  if (state.phase === 'waiting' && state.pointsAtStake !== null) return 'armed'
+  return 'locked'
 }

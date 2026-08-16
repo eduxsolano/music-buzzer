@@ -15,13 +15,25 @@ describe('remainingTierMs', () => {
 
   test('while waiting, it is the whole of what the launch button will play', () => {
     expect(
-      remainingTierMs({ kind: 'waiting', worthTier: 1, launchTier: 2, resumeAtMs: 0 }),
+      remainingTierMs({
+        kind: 'waiting',
+        worthTier: 1,
+        launchTier: 2,
+        resumeAtMs: 0,
+        heardThisRound: true,
+      }),
     ).toBe(10_000)
   })
 
   test('a wait that will resume a cut tier counts only what is left of it', () => {
     expect(
-      remainingTierMs({ kind: 'waiting', worthTier: 2, launchTier: 2, resumeAtMs: 3_000 }),
+      remainingTierMs({
+        kind: 'waiting',
+        worthTier: 2,
+        launchTier: 2,
+        resumeAtMs: 3_000,
+        heardThisRound: true,
+      }),
     ).toBe(7_000)
   })
 
@@ -47,9 +59,15 @@ describe('remainingTierMs', () => {
 describe('tierTotalMs', () => {
   test('is the whole the remainder is measured against, in every phase that has one', () => {
     expect(tierTotalMs({ kind: 'playing', tier: 2, elapsedMs: 4_000 })).toBe(10_000)
-    expect(tierTotalMs({ kind: 'waiting', worthTier: 1, launchTier: 2, resumeAtMs: 0 })).toBe(
-      10_000,
-    )
+    expect(
+      tierTotalMs({
+        kind: 'waiting',
+        worthTier: 1,
+        launchTier: 2,
+        resumeAtMs: 0,
+        heardThisRound: true,
+      }),
+    ).toBe(10_000)
     expect(
       tierTotalMs({
         kind: 'buzzed',
@@ -62,7 +80,13 @@ describe('tierTotalMs', () => {
   })
 
   test('agrees with the remainder it scales, so a ring can never read past full', () => {
-    const phase: Phase = { kind: 'waiting', worthTier: 2, launchTier: 2, resumeAtMs: 3_000 }
+    const phase: Phase = {
+      kind: 'waiting',
+      worthTier: 2,
+      launchTier: 2,
+      resumeAtMs: 3_000,
+      heardThisRound: true,
+    }
     expect(remainingTierMs(phase)!).toBeLessThanOrEqual(tierTotalMs(phase)!)
   })
 

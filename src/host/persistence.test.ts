@@ -189,6 +189,43 @@ describe('host persistence', () => {
     )
     expect(loadGame(storage)).toBeNull()
   })
+
+  // `heardThisRound` shipped in SAVE_VERSION 2, alongside the fix for a
+  // player being able to buzz before a note had played. A save written by
+  // SAVE_VERSION 1 (no `heardThisRound` on `waiting`) must never be silently
+  // accepted as if the field defaulted to `true` — that would resurrect the
+  // exact bug the version bump exists to close off.
+  test('discards a save from the version before heardThisRound existed', () => {
+    const storage = new MemoryStorage()
+    storage.setItem(
+      'hitster:host',
+      JSON.stringify({
+        version: 1,
+        room: 'KZTR',
+        state: {
+          ...initialState(),
+          phase: { kind: 'waiting', worthTier: 1, launchTier: 1, resumeAtMs: 0 },
+        },
+      }),
+    )
+    expect(loadGame(storage)).toBeNull()
+  })
+
+  test('discards a waiting phase missing heardThisRound, even under the current version', () => {
+    const storage = new MemoryStorage()
+    storage.setItem(
+      'hitster:host',
+      JSON.stringify({
+        version: SAVE_VERSION,
+        room: 'KZTR',
+        state: {
+          ...initialState(),
+          phase: { kind: 'waiting', worthTier: 1, launchTier: 1, resumeAtMs: 0 },
+        },
+      }),
+    )
+    expect(loadGame(storage)).toBeNull()
+  })
 })
 
 describe('song history', () => {

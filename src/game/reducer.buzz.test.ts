@@ -12,6 +12,15 @@ function gameWith(names: string[]): GameState {
   return reduce(dealt, { type: 'LAUNCH_TIER' })
 }
 
+/** A game dealt but held at the very start: the host has not launched tier 1 yet. */
+function dealtGame(names: string[]): GameState {
+  const joined = names.reduce(
+    (state, name) => reduce(state, { type: 'JOIN', playerId: name, name }),
+    initialState(),
+  )
+  return reduce(joined, { type: 'START_GAME', deck: ['s1', 's2'], roundsTotal: 2 })
+}
+
 function scoreOf(state: GameState, id: string): number {
   const player = state.players.find((p) => p.id === id)
   if (!player) throw new Error(`No player ${id}`)
@@ -127,6 +136,7 @@ describe('judging a wrong answer', () => {
     state = reduce(state, { type: 'BUZZ', playerId: 'beto' })
     state = reduce(state, { type: 'JUDGE', correct: false })
     state = reduce(state, { type: 'NEXT_ROUND' })
+    state = reduce(state, { type: 'LAUNCH_TIER' }) // the new round's own tier 1, not carried over
     state = reduce(state, { type: 'BUZZ', playerId: 'ana' })
     state = reduce(state, { type: 'JUDGE', correct: false })
     expect(scoreOf(state, 'ana')).toBe(-2)
@@ -147,9 +157,42 @@ describe('judging a wrong answer', () => {
       worthTier: 2,
       launchTier: 2,
       resumeAtMs: 3_000,
+      heardThisRound: true,
     })
     state = reduce(state, { type: 'LAUNCH_TIER' })
     expect(state.phase).toEqual({ kind: 'playing', tier: 2, elapsedMs: 3_000 })
+  })
+
+  // The wrong-answer case the fix has to get right on purpose: a press at
+  // elapsedMs 0 of tier 1 freezes to exactly the same three Stakes fields a
+  // freshly dealt round starts on (`worthTier: 1, launchTier: 1,
+  // resumeAtMs: 0`). Judging it wrong must not leave the round back on the
+  // round's un-pressable opening wait — the tier WAS launched, the room DID
+  // hear the music start, and the resume-after-a-wrong-answer rule must stay
+  // exactly as it always was: the wait it returns to stays pressable.
+  test('a wrong answer at the very start of a tier still leaves a pressable wait', () => {
+    let state = gameWith(['ana', 'beto'])
+    state = reduce(state, { type: 'BUZZ', playerId: 'ana' }) // elapsedMs 0, tier 1
+    expect(state.phase).toEqual({
+      kind: 'buzzed',
+      playerId: 'ana',
+      worthTier: 1,
+      launchTier: 1,
+      resumeAtMs: 0,
+    })
+    state = reduce(state, { type: 'JUDGE', correct: false })
+    expect(state.phase).toEqual({
+      kind: 'waiting',
+      worthTier: 1,
+      launchTier: 1,
+      resumeAtMs: 0,
+      heardThisRound: true,
+    })
+    // Pressable, and worth what it always was — this is not a new hand-out,
+    // it is the frozen tier 1 value the resume rule has always paid.
+    state = reduce(state, { type: 'BUZZ', playerId: 'beto' })
+    state = reduce(state, { type: 'JUDGE', correct: true })
+    expect(scoreOf(state, 'beto')).toBe(5)
   })
 
   test('a press during the pause after a wrong answer keeps that tier, cut point and all', () => {
@@ -179,6 +222,7 @@ describe('judging a wrong answer', () => {
     state = reduce(state, { type: 'JUDGE', correct: false })
     state = reduce(state, { type: 'NEXT_ROUND' })
     expect(state.lockedOut).toEqual([])
+    state = reduce(state, { type: 'LAUNCH_TIER' }) // the new round's own tier 1
     state = reduce(state, { type: 'BUZZ', playerId: 'ana' })
     expect(state.phase).toMatchObject({ kind: 'buzzed', playerId: 'ana' })
   })
@@ -195,5 +239,48 @@ describe('judging a wrong answer', () => {
   test('a judgement with nobody buzzed does nothing', () => {
     const state = gameWith(['ana'])
     expect(reduce(state, { type: 'JUDGE', correct: true })).toBe(state)
+  })
+})
+
+/**
+ * End-to-end proof that the fix is real at the engine level, not just in the
+ * `Stakes` constants: drives whole rounds through `reduce` and checks the
+ * resulting state, exactly as the actual game does.
+ */
+describe('the round only becomes pressable once something has played', () => {
+  test('buzzing before the first LAUNCH_TIER is a no-op, even blind-guessed instantly', () => {
+    const dealt = dealtGame(['ana'])
+    // This is the exact bug: a round is dealt straight into `waiting`, and a
+    // player could press before a single note of tier 1 had sounded.
+    const afterBuzz = reduce(dealt, { type: 'BUZZ', playerId: 'ana' })
+    expect(afterBuzz).toBe(dealt) // same reference: the reducer bailed out
+    expect(afterBuzz.phase.kind).toBe('waiting')
+    expect(scoreOf(afterBuzz, 'ana')).toBe(0)
+  })
+
+  test('once tier 1 is launched, the first between-tier pause pays exactly what it always did', () => {
+    let state = dealtGame(['ana'])
+    state = reduce(state, { type: 'LAUNCH_TIER' }) // tier 1 sounding now
+    state = reduce(state, { type: 'TICK', deltaMs: 5_000 }) // tier 1 runs out
+    expect(state.phase).toMatchObject({ kind: 'waiting', worthTier: 1, heardThisRound: true })
+    // Pressable now, unlike the wait one tick earlier — and worth tier 1's
+    // full value, exactly as the pause-pays-the-last-tier rule always said.
+    state = reduce(state, { type: 'BUZZ', playerId: 'ana' })
+    state = reduce(state, { type: 'JUDGE', correct: true })
+    expect(scoreOf(state, 'ana')).toBe(5)
+  })
+
+  test('the tier point values are exactly what they were: 5, 3, then 2', () => {
+    let state = dealtGame(['ana'])
+    state = reduce(state, { type: 'LAUNCH_TIER' }) // tier 1
+    state = reduce(state, { type: 'TICK', deltaMs: 5_000 })
+    state = reduce(state, { type: 'LAUNCH_TIER' }) // tier 2
+    state = reduce(state, { type: 'TICK', deltaMs: 10_000 })
+    state = reduce(state, { type: 'LAUNCH_TIER' }) // tier 3
+    state = reduce(state, { type: 'BUZZ', playerId: 'ana' })
+    state = reduce(state, { type: 'JUDGE', correct: true })
+    expect(scoreOf(state, 'ana')).toBe(2)
+    // Tier 1 (5) and tier 2 (3) are proven the same way in the "judging a
+    // correct answer" tests above; this closes the loop on tier 3.
   })
 })

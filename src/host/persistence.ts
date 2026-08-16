@@ -34,7 +34,7 @@ export interface SavedGame {
  * reads `buzzed` as `{ kind, playerId, worthTier, launchTier, resumeAtMs }`,
  * and `tierConfig(undefined)` threw before the tree could render.
  */
-export const SAVE_VERSION = 1
+export const SAVE_VERSION = 2
 
 export function saveGame(storage: Storage, save: SavedGame): void {
   storage.setItem(KEY, JSON.stringify({ version: SAVE_VERSION, ...save }))
@@ -89,7 +89,13 @@ function parsePhase(raw: unknown): Phase | null {
       return { kind: 'finished' }
     case 'waiting': {
       const stakes = parseStakes(phase)
-      return stakes ? { kind: 'waiting', ...stakes } : null
+      if (!stakes) return null
+      // Added in SAVE_VERSION 2, alongside the bump: a save from the older
+      // shape is caught by the version check above and never reaches here,
+      // so this is validated with the same rigor as everything else rather
+      // than defaulted.
+      if (typeof phase.heardThisRound !== 'boolean') return null
+      return { kind: 'waiting', heardThisRound: phase.heardThisRound, ...stakes }
     }
     case 'playing': {
       if (!isTier(phase.tier) || !isFiniteNumber(phase.elapsedMs)) return null

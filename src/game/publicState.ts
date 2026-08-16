@@ -50,12 +50,20 @@ export interface PublicState extends PublicStateCore {
  *
  * Exhaustive with an annotated return type: a new phase has to say what a
  * press is worth in it rather than defaulting to nothing.
+ *
+ * `waiting` splits in two: once something has sounded this round a press
+ * still earns the tier that just played, but the round's very first wait —
+ * before the host has launched tier 1 even once — cannot be acted on, so a
+ * press there is worth nothing. This is also what tells a phone whether its
+ * button may act: see `buttonState` in `src/play/playerIdentity.ts`, which
+ * treats `waiting` as armed only when this is non-null.
  */
 export function pointsAtStake(phase: Phase): number | null {
   switch (phase.kind) {
     case 'playing':
       return pointsForTier(phase.tier)
     case 'waiting':
+      return phase.heardThisRound ? pointsForTier(phase.worthTier) : null
     case 'buzzed':
       return pointsForTier(phase.worthTier)
     case 'lobby':

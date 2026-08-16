@@ -40,7 +40,13 @@ describe('starting a game', () => {
     expect(state.currentSongId).toBe('s1')
     expect(state.deck).toEqual(['s2'])
     expect(state.roundsPlayed).toBe(1)
-    expect(state.phase).toEqual({ kind: 'waiting', worthTier: 1, launchTier: 1, resumeAtMs: 0 })
+    expect(state.phase).toEqual({
+      kind: 'waiting',
+      worthTier: 1,
+      launchTier: 1,
+      resumeAtMs: 0,
+      heardThisRound: false,
+    })
   })
 
   test('nothing sounds until the host launches the first tier', () => {
@@ -48,6 +54,16 @@ describe('starting a game', () => {
     expect(reduce(dealt, { type: 'TICK', deltaMs: 1_000 })).toBe(dealt)
     const launched = reduce(dealt, { type: 'LAUNCH_TIER' })
     expect(launched.phase).toEqual({ kind: 'playing', tier: 1, elapsedMs: 0 })
+  })
+
+  // The bug this guards against: a round is dealt straight into `waiting`,
+  // and the BUZZ guard used to accept `waiting` unconditionally — so a
+  // player could press before a single note played and walk away with tier
+  // 1's full 5 points for guessing blind.
+  test('a press before the host has launched a single tier does nothing', () => {
+    const dealt = reduce(withPlayers('ana'), { type: 'START_GAME', deck: ['s1'], roundsTotal: 1 })
+    expect(dealt.phase).toMatchObject({ kind: 'waiting', heardThisRound: false })
+    expect(reduce(dealt, { type: 'BUZZ', playerId: 'ana' })).toBe(dealt)
   })
 })
 
@@ -65,7 +81,7 @@ describe('launching a tier', () => {
   test('resumes from the millisecond it was told to, not from the start', () => {
     const state: GameState = {
       ...withPlayers('ana'),
-      phase: { kind: 'waiting', worthTier: 2, launchTier: 2, resumeAtMs: 3_400 },
+      phase: { kind: 'waiting', worthTier: 2, launchTier: 2, resumeAtMs: 3_400, heardThisRound: true },
     }
     expect(reduce(state, { type: 'LAUNCH_TIER' }).phase).toEqual({
       kind: 'playing',
@@ -92,7 +108,13 @@ describe('tier progression', () => {
 
   test('running out of a tier waits for the host instead of chaining on', () => {
     const state = reduce(playing(), { type: 'TICK', deltaMs: 5_000 })
-    expect(state.phase).toEqual({ kind: 'waiting', worthTier: 1, launchTier: 2, resumeAtMs: 0 })
+    expect(state.phase).toEqual({
+      kind: 'waiting',
+      worthTier: 1,
+      launchTier: 2,
+      resumeAtMs: 0,
+      heardThisRound: true,
+    })
   })
 
   test('the pause is still worth the tier that just played', () => {
@@ -106,7 +128,13 @@ describe('tier progression', () => {
     let state = reduce(playing(), { type: 'TICK', deltaMs: 5_000 })
     state = reduce(state, { type: 'LAUNCH_TIER' })
     state = reduce(state, { type: 'TICK', deltaMs: 10_000 })
-    expect(state.phase).toEqual({ kind: 'waiting', worthTier: 2, launchTier: 3, resumeAtMs: 0 })
+    expect(state.phase).toEqual({
+      kind: 'waiting',
+      worthTier: 2,
+      launchTier: 3,
+      resumeAtMs: 0,
+      heardThisRound: true,
+    })
     state = reduce(state, { type: 'LAUNCH_TIER' })
     expect(state.phase).toMatchObject({ kind: 'playing', tier: 3 })
     state = reduce(state, { type: 'TICK', deltaMs: 15_000 })

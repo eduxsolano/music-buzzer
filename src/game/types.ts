@@ -80,7 +80,24 @@ export interface Stakes {
 
 export type Phase =
   | { kind: 'lobby' }
-  | ({ kind: 'waiting' } & Stakes)
+  /**
+   * `heardThisRound` is deliberately NOT part of `Stakes`: it answers a
+   * different question. `worthTier` / `launchTier` / `resumeAtMs` describe
+   * what a press would be worth; `heardThisRound` says whether a press is
+   * allowed to be worth anything at all in THIS wait.
+   *
+   * It cannot be derived from the other three — a player who buzzes at
+   * elapsedMs 0 of tier 1 and is judged wrong lands back on exactly
+   * `{ worthTier: 1, launchTier: 1, resumeAtMs: 0 }`, bit-for-bit the same
+   * triple a freshly dealt round starts on, yet the two waits must behave
+   * differently: one is the round's first wait (nothing has sounded, not
+   * pressable), the other followed a whole tier's worth of launch (something
+   * has, and it stays pressable — see the `JUDGE` handler). So it is stored,
+   * set to `false` only by `dealRound` and flipped to `true` the moment a
+   * tier is launched or finishes playing; it never resets to `false` again
+   * within the same round.
+   */
+  | ({ kind: 'waiting'; heardThisRound: boolean } & Stakes)
   | { kind: 'playing'; tier: Tier; elapsedMs: number }
   | ({ kind: 'buzzed'; playerId: PlayerId } & Stakes)
   | { kind: 'revealed'; outcome: RevealOutcome; winnerId: PlayerId | null }

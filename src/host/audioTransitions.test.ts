@@ -25,7 +25,15 @@ describe('snapshot', () => {
   })
 
   test('a wait carries the tier it is about to launch', () => {
-    expect(snapshot({ kind: 'waiting', worthTier: 1, launchTier: 2, resumeAtMs: 0 })).toEqual({
+    expect(
+      snapshot({
+        kind: 'waiting',
+        worthTier: 1,
+        launchTier: 2,
+        resumeAtMs: 0,
+        heardThisRound: true,
+      }),
+    ).toEqual({
       kind: 'waiting',
       tier: 2,
       resumes: false,
@@ -33,7 +41,15 @@ describe('snapshot', () => {
   })
 
   test('a wait over a cut tier says so, because it must continue rather than restart', () => {
-    expect(snapshot({ kind: 'waiting', worthTier: 2, launchTier: 2, resumeAtMs: 3_000 })).toEqual({
+    expect(
+      snapshot({
+        kind: 'waiting',
+        worthTier: 2,
+        launchTier: 2,
+        resumeAtMs: 3_000,
+        heardThisRound: true,
+      }),
+    ).toEqual({
       kind: 'waiting',
       tier: 2,
       resumes: true,

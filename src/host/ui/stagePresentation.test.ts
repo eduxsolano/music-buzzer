@@ -37,9 +37,21 @@ describe('moodFor', () => {
   })
 
   it('holds its breath between tiers rather than looking like the lobby', () => {
-    const held = moodFor({ kind: 'waiting', worthTier: 1, launchTier: 2, resumeAtMs: 0 }, null)
+    const held = moodFor(
+      { kind: 'waiting', worthTier: 1, launchTier: 2, resumeAtMs: 0, heardThisRound: true },
+      null,
+    )
     expect(held).toBe('hold')
     expect(held).not.toBe(moodFor({ kind: 'lobby' }, null))
+  })
+
+  it('reads as an invitation to start, not a held breath, before tier 1 has ever launched', () => {
+    const opening = moodFor(
+      { kind: 'waiting', worthTier: 1, launchTier: 1, resumeAtMs: 0, heardThisRound: false },
+      null,
+    )
+    expect(opening).toBe('idle')
+    expect(opening).toBe(moodFor({ kind: 'lobby' }, null))
   })
 
   it('shows the judgement even though a wrong answer returns to playing', () => {
@@ -81,7 +93,15 @@ describe('tierClockFor', () => {
   })
 
   it('shows the tier the host is about to launch, full, while waiting', () => {
-    expect(tierClockFor({ kind: 'waiting', worthTier: 1, launchTier: 2, resumeAtMs: 0 })).toEqual({
+    expect(
+      tierClockFor({
+        kind: 'waiting',
+        worthTier: 1,
+        launchTier: 2,
+        resumeAtMs: 0,
+        heardThisRound: true,
+      }),
+    ).toEqual({
       tier: 2,
       elapsedMs: 0,
     })
@@ -89,7 +109,13 @@ describe('tierClockFor', () => {
 
   it('keeps a cut tier drained while the host holds it, so nothing jumps back', () => {
     expect(
-      tierClockFor({ kind: 'waiting', worthTier: 2, launchTier: 2, resumeAtMs: 3_000 }),
+      tierClockFor({
+        kind: 'waiting',
+        worthTier: 2,
+        launchTier: 2,
+        resumeAtMs: 3_000,
+        heardThisRound: true,
+      }),
     ).toEqual({ tier: 2, elapsedMs: 3_000 })
   })
 

@@ -10,12 +10,19 @@ function gameWith(deck: string[], roundsTotal: number): GameState {
 describe('advancing rounds', () => {
   test('deals the next song and hands the room back to the host', () => {
     let state = gameWith(['s1', 's2'], 2)
+    state = reduce(state, { type: 'LAUNCH_TIER' })
     state = reduce(state, { type: 'BUZZ', playerId: 'ana' })
     state = reduce(state, { type: 'JUDGE', correct: true })
     state = reduce(state, { type: 'NEXT_ROUND' })
     expect(state.currentSongId).toBe('s2')
     expect(state.roundsPlayed).toBe(2)
-    expect(state.phase).toEqual({ kind: 'waiting', worthTier: 1, launchTier: 1, resumeAtMs: 0 })
+    expect(state.phase).toEqual({
+      kind: 'waiting',
+      worthTier: 1,
+      launchTier: 1,
+      resumeAtMs: 0,
+      heardThisRound: false,
+    })
   })
 
   test('no song is dealt twice in one game', () => {

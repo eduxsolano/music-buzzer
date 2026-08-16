@@ -43,7 +43,7 @@ Estas cosas quedan explícitamente fuera de esta versión:
 | Acierto válido | Título **y** artista, ambos | Exige saberse la canción de verdad. |
 | Fallo | −1 punto y eliminado de esa canción | Desincentiva pulsar a ciegas. |
 | Progresión de tramos | Reinicia desde el principio, más largo | El reconocimiento musical funciona sobre el mismo gancho con más contexto. |
-| Pausa entre tramos | El anfitrión lanza cada tramo | *Revisado tras usarlo:* encadenar no funcionaba. Entre tramos la sala está discutiendo qué canción es, y una música que rearranca sola es indistinguible de la que ya sonaba — nadie sabía en qué tramo estaba. El anfitrión sostiene la sala y arranca cada tramo a propósito. Se puede pulsar durante la espera, y vale lo que valía el tramo que acaba de sonar. |
+| Pausa entre tramos | El anfitrión lanza cada tramo | *Revisado tras usarlo:* encadenar no funcionaba. Entre tramos la sala está discutiendo qué canción es, y una música que rearranca sola es indistinguible de la que ya sonaba — nadie sabía en qué tramo estaba. El anfitrión sostiene la sala y arranca cada tramo a propósito. Se puede pulsar durante la espera, y vale lo que valía el tramo que acaba de sonar — **salvo en la primerísima espera de la ronda**, antes de que el anfitrión lance el tramo 1 por primera vez: ahí no ha sonado nada todavía, así que no hay tramo "que acaba de sonar" y una pulsación no vale nada. Esa espera inicial se distingue de cualquier otra con un dato aparte (no derivado de a qué vale la pulsación), precisamente porque fallar una pulsación en el instante 0 del tramo 1 deja la ronda en una espera con los mismos tres valores que la espera inicial: sin ese dato aparte, las dos serían indistinguibles. |
 
 ## 3. Reglas del juego
 
@@ -66,6 +66,13 @@ Entre un tramo y el siguiente la ronda queda **esperando**: la música para y
 el anfitrión decide cuándo suena el tramo siguiente. Los celulares siguen
 activos durante esa espera y una pulsación vale los puntos del **tramo que
 acaba de sonar**, no del que está por venir.
+
+Esto no aplica a la primerísima espera de una ronda recién repartida, antes de
+que el anfitrión lance el tramo 1 por primera vez: ahí todavía no sonó nada,
+así que no hay ningún tramo "que acaba de sonar" que pagar, y una pulsación no
+hace nada — el celular la ignora en silencio, igual que ignoraría una
+pulsación en el lobby. Esa espera inicial es, por lo demás, un `waiting` igual
+a cualquier otro: lo único que cambia es si ya sonó algo esta ronda.
 
 Los límites son cerrados por abajo y abiertos por arriba, medidos sobre el
 segundo de reproducción del tramo en curso: una pulsación en 4.999 s del tramo

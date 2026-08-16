@@ -72,7 +72,10 @@ describe('toPublicState', () => {
   })
 
   test('says what a press is worth right now', () => {
-    expect(toPublicState(dealtGame()).pointsAtStake).toBe(5)
+    // Freshly dealt: the host has not launched tier 1 yet, so a press right
+    // now would be rejected by the reducer — the phone must be told there is
+    // nothing to win, not tier 1's value.
+    expect(toPublicState(dealtGame()).pointsAtStake).toBeNull()
     expect(toPublicState(playingGame()).pointsAtStake).toBe(5)
     const afterTierOne = reduce(playingGame(), { type: 'TICK', deltaMs: 5_000 })
     expect(toPublicState(afterTierOne).pointsAtStake).toBe(5)
@@ -136,7 +139,27 @@ describe('pointsAtStake', () => {
   })
 
   test('is the tier just heard while the host holds the room', () => {
-    expect(pointsAtStake({ kind: 'waiting', worthTier: 2, launchTier: 3, resumeAtMs: 0 })).toBe(3)
+    expect(
+      pointsAtStake({
+        kind: 'waiting',
+        worthTier: 2,
+        launchTier: 3,
+        resumeAtMs: 0,
+        heardThisRound: true,
+      }),
+    ).toBe(3)
+  })
+
+  test('is nothing during the round\'s opening wait, before a tier has ever launched', () => {
+    expect(
+      pointsAtStake({
+        kind: 'waiting',
+        worthTier: 1,
+        launchTier: 1,
+        resumeAtMs: 0,
+        heardThisRound: false,
+      }),
+    ).toBeNull()
   })
 
   test('is frozen at the press while somebody is judged', () => {

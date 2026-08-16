@@ -21,6 +21,11 @@ export function initialState(): GameState {
  * arguing about what the song is, and music restarting by itself is
  * indistinguishable from the music that was already there. The host holds the
  * room and presses to start each tier.
+ *
+ * `heardThisRound: false` is the one thing that makes this wait different
+ * from every other `waiting` phase in the round: nothing has sounded yet, so
+ * a press here must not be allowed to score. See the note on `Phase` in
+ * `types.ts` and the guard in `BUZZ` below.
  */
 function dealRound(state: GameState): GameState {
   const [songId, ...rest] = state.deck
@@ -30,7 +35,7 @@ function dealRound(state: GameState): GameState {
     currentSongId: songId,
     roundsPlayed: state.roundsPlayed + 1,
     lockedOut: [],
-    phase: { kind: 'waiting', worthTier: 1, launchTier: 1, resumeAtMs: 0 },
+    phase: { kind: 'waiting', worthTier: 1, launchTier: 1, resumeAtMs: 0, heardThisRound: false },
   }
 }
 
@@ -89,7 +94,9 @@ export function reduce(state: GameState, event: GameEvent): GameState {
       }
       // The tier that just ran out is STILL what a press is worth. Somebody
       // who names the song half a second after the music stops has earned it;
-      // that is what makes the pause tense rather than dead.
+      // that is what makes the pause tense rather than dead. A whole tier
+      // just played, so this wait is pressable no matter what the round's
+      // opening wait was.
       return {
         ...state,
         phase: {
@@ -97,6 +104,7 @@ export function reduce(state: GameState, event: GameEvent): GameState {
           worthTier: state.phase.tier,
           launchTier: upcoming,
           resumeAtMs: 0,
+          heardThisRound: true,
         },
       }
     }
@@ -104,8 +112,12 @@ export function reduce(state: GameState, event: GameEvent): GameState {
     case 'BUZZ': {
       const { phase } = state
       // Pressing during the pause is deliberate, not a leak: the wait is part
-      // of the round, and it pays whatever the last tier heard was worth.
+      // of the round, and it pays whatever the last tier heard was worth —
+      // PROVIDED there was a last tier heard. The round's very first wait
+      // (before the host has launched tier 1 even once) has nothing to pay
+      // out yet, so it is the one `waiting` phase a press cannot act on.
       if (phase.kind !== 'playing' && phase.kind !== 'waiting') return state
+      if (phase.kind === 'waiting' && !phase.heardThisRound) return state
       if (state.lockedOut.includes(event.playerId)) return state
       if (!state.players.some((p) => p.id === event.playerId)) return state
 
@@ -142,11 +154,20 @@ export function reduce(state: GameState, event: GameEvent): GameState {
       // The three facts come back untouched: same worth, same tier, same
       // millisecond. The audio resumes rather than restarting, so the hook is
       // never handed out twice.
+      //
+      // `heardThisRound: true`, always — not carried, hardcoded. `buzzed` is
+      // only ever reached via `BUZZ`, and by the time that event is accepted
+      // either the phase was `playing` (a tier is actively launched, which
+      // counts as heard the instant it starts — see `Phase` in types.ts) or
+      // it was a `waiting` phase that had already passed the `heardThisRound`
+      // guard above. Either way, something has necessarily sounded this round
+      // by the time a `buzzed` phase exists, so the wait a wrong answer
+      // returns to is never the round's un-pressable opening wait.
       return {
         ...state,
         players,
         lockedOut,
-        phase: { kind: 'waiting', worthTier, launchTier, resumeAtMs },
+        phase: { kind: 'waiting', worthTier, launchTier, resumeAtMs, heardThisRound: true },
       }
     }
 

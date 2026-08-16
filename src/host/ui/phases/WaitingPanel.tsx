@@ -10,17 +10,23 @@ import type { HostView } from '@/host/ui/hostView'
 import { launchLabel, roundLabel, waitingNote } from '@/host/ui/stagePresentation'
 
 /**
- * The held breath.
+ * The held breath — or, for the round's very first wait, no breath to hold.
  *
- * The music has stopped and the room is arguing about what the song was. The
- * host is holding it deliberately, so the screen must not read as broken or
- * finished: same protagonist as `playing` — the points a press is worth right
- * now, which have not dropped yet — over a dimmed version of the same cool
- * ground, with the clock showing what the next tier costs.
+ * Once the room has heard at least one tier, the music has stopped and the
+ * room is arguing about what the song was. The host is holding it
+ * deliberately, so the screen must not read as broken or finished: same
+ * protagonist as `playing` — the points a press is worth right now, which
+ * have not dropped yet — over a dimmed version of the same cool ground, with
+ * the clock showing what the next tier costs.
  *
  * The pressable-ness is the point. A player who names the song half a second
  * after the music cut still earns the tier that just played, so the number in
  * the middle is live information, not a leftover.
+ *
+ * `phase.heardThisRound === false` only ever happens once per round, right
+ * after `dealRound`: nothing has sounded, so there is no tier value to show
+ * and no pause to be tense about — this is an invitation to start, not a
+ * held breath, and `moodFor` colours it `idle` to match.
  */
 export function WaitingPanel({
   view,
@@ -36,15 +42,25 @@ export function WaitingPanel({
     <StagePanel
       kicker={roundLabel(view.state.roundsPlayed, view.state.roundsTotal)}
       hero={
-        <Hero key={phase.worthTier} sizeClass="hero-xl" animation="enter">
-          {points}
-        </Hero>
+        phase.heardThisRound ? (
+          <Hero key={phase.worthTier} sizeClass="hero-xl" animation="enter">
+            {points}
+          </Hero>
+        ) : (
+          <Hero key="ready" sizeClass="hero-lg" animation="enter">
+            Listo
+          </Hero>
+        )
       }
       note={
-        <span className="flex flex-wrap items-baseline justify-center gap-x-[1em] gap-y-2">
-          <span>{waitingNote(points)}</span>
-          <TierCountdown remainingMs={remainingMs} running={false} />
-        </span>
+        phase.heardThisRound ? (
+          <span className="flex flex-wrap items-baseline justify-center gap-x-[1em] gap-y-2">
+            <span>{waitingNote(points)}</span>
+            <TierCountdown remainingMs={remainingMs} running={false} />
+          </span>
+        ) : (
+          <span>Nadie ha escuchado nada todavía</span>
+        )
       }
       actions={
         <>

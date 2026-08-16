@@ -70,7 +70,19 @@ describe('buttonState', () => {
   test('stays armed while the host holds the room between tiers', () => {
     // The pause is part of the round: someone who names the song half a
     // second after the music stops still earns the tier that just played.
+    // `pointsAtStake` is non-null here (5, from `stateWith`'s default),
+    // exactly the way it would be for a real between-tier pause.
     expect(buttonState(stateWith({ phase: 'waiting' }), 'p1')).toBe('armed')
+  })
+
+  test('is locked during the round\'s very first wait, before a note has played', () => {
+    // The bug this guards against: pressing here used to score tier 1's full
+    // 5 points for guessing blind. `pointsAtStake` is null because the
+    // reducer would reject the press outright, and the button must not
+    // invite a press it is going to ignore.
+    expect(
+      buttonState(stateWith({ phase: 'waiting', pointsAtStake: null }), 'p1'),
+    ).toBe('locked')
   })
 
   test('celebrates on the phone of the player just judged correct', () => {

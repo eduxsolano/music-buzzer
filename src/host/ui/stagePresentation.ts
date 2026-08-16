@@ -27,9 +27,12 @@ export function moodFor(phase: Phase, judgement: Judgement | null): Mood {
       return 'idle'
     // A held breath, not a dead screen: the same cool family as `live`, dimmed
     // and drawn in, so the room reads "the music stopped and something is
-    // about to happen" without a word.
+    // about to happen" without a word. But the round's very first wait has
+    // nothing to hold a breath about yet — nobody has heard a note — so it
+    // reads as `idle`, the same invitation-to-start colour as the lobby,
+    // rather than a tense pause the room did not earn.
     case 'waiting':
-      return 'hold'
+      return phase.heardThisRound ? 'hold' : 'idle'
     case 'playing':
       return 'live'
     case 'buzzed':
