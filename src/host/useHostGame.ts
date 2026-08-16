@@ -1,16 +1,17 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { DEFAULT_ROUNDS } from '@/game/config'
+import { DEFAULT_ROUNDS, HISTORY_LIMIT } from '@/game/config'
+import { buildDeck, recordPlayed } from '@/game/deck'
 import { currentSong, initialState } from '@/game/reducer'
 import { toPublicState, withCountdown } from '@/game/publicState'
-import { createRoomCode, shuffle } from '@/game/random'
-import type { GameEvent, Song } from '@/game/types'
+import { createRoomCode } from '@/game/random'
+import type { GameEvent, GameState, Song } from '@/game/types'
 import type { AudioPlayer } from '@/audio/audioPlayer'
 import type { Channel } from '@/realtime/channel'
 import { parsePlayerMessage } from '@/realtime/messages'
 import { createSupabaseChannel } from '@/realtime/supabaseChannel'
-import { clearGame, loadGame, saveGame } from '@/host/persistence'
+import { clearGame, loadGame, loadHistory, saveGame, saveHistory } from '@/host/persistence'
 import { audioActionFor, snapshot, type AudioSnapshot } from '@/host/audioTransitions'
 import { initialSession, step, undoJudgement, type HostSession } from '@/host/undo'
 import { createControlToken } from '@/host/pairing'
@@ -41,6 +42,12 @@ export function useHostGame(songs: Song[]) {
   // racing a cold buffer the instant Start is pressed. The Start button stays
   // gated on audioReady, so there is time.
   const [pendingDeck, setPendingDeck] = useState<string[] | null>(null)
+  // Recently-played song ids, oldest first — the room's memory across games.
+  // Lives outside GameState on purpose (see src/game/config.ts's
+  // HISTORY_LIMIT and src/host/persistence.ts's saveHistory): it is not part
+  // of any one game, it survives a brand-new room code, and it must never
+  // reach toPublicState or the control channel, unlike everything in `state`.
+  const [history, setHistory] = useState<string[]>([])
   const audioRef = useRef<AudioPlayer | null>(null)
   const channelRef = useRef<Channel | null>(null)
 
@@ -61,17 +68,23 @@ export function useHostGame(songs: Song[]) {
       setRoom(createRoomCode(Math.random))
       setControlToken(createControlToken())
     }
+    // The history key is independent of both branches above: it belongs to
+    // this browser's ongoing evening, not to any one room or save.
+    setHistory(loadHistory(window.localStorage))
   }, [])
 
   // Shuffle as soon as the lobby is entered (fresh room, or a reload that
   // landed before Start was pressed), so its first song can be preloaded
   // below well ahead of the Start click. Guarded on pendingDeck so this
-  // does not reshuffle on every render.
+  // does not reshuffle on every render. Songs the room heard recently (see
+  // `history` above) sort to the back, so a second game the same evening
+  // deals fresh songs first and only reaches into recent memory once those
+  // run out.
   useEffect(() => {
     if (!room || state.phase.kind !== 'lobby' || pendingDeck) return
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setPendingDeck(shuffle(songs.map((s) => s.id), Math.random))
-  }, [room, state.phase.kind, songs, pendingDeck])
+    setPendingDeck(buildDeck(songs.map((s) => s.id), history, Math.random))
+  }, [room, state.phase.kind, songs, pendingDeck, history])
 
   // Every event goes through `step`, which is `reduce` plus the one thing the
   // reducer must not know about: whether the last judgement can still be taken
@@ -162,6 +175,37 @@ export function useHostGame(songs: Song[]) {
     forceNextPublishRef.current = false
     void channel.publish({ type: 'STATE', state: withCountdown(publicState, state.phase) })
   }, [room, controlToken, state])
+
+  // Grows the room's memory the moment a round is genuinely decided, so a
+  // reload mid-game does not lose credit for songs already heard. A song
+  // counts once its round reaches `revealed` with anything but `skipped`:
+  // correct, allWrong and timeout all mean the room heard it and judged it,
+  // while a skip (see the design doc — it exists for a video that fails to
+  // play) means the room never really heard this one, so it should still be
+  // free to come up again next time. Keyed on `state.phase` itself, not its
+  // `kind`: the reducer hands out a brand-new phase object every time a round
+  // enters `revealed`, even if an unrelated JOIN re-renders this component
+  // while still in that phase, so the object identity is exactly "did a round
+  // just end" — including across React's dev-only double-invoke of effects,
+  // which the ref below guards against recording twice.
+  const lastRecordedPhaseRef = useRef<GameState['phase'] | null>(null)
+  useEffect(() => {
+    if (state.phase.kind !== 'revealed' || state.phase.outcome === 'skipped') return
+    if (!state.currentSongId) return
+    if (lastRecordedPhaseRef.current === state.phase) return
+    lastRecordedPhaseRef.current = state.phase
+    // `history` is deliberately left out of the dependency array: this effect
+    // is keyed on the phase object identity (see above), and including
+    // `history` here would re-run it every time `setHistory` below fires —
+    // appending the very same song again, forever. The closure's `history` is
+    // still the value from the render that scheduled this effect, which is
+    // current precisely because nothing else changes it between that render
+    // and this effect running.
+    const next = recordPlayed(history, [state.currentSongId], HISTORY_LIMIT)
+    saveHistory(window.localStorage, next)
+    setHistory(next)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.phase, state.currentSongId])
 
   // Listen to the phones. The host decides the winner by arrival order:
   // the reducer ignores every BUZZ after the first.

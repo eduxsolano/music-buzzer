@@ -21,3 +21,18 @@ export const TIERS: readonly TierConfig[] = [
 export const WRONG_ANSWER_PENALTY = 1
 
 export const DEFAULT_ROUNDS = 20
+
+/**
+ * How many recently-played songs the host remembers when shuffling the next
+ * game, so the second game of an evening does not replay the first.
+ *
+ * Three games' worth: long enough that a room playing back-to-back rounds
+ * all evening keeps hearing new songs, short enough that the deck recovers
+ * on its own — by the fourth game, the first game's songs are fresh again.
+ * Kept as a multiple of `DEFAULT_ROUNDS` rather than a bare number so the
+ * relationship (how many games of memory) survives if the game length ever
+ * changes. It is deliberately independent of the deck's actual size:
+ * `buildDeck` degrades gracefully — see its comment — when the deck is
+ * smaller than this, rather than this constant needing to know about that.
+ */
+export const HISTORY_LIMIT = 3 * DEFAULT_ROUNDS

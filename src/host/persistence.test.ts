@@ -1,5 +1,14 @@
 import { describe, expect, test } from 'vitest'
-import { SAVE_VERSION, clearGame, loadGame, saveGame } from '@/host/persistence'
+import {
+  HISTORY_VERSION,
+  SAVE_VERSION,
+  clearGame,
+  clearHistory,
+  loadGame,
+  loadHistory,
+  saveGame,
+  saveHistory,
+} from '@/host/persistence'
 import { initialState, reduce } from '@/game/reducer'
 import { createControlToken } from '@/host/pairing'
 
@@ -148,5 +157,79 @@ describe('host persistence', () => {
       }),
     )
     expect(loadGame(storage)).toBeNull()
+  })
+})
+
+describe('song history', () => {
+  test('round-trips a list of played song ids', () => {
+    const storage = new MemoryStorage()
+    saveHistory(storage, ['s1', 's2', 's3'])
+    expect(loadHistory(storage)).toEqual(['s1', 's2', 's3'])
+  })
+
+  test('is separate from the game save: clearing the game keeps the history', () => {
+    const storage = new MemoryStorage()
+    saveGame(storage, { room: 'KZTR', controlToken: null, state: initialState() })
+    saveHistory(storage, ['s1', 's2'])
+
+    clearGame(storage)
+
+    expect(loadGame(storage)).toBeNull()
+    expect(loadHistory(storage)).toEqual(['s1', 's2'])
+  })
+
+  test('clearing the history keeps the game save', () => {
+    const storage = new MemoryStorage()
+    saveGame(storage, { room: 'KZTR', controlToken: null, state: initialState() })
+    saveHistory(storage, ['s1', 's2'])
+
+    clearHistory(storage)
+
+    expect(loadHistory(storage)).toEqual([])
+    expect(loadGame(storage)).not.toBeNull()
+  })
+
+  test('nothing saved yet means no history, not a crash', () => {
+    expect(loadHistory(new MemoryStorage())).toEqual([])
+  })
+
+  test('returns no history instead of throwing on corrupted data', () => {
+    const storage = new MemoryStorage()
+    storage.setItem('hitster:history', 'not json {{{')
+    expect(() => loadHistory(storage)).not.toThrow()
+    expect(loadHistory(storage)).toEqual([])
+  })
+
+  test('discards a history with no version at all', () => {
+    const storage = new MemoryStorage()
+    storage.setItem('hitster:history', JSON.stringify({ songIds: ['s1'] }))
+    expect(loadHistory(storage)).toEqual([])
+  })
+
+  test('discards a history whose version does not match the current one', () => {
+    const storage = new MemoryStorage()
+    storage.setItem('hitster:history', JSON.stringify({ version: 999, songIds: ['s1'] }))
+    expect(loadHistory(storage)).toEqual([])
+  })
+
+  test('discards a history whose songIds is not an array of strings', () => {
+    const storage = new MemoryStorage()
+    storage.setItem(
+      'hitster:history',
+      JSON.stringify({ version: HISTORY_VERSION, songIds: ['s1', 42, 's3'] }),
+    )
+    expect(loadHistory(storage)).toEqual([])
+  })
+
+  test('discards a history whose songIds is missing entirely', () => {
+    const storage = new MemoryStorage()
+    storage.setItem('hitster:history', JSON.stringify({ version: HISTORY_VERSION }))
+    expect(loadHistory(storage)).toEqual([])
+  })
+
+  test('discards a history that is some other shape entirely, e.g. an array', () => {
+    const storage = new MemoryStorage()
+    storage.setItem('hitster:history', JSON.stringify(['s1', 's2']))
+    expect(loadHistory(storage)).toEqual([])
   })
 })

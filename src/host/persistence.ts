@@ -174,3 +174,49 @@ export function loadGame(storage: Storage): SavedGame | null {
 export function clearGame(storage: Storage): void {
   storage.removeItem(KEY)
 }
+
+const HISTORY_KEY = 'hitster:history'
+
+/**
+ * Bump this whenever the persisted history shape changes. Independent from
+ * `SAVE_VERSION`: the history is the room's memory across games, not part of
+ * any single game's save, and there is no reason a change to one shape
+ * should force the other's version forward.
+ */
+export const HISTORY_VERSION = 1
+
+/**
+ * Recently-played song ids, oldest first. Deliberately its own key rather
+ * than a field inside `SavedGame`: `clearGame` (a fresh room's "new game"
+ * button) removes the save but must not erase what the room has heard —
+ * that is the entire point of this feature. It survives everything a save
+ * does not: a new room code, `NEW_SESSION`, a reload.
+ */
+export function saveHistory(storage: Storage, history: string[]): void {
+  storage.setItem(HISTORY_KEY, JSON.stringify({ version: HISTORY_VERSION, songIds: history }))
+}
+
+/**
+ * Corrupted, obsolete, or structurally wrong data all mean "no memory yet",
+ * never a crash: exactly the same posture `loadGame` takes, because this is
+ * still `localStorage` data written by a possibly-older build. Falling back
+ * to an empty history is also the correct degrade-gracefully behaviour, not
+ * just a safe one — an unreadable history is no worse than a room's first
+ * game ever.
+ */
+export function loadHistory(storage: Storage): string[] {
+  const raw = storage.getItem(HISTORY_KEY)
+  if (!raw) return []
+  try {
+    const parsed = JSON.parse(raw) as Record<string, unknown>
+    if (parsed.version !== HISTORY_VERSION) return []
+    if (!Array.isArray(parsed.songIds) || !parsed.songIds.every(nonEmptyString)) return []
+    return parsed.songIds
+  } catch {
+    return []
+  }
+}
+
+export function clearHistory(storage: Storage): void {
+  storage.removeItem(HISTORY_KEY)
+}
