@@ -40,7 +40,11 @@ function many(count: number, overrides: Partial<Song> = {}): Song[] {
 }
 
 describe('offerableDeckAxes', () => {
-  test('offers an option that holds exactly a full game', () => {
+  // These pass their own `minimum` rather than importing
+  // MIN_DECK_OPTION_SONGS: what is under test is the rule (at least this
+  // many, or it is not offered), not the value the app happens to choose. The
+  // reasoning behind that value lives beside it in `src/game/config.ts`.
+  test('offers an option that holds exactly the minimum', () => {
     const songs = [...many(20, { playlists: ['billboard-2026'] }), ...many(5)]
     const axes = offerableDeckAxes(songs, 20, NAMES)
     expect(axes).toEqual([
@@ -54,7 +58,7 @@ describe('offerableDeckAxes', () => {
     ])
   })
 
-  test('drops an option one song short of a full game', () => {
+  test('drops an option one song short of the minimum', () => {
     const songs = [...many(19, { playlists: ['billboard-2026'] }), ...many(30)]
     expect(offerableDeckAxes(songs, 20, NAMES)).toEqual([])
   })
@@ -165,7 +169,7 @@ describe('filterSongs', () => {
     expect(filterSongs(songs, { axis: 'playlist', value: 'billboard-2026' })).toEqual([])
   })
 
-  test('every offered option really deals at least a full game', () => {
+  test('every offered option really holds at least the minimum', () => {
     const songs = [
       ...many(25, { playlists: ['billboard-2026'], year: 2024, genres: ['pop'] }),
       ...many(30, { playlists: ['rock-venezolano'], year: 1994, artists: ['Zapato 3'] }),

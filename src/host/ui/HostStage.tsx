@@ -29,10 +29,11 @@ export interface HostGameApi {
   judgement: Judgement | null
   canUndo: boolean
   /**
-   * The name of the themed deck in play, or null when it is the whole deck.
-   * The room is told what it is playing; it is never told what is playing.
+   * The deck about to be, or being, played. `label` always names it — "Todo
+   * el mazo" included — and `chosen` says whether the host narrowed it. The
+   * room is told what it is playing; it is never told what is playing.
    */
-  deckLabel: string | null
+  deck: { label: string; chosen: boolean }
   dispatch: (event: GameEvent) => void
   judge: (correct: boolean) => void
   undo: () => void
@@ -62,7 +63,7 @@ export function HostStage({ game }: { game: HostGameApi }) {
     channelError,
     judgement,
     canUndo,
-    deckLabel,
+    deck,
     dispatch,
     judge,
     undo,
@@ -104,7 +105,7 @@ export function HostStage({ game }: { game: HostGameApi }) {
     audioReady,
     scoreboard,
     canUndo,
-    deckLabel,
+    deck,
     pairingOpen,
     dispatch,
     startGame,
@@ -131,13 +132,17 @@ export function HostStage({ game }: { game: HostGameApi }) {
             </span>
             {/* What the room is playing, never what is playing. Only present
                 when the host narrowed the deck — a chip that is always there
-                stops being read, and "all of it" is not news. It is also the
-                only place this fact appears outside the host's own phone: it
-                is deliberately absent from the public projection, because a
-                themed deck narrows twenty guesses at once. */}
-            {deckLabel ? (
+                stops being read, and "all of it" is not news here, where the
+                chip's job is to keep a themed game labelled for twenty
+                rounds. The lobby line below states the deck unconditionally
+                for the other job, which is letting the host notice a choice
+                that is gone. This is also the only place the fact appears
+                outside the host's own phone: it is deliberately absent from
+                the public projection, because a themed deck narrows twenty
+                guesses at once. */}
+            {deck.chosen ? (
               <span className="chip">
-                Mazo <strong style={{ color: 'var(--text-hi)' }}>{deckLabel}</strong>
+                Mazo <strong style={{ color: 'var(--text-hi)' }}>{deck.label}</strong>
               </span>
             ) : null}
           </div>

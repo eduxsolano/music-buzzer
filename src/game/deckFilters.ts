@@ -11,12 +11,18 @@ import type { Song } from '@/game/types'
  * Three selectors offering one choice each is worse than no selector.
  *
  * So there is one generic selector, and one rule decides what it shows:
- * **an option appears only if it holds a full game's worth of songs.** An
- * axis with no qualifying option does not appear at all. Nothing here knows
- * which axes happen to qualify today; as the deck's years and artists get
+ * **an option appears only if it holds at least `minimum` songs.** An axis
+ * with no qualifying option does not appear at all. Nothing here knows which
+ * axes happen to qualify today; as the deck's years and artists get
  * hand-curated, the same code starts offering more with no edit. That is why
  * this is a pure function with tests rather than a hand-written list of
  * decks.
+ *
+ * `minimum` is the caller's to choose and the reasoning behind the app's
+ * value lives beside it, on `MIN_DECK_OPTION_SONGS` in `src/game/config.ts`.
+ * The short version: it is two games' worth, not one, because an option that
+ * holds exactly one game plays all of it every time and can never produce a
+ * second game that differs.
  *
  * Pure by the same contract as everything else under `src/game/`: no DOM, no
  * network, no clock, no randomness. Given the same songs it returns the same
@@ -116,13 +122,12 @@ export function optionLabel(
 }
 
 /**
- * The axes and options this deck can fill a whole game from.
+ * The axes and options this deck can honestly offer.
  *
- * `minimum` is a game's length: an option holding fewer songs than that could
- * not deal a full game and is not offered, however tempting it looks. Options
- * are ordered biggest first so the host's thumb finds the roomiest deck
- * without reading, and ties break alphabetically so the order never moves
- * between renders.
+ * An option holding fewer than `minimum` songs is not offered, however
+ * tempting it looks. Options are ordered biggest first so the host's thumb
+ * finds the roomiest deck without reading, and ties break alphabetically so
+ * the order never moves between renders.
  */
 export function offerableDeckAxes(
   songs: readonly Song[],

@@ -14,8 +14,21 @@ import { parseSongs } from '@/songs/schema'
 import { coverPath } from '@/songs/enrich'
 import { PLAYLISTS, playlistNames } from '@/songs/playlists'
 import { filterSongs, offerableDeckAxes } from '@/game/deckFilters'
-import { MIN_DECK_OPTION_SONGS } from '@/game/config'
+import { buildDeck, recordPlayed } from '@/game/deck'
+import { DEFAULT_ROUNDS, HISTORY_LIMIT, MIN_DECK_OPTION_SONGS } from '@/game/config'
 import type { Song } from '@/game/types'
+
+/** Deterministic stand-in for Math.random. xorshift32; see src/game/deck.test.ts. */
+function seededRandom(seed: number): () => number {
+  let state = seed
+  return () => {
+    state ^= state << 13
+    state ^= state >>> 17
+    state ^= state << 5
+    state |= 0
+    return (state >>> 0) / 0x100000000
+  }
+}
 
 const root = path.resolve(import.meta.dirname, '../..')
 const songs: Song[] = parseSongs(JSON.parse(readFileSync(path.join(root, 'src/songs/songs.json'), 'utf8')))
@@ -87,6 +100,34 @@ describe('what the deck in the repository can offer', () => {
         const filtered = filterSongs(songs, option)
         expect(filtered.length).toBe(option.count)
         expect(filtered.length).toBeGreaterThanOrEqual(MIN_DECK_OPTION_SONGS)
+      }
+    }
+  })
+
+  test('every offered option gives two consecutive games that differ', () => {
+    // The promise behind the threshold, checked against the real deck rather
+    // than only against the constant: an option the host is offered has to be
+    // able to produce a second game, and a sixth, that is not a replay of the
+    // first. An option at exactly a game's length cannot, which is why the
+    // minimum is two games' worth.
+    for (const axis of axes) {
+      for (const option of axis.options) {
+        const pool = filterSongs(songs, option).map((song) => song.id)
+        const random = seededRandom(2026)
+        const orders: string[] = []
+        let history: string[] = []
+        for (let game = 0; game < 6; game += 1) {
+          const dealt = buildDeck(pool, history, random).slice(0, DEFAULT_ROUNDS)
+          expect(dealt, `${option.label} repartió ${dealt.length}`).toHaveLength(DEFAULT_ROUNDS)
+          expect(new Set(dealt).size).toBe(DEFAULT_ROUNDS)
+          orders.push(dealt.join(','))
+          history = recordPlayed(history, dealt, HISTORY_LIMIT)
+        }
+        // The second game shares nothing with the first…
+        const [one, two] = orders.map((order) => order.split(','))
+        expect(two.filter((id) => one.includes(id)), option.label).toEqual([])
+        // …and no two of the six are the same running order.
+        expect(new Set(orders).size, option.label).toBe(orders.length)
       }
     }
   })

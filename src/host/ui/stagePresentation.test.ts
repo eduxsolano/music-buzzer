@@ -7,6 +7,7 @@ import {
   joinNames,
   launchLabel,
   moodFor,
+  lobbyNote,
   playersConnectedLabel,
   pointsLabel,
   revealDetail,
@@ -213,6 +214,16 @@ describe('lobby and round copy', () => {
 
   it('numbers the round', () => {
     expect(roundLabel(3, 20)).toBe('Canción 3 de 20')
+  })
+
+  it('always names the deck the next game will use, the whole one included', () => {
+    // "Nueva partida" drops the host's deck choice along with the room. If
+    // this line only appeared for a themed deck it would silently disappear,
+    // and a host who had just played one would start a different game without
+    // noticing. It changes words instead of vanishing.
+    expect(lobbyNote(2, 'Rock venezolano')).toBe('2 jugadores conectados · Mazo: Rock venezolano')
+    expect(lobbyNote(2, 'Todo el mazo')).toBe('2 jugadores conectados · Mazo: Todo el mazo')
+    expect(lobbyNote(0, 'Todo el mazo')).toBe('Esperando jugadores · Mazo: Todo el mazo')
   })
 })
 

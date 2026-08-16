@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { DEFAULT_ROUNDS, TIERS, WRONG_ANSWER_PENALTY } from '@/game/config'
+import { DEFAULT_ROUNDS, MIN_DECK_OPTION_SONGS, TIERS, WRONG_ANSWER_PENALTY } from '@/game/config'
 
 describe('config', () => {
   test('define exactly three tiers with the agreed durations and points', () => {
@@ -16,5 +16,15 @@ describe('config', () => {
 
   test('a game is twenty songs by default', () => {
     expect(DEFAULT_ROUNDS).toBe(20)
+  })
+
+  test('a themed deck must hold two games, not one, to be worth offering', () => {
+    // Deliberately more than a game's length. An option holding exactly
+    // DEFAULT_ROUNDS songs plays all of them every game, so nothing is ever
+    // fresh again and the room hears the same twenty for the rest of the
+    // night. Two games' worth is the smallest size at which a second game can
+    // differ from the first at all.
+    expect(MIN_DECK_OPTION_SONGS).toBe(2 * DEFAULT_ROUNDS)
+    expect(MIN_DECK_OPTION_SONGS).toBeGreaterThan(DEFAULT_ROUNDS)
   })
 })

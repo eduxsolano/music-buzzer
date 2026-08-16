@@ -474,10 +474,13 @@ export function useHostGame(songs: Song[]) {
     channelError,
     judgement,
     canUndo,
-    // What the television tells the room it is playing. Null for the whole
-    // deck: there is nothing to announce about "all of it", and a chip that
+    // What the television tells the room it is playing. `label` is always a
+    // real name — "Todo el mazo" included — so the lobby can state the deck
+    // unconditionally and a choice dropped by "Nueva partida" shows up as
+    // changed words rather than as a line that quietly disappeared.
+    // `chosen` is what the header chip keys off instead, because a chip that
     // is always there stops being read.
-    deckLabel: deckSelection ? chosenDeckLabel : null,
+    deck: { label: chosenDeckLabel, chosen: deckSelection !== null },
     dispatch,
     judge,
     undo,

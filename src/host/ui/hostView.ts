@@ -18,8 +18,11 @@ export interface HostView {
   scoreboard: Player[]
   /** True while the last judgement can still be taken back. */
   canUndo: boolean
-  /** The themed deck in play, named for the room; null when it is the whole deck. */
-  deckLabel: string | null
+  /**
+   * The deck in play, named for the room. `label` is always a real name,
+   * "Todo el mazo" included; `chosen` says whether the host narrowed it.
+   */
+  deck: { label: string; chosen: boolean }
   /**
    * True while the pairing code is on the television. Panels must not render
    * anything else scannable while it is: the private door and the public one

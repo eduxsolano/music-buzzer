@@ -25,13 +25,30 @@ export const DEFAULT_ROUNDS = 20
 /**
  * How many songs a themed deck must hold before the host is offered it.
  *
- * A full game, exactly — an option that cannot deal 20 songs is not a deck,
- * it is a shortened game nobody asked for. Tied to `DEFAULT_ROUNDS` rather
- * than written as 20 so the relationship (a deck is worth offering when it
- * can fill a game) survives a change to the game's length. See
- * `offerableDeckAxes` in `src/game/deckFilters.ts` for the rule itself.
+ * **Two games' worth, not one, and the second game is the whole point.** The
+ * obvious threshold is `DEFAULT_ROUNDS`: an option that cannot deal 20 songs
+ * is a shortened game nobody asked for. But an option holding *exactly* 20 is
+ * worse than short — it is frozen. Every song it has is played every game, so
+ * after the first game every one of them sits in `recentlyPlayed` forever and
+ * `buildDeck` has nothing fresh left to shuffle. The room hears the same
+ * twenty songs in a near-identical order for the rest of the night. A deck
+ * that cannot produce two different games is not a deck.
+ *
+ * So the rule is: **an option must hold enough songs that two consecutive
+ * games differ.** That is `2 * DEFAULT_ROUNDS` — at 40 songs the second game
+ * is dealt entirely from the 20 the first one did not touch.
+ *
+ * It resolves a second problem without naming it. A valid answer in this game
+ * is title *and* artist, and the television names the chosen deck all game —
+ * so a single-artist deck would hand the room one of the two required fields
+ * for twenty rounds running. At this threshold no artist in the deck
+ * qualifies, and the artist axis needs no special case to say so.
+ *
+ * Do NOT "simplify" this back to `DEFAULT_ROUNDS` because a game is 20 songs.
+ * The two numbers answer different questions: that one is how long a game is,
+ * this one is how much variety an option must have to be worth offering.
  */
-export const MIN_DECK_OPTION_SONGS = DEFAULT_ROUNDS
+export const MIN_DECK_OPTION_SONGS = 2 * DEFAULT_ROUNDS
 
 /**
  * How many recently-played songs the host remembers when shuffling the next

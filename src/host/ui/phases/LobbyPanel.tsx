@@ -5,18 +5,11 @@ import { QrCard } from '@/host/ui/QrCard'
 import { ShareLink } from '@/ui/ShareLink'
 import { joinUrl } from '@/host/pairing'
 import type { HostView } from '@/host/ui/hostView'
-import { playersConnectedLabel } from '@/host/ui/stagePresentation'
+import { lobbyNote } from '@/host/ui/stagePresentation'
 
 /** Before the music: the room code and the QR are the only two things to do. */
 export function LobbyPanel({ view }: { view: HostView }) {
-  const { room, state, audioReady, startGame, origin, pairingOpen, deckLabel } = view
-
-  // The header chip carries the deck all game; here it is said in words too,
-  // because the lobby is the one moment the room is looking at the television
-  // with nothing else happening on it, and "vamos a jugar el mazo de rock
-  // venezolano" is worth landing before the first song.
-  const players = playersConnectedLabel(state.players.length)
-  const note = deckLabel ? `${players} · Mazo: ${deckLabel}` : players
+  const { room, state, audioReady, startGame, origin, pairingOpen, deck } = view
 
   return (
     <StagePanel
@@ -49,7 +42,10 @@ export function LobbyPanel({ view }: { view: HostView }) {
           </div>
         </div>
       }
-      note={note}
+      /* Always names the deck, the whole one included — see `lobbyNote`. This
+         is the last screen before Start, so it is the last chance for a host
+         whose choice was dropped by "Nueva partida" to notice. */
+      note={lobbyNote(state.players.length, deck.label)}
       actions={
         <button
           onClick={startGame}

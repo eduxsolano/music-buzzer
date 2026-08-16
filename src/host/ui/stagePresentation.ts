@@ -206,6 +206,22 @@ export function playersConnectedLabel(count: number): string {
   return count === 1 ? '1 jugador conectado' : `${count} jugadores conectados`
 }
 
+/**
+ * The line under the room code, which **always names the deck about to be
+ * played** — including the whole one.
+ *
+ * That "including" is the entire point and is not cosmetic. "Nueva partida"
+ * on the television mints a fresh room and, with it, drops the host's deck
+ * choice; if this line only appeared for a themed deck, a host who had just
+ * played a themed game would find nothing where something used to be and
+ * start a different game without noticing. A line that is always present
+ * changes its words instead of vanishing, and a changed word is something a
+ * person reads.
+ */
+export function lobbyNote(playerCount: number, deckLabel: string): string {
+  return `${playersConnectedLabel(playerCount)} · Mazo: ${deckLabel}`
+}
+
 export function roundLabel(played: number, total: number): string {
   return `Canción ${played} de ${total}`
 }

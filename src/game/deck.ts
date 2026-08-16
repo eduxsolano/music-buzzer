@@ -1,5 +1,26 @@
+import { DEFAULT_ROUNDS } from '@/game/config'
 import { shuffle } from '@/game/random'
 import type { Phase } from '@/game/types'
+
+/**
+ * Shuffles within blocks of `size`, leaving the blocks themselves in place.
+ *
+ * The point is to separate the part of an ordering that carries meaning from
+ * the part that is arbitrary. For the stale tail below, "which songs come
+ * back first" is meaningful and must stay ordered by recency; "in what order
+ * those twenty come back" is not, and letting it be fixed is what makes a
+ * saturated deck replay itself identically forever. Block by block, the room
+ * still hears whatever it heard longest ago first, and never in the same
+ * arrangement twice.
+ */
+function shuffleWithinBlocks<T>(items: readonly T[], size: number, random: () => number): T[] {
+  if (size < 1) return [...items]
+  const result: T[] = []
+  for (let start = 0; start < items.length; start += size) {
+    result.push(...shuffle(items.slice(start, start + size), random))
+  }
+  return result
+}
 
 /**
  * Orders every song id for a fresh game.
@@ -9,19 +30,40 @@ import type { Phase } from '@/game/types'
  * out of songs the room has not heard lately. Songs present in
  * `recentlyPlayed` ("stale") follow, ordered from least- to
  * most-recently-played — the graceful-degradation path for a deck too small,
- * or a night too long, to keep every game fully fresh. That ordering is
- * deterministic on purpose: when the room has to hear something again, it
- * should always be whichever song it heard longest ago, not a coin flip.
+ * or a night too long, to keep every game fully fresh.
+ *
+ * That recency ordering is kept at the granularity of a game and randomised
+ * inside it, via `blockSize`. Both halves of that matter:
+ *
+ * - **Ordered between blocks.** When the room has to hear something again it
+ *   should be whichever songs it heard longest ago, not a coin flip. Only the
+ *   first `blockSize` stale songs can actually be reached in one game, so
+ *   that is exactly the granularity at which "least recently played first"
+ *   has any consequence.
+ * - **Shuffled within a block.** A fully deterministic tail means a deck whose
+ *   songs are *all* in memory reproduces the very same running order every
+ *   game, forever — `shuffle` never runs again for it. That was real: a
+ *   40-song deck against a 60-deep memory falls into it by the third game,
+ *   and the room hears the same sequence for the rest of the night. Which of
+ *   twenty equally-stale songs plays third is arbitrary, so it is left to
+ *   chance rather than frozen.
  *
  * `recentlyPlayed` is ordered oldest-first (index 0 = played longest ago),
- * matching what `recordPlayed` below produces and what persistence stores.
- * The result has exactly as many ids as `allSongIds` — same contract as the
- * plain `shuffle` this replaces — so callers slot it in unchanged.
+ * matching what `recordPlayed` below produces and what persistence stores. An
+ * id repeated in it counts at its most recent position — a song heard twice
+ * tonight is as stale as the later hearing, not the earlier one. The result
+ * has exactly as many ids as `allSongIds` — same contract as the plain
+ * `shuffle` this replaces — so callers slot it in unchanged.
+ *
+ * `blockSize` defaults to a game's length, which is what every caller wants;
+ * it is a parameter so tests can exercise the boundary without a 20-song
+ * fixture.
  */
 export function buildDeck(
   allSongIds: readonly string[],
   recentlyPlayed: readonly string[],
   random: () => number,
+  blockSize: number = DEFAULT_ROUNDS,
 ): string[] {
   const recencyRank = new Map<string, number>()
   recentlyPlayed.forEach((id, index) => recencyRank.set(id, index))
@@ -37,7 +79,7 @@ export function buildDeck(
   }
   stale.sort((a, b) => (recencyRank.get(a) as number) - (recencyRank.get(b) as number))
 
-  return [...shuffle(fresh, random), ...stale]
+  return [...shuffle(fresh, random), ...shuffleWithinBlocks(stale, blockSize, random)]
 }
 
 /**

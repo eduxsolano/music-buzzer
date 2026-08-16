@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest'
 import { buildDeck, recordPlayed, recordRoundIfDecided } from '@/game/deck'
-import { HISTORY_LIMIT } from '@/game/config'
+import { HISTORY_LIMIT, MIN_DECK_OPTION_SONGS } from '@/game/config'
 import { initialState } from '@/game/reducer'
 import { initialSession, step, undoJudgement } from '@/host/undo'
 
@@ -49,9 +49,44 @@ describe('buildDeck', () => {
 
   test('when everything is recently played, orders by least- to most-recently played', () => {
     const ids = ['a', 'b', 'c']
-    // 'b' played longest ago (index 0), 'c' most recently (index 2).
-    const result = buildDeck(ids, ['b', 'a', 'c'], fakeRandom([0.5]))
+    // 'b' played longest ago (index 0), 'c' most recently (index 2). A block
+    // size of 1 isolates the ordering principle from the shuffle inside each
+    // block, which the next two tests cover.
+    const result = buildDeck(ids, ['b', 'a', 'c'], fakeRandom([0.5]), 1)
     expect(result).toEqual(['b', 'a', 'c'])
+  })
+
+  test('stale songs keep their recency order between blocks', () => {
+    // Six stale songs, blocks of two: whatever the shuffle does inside a
+    // block, nothing from a later block may jump ahead of an earlier one.
+    const ids = ['a', 'b', 'c', 'd', 'e', 'f']
+    const oldestFirst = ['f', 'e', 'd', 'c', 'b', 'a']
+    const result = buildDeck(ids, oldestFirst, seededRandom(11), 2)
+
+    expect(new Set(result.slice(0, 2))).toEqual(new Set(['f', 'e']))
+    expect(new Set(result.slice(2, 4))).toEqual(new Set(['d', 'c']))
+    expect(new Set(result.slice(4, 6))).toEqual(new Set(['b', 'a']))
+  })
+
+  test('the order inside a block is left to chance, not frozen', () => {
+    // The regression this exists for: with every song in memory the tail used
+    // to be fully deterministic, so a saturated deck replayed itself in the
+    // identical order forever and `shuffle` never ran for it again.
+    const ids = Array.from({ length: 8 }, (_, i) => `song-${i}`)
+    const random = seededRandom(3)
+    const orders = new Set<string>()
+    for (let attempt = 0; attempt < 20; attempt += 1) {
+      orders.add(buildDeck(ids, ids, random, 8).join(','))
+    }
+    expect(orders.size).toBeGreaterThan(1)
+  })
+
+  test('a song heard twice tonight counts as stale from the later hearing', () => {
+    const ids = ['a', 'b']
+    // 'a' opened the night and closed it; 'b' was in the middle. So 'b' is the
+    // one the room heard longest ago and must come back first.
+    const result = buildDeck(ids, ['a', 'b', 'a'], fakeRandom([0.5]), 1)
+    expect(result).toEqual(['b', 'a'])
   })
 
   test('does not mutate its inputs', () => {
@@ -159,10 +194,14 @@ describe('across several consecutive games', () => {
     for (const id of freshForGameTwo) {
       expect(gameTwoDealt).toContain(id)
     }
-    // The reused ones are ordered by recency: the deck's stale segment (after
-    // the 5 shuffled fresh ones) must equal game one's dealt order exactly,
-    // since that IS the least-to-most-recently-played order.
-    expect(gameTwoDeck.slice(5)).toEqual(gameOneDealt)
+    // The reused ones are ordered by recency at the granularity that has any
+    // consequence: the stale segment (after the 5 shuffled fresh ones) holds
+    // exactly game one's songs, and its first block of 20 — the only part
+    // game two can actually reach — is game one's dealt set. Their order
+    // *within* that block is deliberately not pinned: see "the order inside a
+    // block is left to chance" above for the replay bug that fixed.
+    expect(new Set(gameTwoDeck.slice(5))).toEqual(new Set(gameOneDealt))
+    expect(new Set(gameTwoDeck.slice(5, 25))).toEqual(new Set(gameOneDealt))
   })
 
   test('HISTORY_LIMIT eventually lets old songs become fresh again', () => {
@@ -200,35 +239,69 @@ describe('across several consecutive games', () => {
  */
 describe('a filtered deck meets the room memory', () => {
   const ROUNDS = 20
-  /** The narrowest deck the selector will ever offer: exactly a full game. */
-  const narrow = Array.from({ length: ROUNDS }, (_, i) => `narrow-${i}`)
+  /** The narrowest deck the selector will ever offer: two games' worth. */
+  const narrow = Array.from({ length: MIN_DECK_OPTION_SONGS }, (_, i) => `narrow-${i}`)
   const wide = Array.from({ length: 300 }, (_, i) => `wide-${i}`)
 
-  test('the narrowest offerable deck still deals a full game with an empty memory', () => {
-    const deck = buildDeck(narrow, [], seededRandom(1))
-    expect(deck).toHaveLength(ROUNDS)
-    expect(new Set(deck).size).toBe(ROUNDS)
+  /** Plays `count` games from `pool` and returns what each one dealt. */
+  function playGames(pool: readonly string[], count: number, random: () => number): string[][] {
+    const games: string[][] = []
+    let history: string[] = []
+    for (let game = 0; game < count; game += 1) {
+      const dealt = buildDeck(pool, history, random).slice(0, ROUNDS)
+      games.push(dealt)
+      history = recordPlayed(history, dealt, HISTORY_LIMIT)
+    }
+    return games
+  }
+
+  test('the narrowest offerable deck deals a full game with an empty memory', () => {
+    const dealt = buildDeck(narrow, [], seededRandom(1)).slice(0, ROUNDS)
+    expect(dealt).toHaveLength(ROUNDS)
+    expect(new Set(dealt).size).toBe(ROUNDS)
+  })
+
+  test('the narrowest offerable deck really does give two different games', () => {
+    // This is the reason the threshold is two games' worth and not one. At
+    // exactly a game's length every song is always recently played, so there
+    // is never anything fresh; at twice it, the second game is dealt entirely
+    // from the half the first one did not touch.
+    const [one, two] = playGames(narrow, 2, seededRandom(2))
+    expect(two.filter((id) => one.includes(id))).toEqual([])
+  })
+
+  test('and it keeps giving different games once memory has saturated', () => {
+    // The regression: with a fully-remembered deck the stale tail used to be
+    // deterministic, so from game 3 onwards the room heard the identical
+    // running order for the rest of the night.
+    const games = playGames(narrow, 6, seededRandom(3))
+    for (const game of games) {
+      expect(game).toHaveLength(ROUNDS)
+      expect(new Set(game).size).toBe(ROUNDS)
+    }
+    expect(new Set(games.map((game) => game.join(','))).size).toBe(games.length)
+  })
+
+  test('a deck just above the minimum also never settles into one order', () => {
+    const pool = Array.from({ length: MIN_DECK_OPTION_SONGS + 5 }, (_, i) => `pool-${i}`)
+    const games = playGames(pool, 6, seededRandom(4))
+    expect(new Set(games.map((game) => game.join(','))).size).toBe(games.length)
   })
 
   test('it still deals a full game when every one of its songs was just played', () => {
-    // The worst case there is: the host plays the 20-song artist deck, then
-    // immediately plays it again. Nothing is fresh, so `buildDeck` falls back
-    // to least-recently-played order — a full game of repeats beats a short
-    // game, and the room is choosing to replay a 20-song deck anyway.
+    // A full game of repeats beats a short game: `buildDeck` returns every id
+    // it was given, so a saturated pool still fills twenty rounds.
     const history = recordPlayed([], narrow, HISTORY_LIMIT)
-    const deck = buildDeck(narrow, history, seededRandom(2))
-    expect(deck).toHaveLength(ROUNDS)
-    expect(new Set(deck).size).toBe(ROUNDS)
-    // Least-recently-played first, deterministically: the room hears them in
-    // the same order it heard them last time, not in a fresh random one.
-    expect(deck).toEqual(narrow)
+    const dealt = buildDeck(narrow, history, seededRandom(5)).slice(0, ROUNDS)
+    expect(dealt).toHaveLength(ROUNDS)
+    expect(new Set(dealt).size).toBe(ROUNDS)
   })
 
   test('a memory full of OTHER songs does not touch a narrow deck at all', () => {
     // The history is global; the filtered pool is not. Songs the wide deck
     // put in memory must not make the narrow deck's songs any less fresh.
     const history = recordPlayed([], wide.slice(0, HISTORY_LIMIT), HISTORY_LIMIT)
-    const deck = buildDeck(narrow, history, seededRandom(3))
+    const deck = buildDeck(narrow, history, seededRandom(6))
     expect([...deck].sort()).toEqual([...narrow].sort())
   })
 
@@ -237,7 +310,7 @@ describe('a filtered deck meets the room memory', () => {
     // even after three back-to-back games there are fresh songs left, so the
     // selector does not turn the evening into reruns.
     const pool = Array.from({ length: 105 }, (_, i) => `pool-${i}`)
-    const random = seededRandom(4)
+    const random = seededRandom(7)
     let history: string[] = []
     for (let game = 0; game < 3; game += 1) {
       const dealt = buildDeck(pool, history, random).slice(0, ROUNDS)
@@ -252,14 +325,14 @@ describe('a filtered deck meets the room memory', () => {
     // include some of the narrow deck's own; then the host picks the narrow
     // deck. It must still deal 20.
     const whole = [...narrow, ...wide]
-    const random = seededRandom(5)
+    const random = seededRandom(8)
     let history: string[] = []
     for (let game = 0; game < 2; game += 1) {
       history = recordPlayed(history, buildDeck(whole, history, random).slice(0, ROUNDS), HISTORY_LIMIT)
     }
-    const deck = buildDeck(narrow, history, random)
-    expect(deck.slice(0, ROUNDS)).toHaveLength(ROUNDS)
-    expect(new Set(deck).size).toBe(ROUNDS)
+    const dealt = buildDeck(narrow, history, random).slice(0, ROUNDS)
+    expect(dealt).toHaveLength(ROUNDS)
+    expect(new Set(dealt).size).toBe(ROUNDS)
   })
 })
 
