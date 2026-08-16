@@ -190,6 +190,79 @@ describe('across several consecutive games', () => {
   })
 })
 
+/**
+ * The deck selector shrinks the pool `buildDeck` draws from, and the room's
+ * memory does not shrink with it: the history is global, so a narrow deck can
+ * find every one of its songs already remembered. These are the cases where
+ * that could starve a game, and they exist because the selector's promise —
+ * an option is only offered if it can deal a full game — has to survive
+ * contact with the memory that predates it.
+ */
+describe('a filtered deck meets the room memory', () => {
+  const ROUNDS = 20
+  /** The narrowest deck the selector will ever offer: exactly a full game. */
+  const narrow = Array.from({ length: ROUNDS }, (_, i) => `narrow-${i}`)
+  const wide = Array.from({ length: 300 }, (_, i) => `wide-${i}`)
+
+  test('the narrowest offerable deck still deals a full game with an empty memory', () => {
+    const deck = buildDeck(narrow, [], seededRandom(1))
+    expect(deck).toHaveLength(ROUNDS)
+    expect(new Set(deck).size).toBe(ROUNDS)
+  })
+
+  test('it still deals a full game when every one of its songs was just played', () => {
+    // The worst case there is: the host plays the 20-song artist deck, then
+    // immediately plays it again. Nothing is fresh, so `buildDeck` falls back
+    // to least-recently-played order — a full game of repeats beats a short
+    // game, and the room is choosing to replay a 20-song deck anyway.
+    const history = recordPlayed([], narrow, HISTORY_LIMIT)
+    const deck = buildDeck(narrow, history, seededRandom(2))
+    expect(deck).toHaveLength(ROUNDS)
+    expect(new Set(deck).size).toBe(ROUNDS)
+    // Least-recently-played first, deterministically: the room hears them in
+    // the same order it heard them last time, not in a fresh random one.
+    expect(deck).toEqual(narrow)
+  })
+
+  test('a memory full of OTHER songs does not touch a narrow deck at all', () => {
+    // The history is global; the filtered pool is not. Songs the wide deck
+    // put in memory must not make the narrow deck's songs any less fresh.
+    const history = recordPlayed([], wide.slice(0, HISTORY_LIMIT), HISTORY_LIMIT)
+    const deck = buildDeck(narrow, history, seededRandom(3))
+    expect([...deck].sort()).toEqual([...narrow].sort())
+  })
+
+  test('a mid-sized filtered deck keeps dealing fresh songs game after game', () => {
+    // 105 songs (the size of the 2020s deck today) against a 60-deep memory:
+    // even after three back-to-back games there are fresh songs left, so the
+    // selector does not turn the evening into reruns.
+    const pool = Array.from({ length: 105 }, (_, i) => `pool-${i}`)
+    const random = seededRandom(4)
+    let history: string[] = []
+    for (let game = 0; game < 3; game += 1) {
+      const dealt = buildDeck(pool, history, random).slice(0, ROUNDS)
+      expect(dealt).toHaveLength(ROUNDS)
+      expect(dealt.filter((id) => history.includes(id))).toEqual([])
+      history = recordPlayed(history, dealt, HISTORY_LIMIT)
+    }
+  })
+
+  test('switching to a filtered deck mid-evening never yields fewer than a full game', () => {
+    // The whole deck is played twice, filling memory with 40 songs that
+    // include some of the narrow deck's own; then the host picks the narrow
+    // deck. It must still deal 20.
+    const whole = [...narrow, ...wide]
+    const random = seededRandom(5)
+    let history: string[] = []
+    for (let game = 0; game < 2; game += 1) {
+      history = recordPlayed(history, buildDeck(whole, history, random).slice(0, ROUNDS), HISTORY_LIMIT)
+    }
+    const deck = buildDeck(narrow, history, random)
+    expect(deck.slice(0, ROUNDS)).toHaveLength(ROUNDS)
+    expect(new Set(deck).size).toBe(ROUNDS)
+  })
+})
+
 describe('recordRoundIfDecided', () => {
   // Regression: an earlier version of the host's recording effect was keyed
   // on the `revealed` phase object's identity rather than `currentSongId`.

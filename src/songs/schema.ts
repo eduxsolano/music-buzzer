@@ -53,6 +53,7 @@ function parseSong(raw: unknown, index: number): Song {
     fail(id, 'releaseGroupId', 'must be a MusicBrainz UUID when present')
   }
   const genres = optionalStrings(s.genres, id, 'genres')
+  const playlists = optionalStrings(s.playlists, id, 'playlists')
   if (s.cover !== undefined && (typeof s.cover !== 'string' || !s.cover.startsWith('/covers/'))) {
     fail(id, 'cover', 'must be a path under /covers when present')
   }
@@ -67,6 +68,7 @@ function parseSong(raw: unknown, index: number): Song {
     startSeconds: s.startSeconds as number,
     ...(s.releaseGroupId !== undefined ? { releaseGroupId: s.releaseGroupId as string } : {}),
     ...(genres !== undefined ? { genres } : {}),
+    ...(playlists !== undefined ? { playlists } : {}),
     ...(s.cover !== undefined ? { cover: s.cover as string } : {}),
   }
 }

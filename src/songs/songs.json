@@ -98,6 +98,10 @@
       "piano rock",
       "pop soul"
     ],
+    "playlists": [
+      "billboard-2026",
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/lady-gaga-bruno-mars-die-with-a-smile.jpg"
   },
   {
@@ -113,6 +117,10 @@
     "releaseGroupId": "fd4181e0-495b-430d-9751-5d1885f6781e",
     "genres": [
       "ballad"
+    ],
+    "playlists": [
+      "billboard-2026",
+      "exitos-de-hoy"
     ],
     "cover": "/covers/alex-warren-ordinary.jpg"
   },
@@ -130,6 +138,10 @@
     "genres": [
       "pop"
     ],
+    "playlists": [
+      "billboard-2026",
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/taylor-swift-the-fate-of-ophelia.jpg"
   },
   {
@@ -141,7 +153,11 @@
       "Sony Pictures Animation"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026",
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "morgan-wallen-what-i-want-feat-tate-mcrae",
@@ -152,7 +168,10 @@
       "Morgan Wallen"
     ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026"
+    ]
   },
   {
     "id": "harry-styles-aperture",
@@ -165,6 +184,9 @@
     "year": 2026,
     "startSeconds": 30,
     "releaseGroupId": "3acb8595-9a19-49f2-b3d4-843bd032759a",
+    "playlists": [
+      "billboard-2026"
+    ],
     "cover": "/covers/harry-styles-aperture.jpg"
   },
   {
@@ -178,6 +200,10 @@
     "year": 2025,
     "startSeconds": 30,
     "releaseGroupId": "e8335c23-5d68-47e6-898b-3117be067195",
+    "playlists": [
+      "billboard-2026",
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/justin-bieber-daisies.jpg"
   },
   {
@@ -189,7 +215,11 @@
       "Bruno Mars"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026",
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "sienna-spiro-die-on-this-hill",
@@ -202,6 +232,9 @@
     "year": 2025,
     "startSeconds": 30,
     "releaseGroupId": "c5d27497-e67b-4f73-a69c-4bd68fab945d",
+    "playlists": [
+      "billboard-2026"
+    ],
     "cover": "/covers/sienna-spiro-die-on-this-hill.jpg"
   },
   {
@@ -219,6 +252,9 @@
       "alternative rock",
       "soul"
     ],
+    "playlists": [
+      "billboard-2026"
+    ],
     "cover": "/covers/teddy-swims-lose-control.jpg"
   },
   {
@@ -232,6 +268,10 @@
     "year": 2025,
     "startSeconds": 30,
     "releaseGroupId": "eede2032-240e-4e4c-be36-d87206199e25",
+    "playlists": [
+      "billboard-2026",
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/sabrina-carpenter-tears.jpg"
   },
   {
@@ -248,6 +288,9 @@
     "genres": [
       "pop"
     ],
+    "playlists": [
+      "billboard-2026"
+    ],
     "cover": "/covers/olivia-rodrigo-drop-dead.jpg"
   },
   {
@@ -261,6 +304,9 @@
     "year": 2025,
     "startSeconds": 30,
     "releaseGroupId": "53fea274-2ee8-43f9-93dc-67be72b86615",
+    "playlists": [
+      "billboard-2026"
+    ],
     "cover": "/covers/zep-nobody.jpg"
   },
   {
@@ -272,7 +318,10 @@
       "Morgan Wallen"
     ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026"
+    ]
   },
   {
     "id": "benson-boone-beautiful-things",
@@ -289,6 +338,10 @@
       "pop",
       "rock"
     ],
+    "playlists": [
+      "billboard-2026",
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/benson-boone-beautiful-things.jpg"
   },
   {
@@ -300,7 +353,11 @@
       "Laufey"
     ],
     "year": 2026,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026",
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "dave-raindance-ft-tems",
@@ -311,7 +368,11 @@
       "Dave"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026",
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "stunna-4-vegas-rangin-bells",
@@ -322,7 +383,10 @@
       "Stunna 4 Vegas"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026"
+    ]
   },
   {
     "id": "leon-thomas-mutt",
@@ -335,6 +399,9 @@
     "year": 2024,
     "startSeconds": 30,
     "releaseGroupId": "d1dc70e7-20e8-4fb5-b0f5-01e1fe25a196",
+    "playlists": [
+      "billboard-2026"
+    ],
     "cover": "/covers/leon-thomas-mutt.jpg"
   },
   {
@@ -351,6 +418,10 @@
     "genres": [
       "pop"
     ],
+    "playlists": [
+      "billboard-2026",
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/tyla-chanel.jpg"
   },
   {
@@ -366,6 +437,10 @@
     "releaseGroupId": "d4f989e0-a884-4ceb-a30e-1541d72bc4ab",
     "genres": [
       "neo soul"
+    ],
+    "playlists": [
+      "billboard-2026",
+      "exitos-de-hoy"
     ],
     "cover": "/covers/gabriel-jacoby-the-one.jpg"
   },
@@ -386,6 +461,9 @@
       "conscious hip hop",
       "contemporary r&b"
     ],
+    "playlists": [
+      "billboard-2026"
+    ],
     "cover": "/covers/doechii-sza-girl-get-up.jpg"
   },
   {
@@ -399,6 +477,9 @@
     "year": 2024,
     "startSeconds": 30,
     "releaseGroupId": "6c473425-fd8c-4638-894f-efad1a264d67",
+    "playlists": [
+      "billboard-2026"
+    ],
     "cover": "/covers/shaboozey-a-bar-song-tipsy.jpg"
   },
   {
@@ -410,7 +491,10 @@
       "Luh Tee"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026"
+    ]
   },
   {
     "id": "cameron-whitcomb-kingdom-of-fear",
@@ -423,6 +507,9 @@
     "year": 2026,
     "startSeconds": 30,
     "releaseGroupId": "cb04c487-cbd4-4f84-9590-94ccfbf05170",
+    "playlists": [
+      "billboard-2026"
+    ],
     "cover": "/covers/cameron-whitcomb-kingdom-of-fear.jpg"
   },
   {
@@ -434,7 +521,10 @@
       "YE"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026"
+    ]
   },
   {
     "id": "cat-serrano-not-like-you",
@@ -445,7 +535,10 @@
       "Cat Serrano"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026"
+    ]
   },
   {
     "id": "tyla-she-did-it-again-ft-zara-larsson",
@@ -462,6 +555,9 @@
     "genres": [
       "new jack swing"
     ],
+    "playlists": [
+      "billboard-2026"
+    ],
     "cover": "/covers/tyla-she-did-it-again-ft-zara-larsson.jpg"
   },
   {
@@ -476,6 +572,10 @@
     "year": 2026,
     "startSeconds": 30,
     "releaseGroupId": "c95309c4-65f4-47d4-b4d8-fcdf67db2b42",
+    "playlists": [
+      "billboard-2026",
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/bebe-rexha-faithless-new-religion.jpg"
   },
   {
@@ -487,7 +587,10 @@
       "Nuke2Stiff"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026"
+    ]
   },
   {
     "id": "brent-faiyaz-like-it-was",
@@ -498,7 +601,10 @@
       "Brent Faiyaz"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026"
+    ]
   },
   {
     "id": "taylor-swift-opalite",
@@ -516,6 +622,9 @@
       "europop",
       "pop"
     ],
+    "playlists": [
+      "billboard-2026"
+    ],
     "cover": "/covers/taylor-swift-opalite.jpg"
   },
   {
@@ -529,7 +638,10 @@
     ],
     "year": 2025,
     "startSeconds": 30,
-    "releaseGroupId": "1afa87eb-7712-4bb5-907e-aaef65d5d6c0"
+    "releaseGroupId": "1afa87eb-7712-4bb5-907e-aaef65d5d6c0",
+    "playlists": [
+      "billboard-2026"
+    ]
   },
   {
     "id": "shutchadown-my-whole-team",
@@ -540,7 +652,10 @@
       "SHUTchaDOWN"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026"
+    ]
   },
   {
     "id": "moneybagg-yo-i-see-why",
@@ -552,7 +667,10 @@
     ],
     "year": 0,
     "startSeconds": 30,
-    "releaseGroupId": "6bcb2832-da6d-40fc-9383-f16fdbeadd44"
+    "releaseGroupId": "6bcb2832-da6d-40fc-9383-f16fdbeadd44",
+    "playlists": [
+      "billboard-2026"
+    ]
   },
   {
     "id": "adela-ain-t-in-la",
@@ -565,6 +683,9 @@
     "year": 0,
     "startSeconds": 30,
     "releaseGroupId": "4578f9c0-28c8-4e20-b331-575cfff7cba6",
+    "playlists": [
+      "billboard-2026"
+    ],
     "cover": "/covers/adela-ain-t-in-la.jpg"
   },
   {
@@ -578,6 +699,9 @@
     "year": 2025,
     "startSeconds": 30,
     "releaseGroupId": "56aaa6de-2425-4fa1-af43-5a0b740906ef",
+    "playlists": [
+      "billboard-2026"
+    ],
     "cover": "/covers/morgan-wallen-just-in-case.jpg"
   },
   {
@@ -589,7 +713,11 @@
       "Harry Styles"
     ],
     "year": 2026,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026",
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "manana-calendar",
@@ -600,7 +728,11 @@
       "Manana"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026",
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "hybe-labels-bts-swim-official-mv",
@@ -611,7 +743,10 @@
       "HYBE LABELS"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026"
+    ]
   },
   {
     "id": "sabrina-carpenter-house-tour",
@@ -624,6 +759,9 @@
     "year": 2025,
     "startSeconds": 30,
     "releaseGroupId": "345f389c-3cc3-476f-a64d-51bd84d92ade",
+    "playlists": [
+      "billboard-2026"
+    ],
     "cover": "/covers/sabrina-carpenter-house-tour.jpg"
   },
   {
@@ -635,7 +773,11 @@
       "HoodTrophy Bino"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026",
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "sombr-undressed",
@@ -653,6 +795,10 @@
       "indie rock",
       "new wave"
     ],
+    "playlists": [
+      "billboard-2026",
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/sombr-undressed.jpg"
   },
   {
@@ -666,6 +812,10 @@
     "year": 2026,
     "startSeconds": 30,
     "releaseGroupId": "604c10d8-bd25-46f0-83d5-ceaf5af5381d",
+    "playlists": [
+      "billboard-2026",
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/bruno-mars-i-just-might.jpg"
   },
   {
@@ -677,7 +827,10 @@
       "RJmrLA & Joe Moses"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026"
+    ]
   },
   {
     "id": "shaboozey-good-news",
@@ -690,6 +843,9 @@
     "year": 2024,
     "startSeconds": 30,
     "releaseGroupId": "e4218a2b-be8c-4d58-b578-5e45e9085086",
+    "playlists": [
+      "billboard-2026"
+    ],
     "cover": "/covers/shaboozey-good-news.jpg"
   },
   {
@@ -703,6 +859,9 @@
     "year": 2026,
     "startSeconds": 30,
     "releaseGroupId": "7484a082-882d-4c7a-a59b-d2714282ec55",
+    "playlists": [
+      "billboard-2026"
+    ],
     "cover": "/covers/ariana-grande-hate-that-i-made-you-love-me.jpg"
   },
   {
@@ -714,7 +873,10 @@
       "Morgan Wallen"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026"
+    ]
   },
   {
     "id": "eddy-baker-120-proof",
@@ -725,7 +887,10 @@
       "EDDY BAKER"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026"
+    ]
   },
   {
     "id": "benson-boone-mystical-magical",
@@ -738,6 +903,10 @@
     "year": 2025,
     "startSeconds": 30,
     "releaseGroupId": "4db99fa5-bd71-4912-b31e-8b2d56d0d2c3",
+    "playlists": [
+      "billboard-2026",
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/benson-boone-mystical-magical.jpg"
   },
   {
@@ -756,6 +925,9 @@
       "pop",
       "dance-pop"
     ],
+    "playlists": [
+      "billboard-2026"
+    ],
     "cover": "/covers/chappell-roan-pink-pony-club.jpg"
   },
   {
@@ -769,6 +941,10 @@
     "year": 2025,
     "startSeconds": 30,
     "releaseGroupId": "9ae401f3-75b7-4bae-8d9f-7ce7e0455553",
+    "playlists": [
+      "billboard-2026",
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/alex-warren-eternity.jpg"
   },
   {
@@ -780,7 +956,10 @@
       "Maddy Byrnes"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026"
+    ]
   },
   {
     "id": "sombr-back-to-friends",
@@ -798,6 +977,10 @@
       "dream pop",
       "indie rock"
     ],
+    "playlists": [
+      "billboard-2026",
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/sombr-back-to-friends.jpg"
   },
   {
@@ -809,7 +992,10 @@
       "Kendrick Lamar, SZA"
     ],
     "year": 2024,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026"
+    ]
   },
   {
     "id": "hybe-labels-katseye-animal-official-mv",
@@ -820,7 +1006,10 @@
       "HYBE LABELS"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026"
+    ]
   },
   {
     "id": "olivia-dean-man-i-need",
@@ -833,6 +1022,10 @@
     "year": 2025,
     "startSeconds": 30,
     "releaseGroupId": "ea4812e1-baee-4669-9df7-6099fb50f775",
+    "playlists": [
+      "billboard-2026",
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/olivia-dean-man-i-need.jpg"
   },
   {
@@ -846,6 +1039,9 @@
     "year": 2025,
     "startSeconds": 30,
     "releaseGroupId": "fd850df3-549b-406c-af86-c476642a20a1",
+    "playlists": [
+      "billboard-2026"
+    ],
     "cover": "/covers/russell-dickerson-happen-to-me.jpg"
   },
   {
@@ -860,6 +1056,9 @@
     "year": 2026,
     "startSeconds": 30,
     "releaseGroupId": "a0888b67-a2bc-4006-acb9-bfc408341141",
+    "playlists": [
+      "billboard-2026"
+    ],
     "cover": "/covers/raye-click-clack-symphony-feat-hans-zimmer.jpg"
   },
   {
@@ -871,7 +1070,11 @@
       "Justin Bieber"
     ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026",
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "chris-brown-it-depends-ft-bryson-tiller",
@@ -885,6 +1088,9 @@
     "year": 2025,
     "startSeconds": 30,
     "releaseGroupId": "0140f2f7-f69e-41ea-a87a-98e5ba98057f",
+    "playlists": [
+      "billboard-2026"
+    ],
     "cover": "/covers/chris-brown-it-depends-ft-bryson-tiller.jpg"
   },
   {
@@ -901,6 +1107,10 @@
     "genres": [
       "pop"
     ],
+    "playlists": [
+      "billboard-2026",
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/katy-perry-bandaids.jpg"
   },
   {
@@ -912,7 +1122,10 @@
       "Olivia Dean"
     ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026"
+    ]
   },
   {
     "id": "mariah-the-scientist-burning-blue",
@@ -925,6 +1138,9 @@
     "year": 2025,
     "startSeconds": 30,
     "releaseGroupId": "7a26146c-786a-49d2-b0fb-528a0d5ff0bf",
+    "playlists": [
+      "billboard-2026"
+    ],
     "cover": "/covers/mariah-the-scientist-burning-blue.jpg"
   },
   {
@@ -938,6 +1154,9 @@
     "year": 0,
     "startSeconds": 30,
     "releaseGroupId": "71e73dbe-25b0-45d1-8955-97aa75f0a449",
+    "playlists": [
+      "billboard-2026"
+    ],
     "cover": "/covers/benson-boone-sorry-i-m-here-for-someone-else.jpg"
   },
   {
@@ -949,7 +1168,10 @@
       "Tinashe & Disco Lines"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026"
+    ]
   },
   {
     "id": "sierra-you-broke-me",
@@ -960,7 +1182,10 @@
       "Sierra"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026"
+    ]
   },
   {
     "id": "sony-pictures-animation-free-official-lyric-video-sony-animation",
@@ -971,7 +1196,10 @@
       "Sony Pictures Animation"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026"
+    ]
   },
   {
     "id": "katseye-internet-girl-visualizer-katseye",
@@ -982,7 +1210,10 @@
       "KATSEYE"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026"
+    ]
   },
   {
     "id": "partynextdoor-drake-somebody-loves-me",
@@ -993,7 +1224,10 @@
       "PARTYNEXTDOOR, Drake"
     ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026"
+    ]
   },
   {
     "id": "sombr-12-to-12",
@@ -1011,6 +1245,9 @@
       "dance-pop",
       "new wave"
     ],
+    "playlists": [
+      "billboard-2026"
+    ],
     "cover": "/covers/sombr-12-to-12.jpg"
   },
   {
@@ -1023,7 +1260,10 @@
     ],
     "year": 0,
     "startSeconds": 30,
-    "releaseGroupId": "9b16acb3-b096-4d96-bd26-eb95c07625cd"
+    "releaseGroupId": "9b16acb3-b096-4d96-bd26-eb95c07625cd",
+    "playlists": [
+      "billboard-2026"
+    ]
   },
   {
     "id": "katseye-gabriela-performance-video-katseye",
@@ -1034,7 +1274,10 @@
       "KATSEYE"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026"
+    ]
   },
   {
     "id": "tate-mcrae-revolving-door",
@@ -1045,7 +1288,10 @@
       "Tate McRae"
     ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026"
+    ]
   },
   {
     "id": "eloise-it-all-goes",
@@ -1056,7 +1302,10 @@
       "Eloise"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026"
+    ]
   },
   {
     "id": "darin-feat-eloise-falling-in-love",
@@ -1067,7 +1316,11 @@
       "Darin feat. Eloise"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026",
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "riley-green-worst-way",
@@ -1080,6 +1333,9 @@
     "year": 2024,
     "startSeconds": 30,
     "releaseGroupId": "dc7caa95-ad5e-49d3-b739-e847ccda25c3",
+    "playlists": [
+      "billboard-2026"
+    ],
     "cover": "/covers/riley-green-worst-way.jpg"
   },
   {
@@ -1093,6 +1349,9 @@
     "year": 2024,
     "startSeconds": 30,
     "releaseGroupId": "2615b70c-a100-4836-9c78-88a3149a16cc",
+    "playlists": [
+      "billboard-2026"
+    ],
     "cover": "/covers/hudson-westbrook-house-again.jpg"
   },
   {
@@ -1106,6 +1365,9 @@
     "year": 0,
     "startSeconds": 30,
     "releaseGroupId": "5d35c6e6-154a-4a9b-9dee-ecb4f8a22a10",
+    "playlists": [
+      "billboard-2026"
+    ],
     "cover": "/covers/lainey-wilson-somewhere-over-laredo.jpg"
   },
   {
@@ -1117,7 +1379,10 @@
       "Miley Cyrus"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026"
+    ]
   },
   {
     "id": "lady-gaga-abracadabra",
@@ -1134,6 +1399,10 @@
       "dance-pop",
       "acid house",
       "electro house"
+    ],
+    "playlists": [
+      "billboard-2026",
+      "exitos-de-hoy"
     ],
     "cover": "/covers/lady-gaga-abracadabra.jpg"
   },
@@ -1153,6 +1422,10 @@
       "pop",
       "soft rock"
     ],
+    "playlists": [
+      "billboard-2026",
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/sabrina-carpenter-please-please-please.jpg"
   },
   {
@@ -1171,6 +1444,10 @@
       "ballad",
       "new wave"
     ],
+    "playlists": [
+      "billboard-2026",
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/billie-eilish-birds-of-a-feather.jpg"
   },
   {
@@ -1185,6 +1462,9 @@
     "year": 2025,
     "startSeconds": 30,
     "releaseGroupId": "bd0804dd-f371-42f7-8961-da80ec5df2c9",
+    "playlists": [
+      "billboard-2026"
+    ],
     "cover": "/covers/jisoo-x-zayn-eyes-closed.jpg"
   },
   {
@@ -1198,6 +1478,9 @@
     "year": 2024,
     "startSeconds": 30,
     "releaseGroupId": "790c8610-2855-43a9-ad32-8a037b30b190",
+    "playlists": [
+      "billboard-2026"
+    ],
     "cover": "/covers/morgan-wallen-love-somebody.jpg"
   },
   {
@@ -1209,7 +1492,10 @@
       "Gunna"
     ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026"
+    ]
   },
   {
     "id": "central-cee-ft-lil-baby-band4band",
@@ -1223,6 +1509,9 @@
     "year": 2024,
     "startSeconds": 30,
     "releaseGroupId": "ac3a7d23-559e-4ca5-9bc4-b752ab414121",
+    "playlists": [
+      "billboard-2026"
+    ],
     "cover": "/covers/central-cee-ft-lil-baby-band4band.jpg"
   },
   {
@@ -1234,7 +1523,11 @@
       "Dominic Fike"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026",
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "teddy-swims-bad-dreams",
@@ -1247,6 +1540,9 @@
     "year": 2024,
     "startSeconds": 30,
     "releaseGroupId": "cc906a32-ab9b-46f9-b1dd-cc7701b0ca29",
+    "playlists": [
+      "billboard-2026"
+    ],
     "cover": "/covers/teddy-swims-bad-dreams.jpg"
   },
   {
@@ -1258,7 +1554,10 @@
       "Tate McRae"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026"
+    ]
   },
   {
     "id": "rose-bruno-mars-apt",
@@ -1277,6 +1576,10 @@
       "dance-rock",
       "pop punk"
     ],
+    "playlists": [
+      "billboard-2026",
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/rose-bruno-mars-apt.jpg"
   },
   {
@@ -1294,6 +1597,9 @@
       "house",
       "trap"
     ],
+    "playlists": [
+      "billboard-2026"
+    ],
     "cover": "/covers/tommy-richman-million-dollar-baby.jpg"
   },
   {
@@ -1307,6 +1613,10 @@
     "year": 2024,
     "startSeconds": 30,
     "releaseGroupId": "7a7ecae9-b72c-4e98-92e5-ce29ff8358cc",
+    "playlists": [
+      "billboard-2026",
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/lola-young-messy.jpg"
   },
   {
@@ -1321,6 +1631,9 @@
     "year": 2025,
     "startSeconds": 30,
     "releaseGroupId": "e59cbe23-fd61-4adf-9845-67ae8fb6e3ca",
+    "playlists": [
+      "billboard-2026"
+    ],
     "cover": "/covers/wizthemc-bees-honey-show-me-love.jpg"
   },
   {
@@ -1339,6 +1652,10 @@
       "boogie",
       "dance-pop"
     ],
+    "playlists": [
+      "billboard-2026",
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/sabrina-carpenter-espresso.jpg"
   },
   {
@@ -1352,6 +1669,9 @@
     "year": 2024,
     "startSeconds": 30,
     "releaseGroupId": "aee32cb3-07e0-4c23-930d-e989bf9e84bb",
+    "playlists": [
+      "billboard-2026"
+    ],
     "cover": "/covers/morgan-wallen-smile.jpg"
   },
   {
@@ -1370,6 +1690,10 @@
       "country pop",
       "pop rock"
     ],
+    "playlists": [
+      "billboard-2026",
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/sabrina-carpenter-manchild.jpg"
   },
   {
@@ -1381,7 +1705,11 @@
       "Ravyn Lenae"
     ],
     "year": 2024,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026",
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "hybe-labels-bts-normal-official-mv",
@@ -1392,7 +1720,10 @@
       "HYBE LABELS"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026"
+    ]
   },
   {
     "id": "ice-spice-big-guy-from-the-spongebob-movie-search-for-squarepants",
@@ -1403,7 +1734,10 @@
       "Ice Spice"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026"
+    ]
   },
   {
     "id": "pinkpantheress-stateside-zara-larsson",
@@ -1414,7 +1748,11 @@
       "PinkPantheress"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026",
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "nocap-leverage",
@@ -1425,7 +1763,10 @@
       "NoCap"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "billboard-2026"
+    ]
   },
   {
     "id": "myles-smith-stargazing",
@@ -1438,6 +1779,9 @@
     "year": 2024,
     "startSeconds": 30,
     "releaseGroupId": "9cde989e-2153-44ee-b9c8-6869a18f95e2",
+    "playlists": [
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/myles-smith-stargazing.jpg"
   },
   {
@@ -1451,6 +1795,9 @@
     "year": 2026,
     "startSeconds": 30,
     "releaseGroupId": "733de4db-e503-4cb2-8d30-216a907ca16e",
+    "playlists": [
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/olivia-rodrigo-stupid-song.jpg"
   },
   {
@@ -1467,6 +1814,9 @@
     "genres": [
       "pop"
     ],
+    "playlists": [
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/ed-sheeran-sapphire.jpg"
   },
   {
@@ -1478,7 +1828,10 @@
       "Malcolm Todd"
     ],
     "year": 2024,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "latin-city-justin-bieber-nicki-minaj-beauty-and-a-beat",
@@ -1489,7 +1842,10 @@
       "Latin City"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "katy-perry-the-one-that-got-away",
@@ -1506,6 +1862,9 @@
       "pop",
       "progressive house"
     ],
+    "playlists": [
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/katy-perry-the-one-that-got-away.jpg"
   },
   {
@@ -1519,6 +1878,9 @@
     "year": 2026,
     "startSeconds": 30,
     "releaseGroupId": "7894a899-adbc-40ba-afd2-3468e9398899",
+    "playlists": [
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/alex-warren-fever-dream.jpg"
   },
   {
@@ -1530,7 +1892,10 @@
       "Taylor Swift"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "kendrick-lamar-luther",
@@ -1541,7 +1906,10 @@
       "Kendrick Lamar"
     ],
     "year": 2024,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "billie-jean-michael-jackson",
@@ -1552,7 +1920,10 @@
       "Billie Jean"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "popcaan-wine-jiggle",
@@ -1563,7 +1934,10 @@
       "Popcaan"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "raye-where-is-my-husband",
@@ -1576,6 +1950,9 @@
     "year": 2025,
     "startSeconds": 30,
     "releaseGroupId": "0b17e3ac-1bf2-4df9-9eef-e12babb3e56f",
+    "playlists": [
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/raye-where-is-my-husband.jpg"
   },
   {
@@ -1587,7 +1964,10 @@
       "Lil Uzi Vert"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "temper-city-self-aware",
@@ -1600,6 +1980,9 @@
     "year": 0,
     "startSeconds": 30,
     "releaseGroupId": "fb56de2f-d2a4-4bb5-9151-fec75571cc4c",
+    "playlists": [
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/temper-city-self-aware.jpg"
   },
   {
@@ -1613,6 +1996,9 @@
     "year": 2025,
     "startSeconds": 30,
     "releaseGroupId": "08de34c3-3b2c-41ec-9b7f-ce333bfd4c9f",
+    "playlists": [
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/taylor-swift-elizabeth-taylor.jpg"
   },
   {
@@ -1629,6 +2015,9 @@
     "genres": [
       "pop"
     ],
+    "playlists": [
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/olivia-rodrigo-the-cure.jpg"
   },
   {
@@ -1642,6 +2031,9 @@
     "year": 0,
     "startSeconds": 30,
     "releaseGroupId": "abe4081b-2b35-460b-a0fb-86781fe12abf",
+    "playlists": [
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/onerepublic-need-your-love.jpg"
   },
   {
@@ -1655,6 +2047,9 @@
     "year": 2014,
     "startSeconds": 30,
     "releaseGroupId": "3222df0a-8bdb-4ce1-99cb-a418d1155618",
+    "playlists": [
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/michael-jackson-chicago.jpg"
   },
   {
@@ -1670,6 +2065,9 @@
     "year": 0,
     "startSeconds": 30,
     "releaseGroupId": "2100868f-2c7a-4aa7-9e92-184a6fe9a46f",
+    "playlists": [
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/david-guetta-teddy-swims-tones-and-i-gone-gone-gone.jpg"
   },
   {
@@ -1681,7 +2079,10 @@
       "HYBE LABELS"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "shakira-burna-boy-dai-dai",
@@ -1695,6 +2096,9 @@
     "year": 0,
     "startSeconds": 30,
     "releaseGroupId": "8f539b56-4e11-4da1-ac72-3776aadb9518",
+    "playlists": [
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/shakira-burna-boy-dai-dai.jpg"
   },
   {
@@ -1706,7 +2110,10 @@
       "Lady Gaga"
     ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "charli-xcx-ss26",
@@ -1719,6 +2126,9 @@
     "year": 2026,
     "startSeconds": 30,
     "releaseGroupId": "a754e1bf-1c77-455d-8392-76d96da7e98a",
+    "playlists": [
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/charli-xcx-ss26.jpg"
   },
   {
@@ -1730,7 +2140,10 @@
       "Anyma, LISA"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "miley-cyrus-flowers",
@@ -1746,6 +2159,9 @@
     "genres": [
       "pop"
     ],
+    "playlists": [
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/miley-cyrus-flowers.jpg"
   },
   {
@@ -1759,6 +2175,9 @@
     "year": 2025,
     "startSeconds": 30,
     "releaseGroupId": "367839fd-4c24-45e4-a005-6bf6f04ac0cd",
+    "playlists": [
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/f3miii-noble.jpg"
   },
   {
@@ -1772,7 +2191,10 @@
     ],
     "year": 2025,
     "startSeconds": 30,
-    "releaseGroupId": "49fcf2d4-2772-4e57-9ab0-a8241df9ad83"
+    "releaseGroupId": "49fcf2d4-2772-4e57-9ab0-a8241df9ad83",
+    "playlists": [
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "doja-cat-jealous-type",
@@ -1790,6 +2212,9 @@
       "dance-pop",
       "freestyle"
     ],
+    "playlists": [
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/doja-cat-jealous-type.jpg"
   },
   {
@@ -1804,6 +2229,9 @@
     "year": 2025,
     "startSeconds": 30,
     "releaseGroupId": "6e4b5677-ce6a-4a87-b9ed-8f5434927942",
+    "playlists": [
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/bigxthaplug-all-the-way-feat-bailey-zimmerman.jpg"
   },
   {
@@ -1817,6 +2245,9 @@
     "year": 2022,
     "startSeconds": 30,
     "releaseGroupId": "b423b12f-6960-4985-b9ca-3be05904d3b9",
+    "playlists": [
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/noah-kahan-stick-season.jpg"
   },
   {
@@ -1835,6 +2266,9 @@
       "pop",
       "pop soul"
     ],
+    "playlists": [
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/sienna-spiro-the-visitor.jpg"
   },
   {
@@ -1848,6 +2282,9 @@
     "year": 0,
     "startSeconds": 30,
     "releaseGroupId": "ff8c5dfe-5f12-4b7c-a901-af414c791d44",
+    "playlists": [
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/ella-langley-be-her.jpg"
   },
   {
@@ -1863,6 +2300,9 @@
     "year": 2025,
     "startSeconds": 30,
     "releaseGroupId": "867cc340-4e21-4473-9d5f-5a911b300e26",
+    "playlists": [
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/damiano-david-tyla-nile-rodgers-talk-to-me.jpg"
   },
   {
@@ -1881,6 +2321,9 @@
       "pop",
       "synth-pop"
     ],
+    "playlists": [
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/ariana-grande-we-can-t-be-friends-wait-for-your-love.jpg"
   },
   {
@@ -1892,7 +2335,10 @@
       "ANOTR ft. 54 Ultra"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "miley-cyrus-end-of-the-world",
@@ -1908,6 +2354,9 @@
     "genres": [
       "pop"
     ],
+    "playlists": [
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/miley-cyrus-end-of-the-world.jpg"
   },
   {
@@ -1919,7 +2368,10 @@
       "Don Toliver & Yeat"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "charli-xcx-party-4-u",
@@ -1932,6 +2384,9 @@
     "year": 2020,
     "startSeconds": 30,
     "releaseGroupId": "1d26fed3-35b9-47ed-88c4-fc37d0c10940",
+    "playlists": [
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/charli-xcx-party-4-u.jpg"
   },
   {
@@ -1943,7 +2398,10 @@
       "Connie Francis"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "ed-sheeran-a-little-more",
@@ -1956,6 +2414,9 @@
     "year": 2025,
     "startSeconds": 30,
     "releaseGroupId": "35bbb386-480a-4f93-acb0-c2a92317c6dc",
+    "playlists": [
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/ed-sheeran-a-little-more.jpg"
   },
   {
@@ -1967,7 +2428,10 @@
       "ROSÉ"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "taylor-swift-cruel-summer",
@@ -1985,6 +2449,9 @@
       "pop",
       "synth-pop"
     ],
+    "playlists": [
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/taylor-swift-cruel-summer.jpg"
   },
   {
@@ -1996,7 +2463,10 @@
       "Morgan Wallen, Tate McRae"
     ],
     "year": 2025,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "teddy-swims-lose-control-2",
@@ -2013,6 +2483,9 @@
       "alternative rock",
       "soul"
     ],
+    "playlists": [
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/teddy-swims-lose-control-2.jpg"
   },
   {
@@ -2024,7 +2497,10 @@
       "Teddy Swims"
     ],
     "year": 2023,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "chappell-roan-hot-to-go",
@@ -2042,6 +2518,9 @@
       "dance-pop",
       "synth-pop"
     ],
+    "playlists": [
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/chappell-roan-hot-to-go.jpg"
   },
   {
@@ -2053,7 +2532,10 @@
       "SZA"
     ],
     "year": 2024,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "taylor-swift-opalite-2",
@@ -2071,6 +2553,9 @@
       "europop",
       "pop"
     ],
+    "playlists": [
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/taylor-swift-opalite-2.jpg"
   },
   {
@@ -2082,7 +2567,10 @@
       "Sabrina Carpenter"
     ],
     "year": 2024,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "tate-mcrae-sports-car",
@@ -2095,6 +2583,9 @@
     "year": 2025,
     "startSeconds": 30,
     "releaseGroupId": "b1d42e45-c3d0-4f98-a8ce-ac9007067349",
+    "playlists": [
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/tate-mcrae-sports-car.jpg"
   },
   {
@@ -2113,6 +2604,9 @@
       "amapiano",
       "afrobeats"
     ],
+    "playlists": [
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/tyla-water.jpg"
   },
   {
@@ -2127,6 +2621,9 @@
     "year": 2026,
     "startSeconds": 30,
     "releaseGroupId": "43da569b-f13e-4c60-b1af-e4f1ddbfae88",
+    "playlists": [
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/bebe-rexha-david-guetta-sad-girls.jpg"
   },
   {
@@ -2138,7 +2635,10 @@
       "Rema, Selena Gomez"
     ],
     "year": 2022,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "hozier-too-sweet",
@@ -2149,7 +2649,10 @@
       "Hozier"
     ],
     "year": 2024,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "post-malone-i-had-some-help-feat-morgan-wallen",
@@ -2166,6 +2669,9 @@
     "genres": [
       "country"
     ],
+    "playlists": [
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/post-malone-i-had-some-help-feat-morgan-wallen.jpg"
   },
   {
@@ -2179,6 +2685,9 @@
     "year": 2026,
     "startSeconds": 30,
     "releaseGroupId": "8839d9e1-2e93-4ea3-a29e-3b7ba9a46c98",
+    "playlists": [
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/sombr-homewrecker.jpg"
   },
   {
@@ -2190,7 +2699,10 @@
       "Lady Gaga, Doechii"
     ],
     "year": 2026,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "martin-garrix-ed-sheeran-repeat-it",
@@ -2204,6 +2716,9 @@
     "year": 0,
     "startSeconds": 30,
     "releaseGroupId": "b27269a8-6160-41db-ae52-3d04f789a5f7",
+    "playlists": [
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/martin-garrix-ed-sheeran-repeat-it.jpg"
   },
   {
@@ -2217,6 +2732,9 @@
     "year": 2026,
     "startSeconds": 30,
     "releaseGroupId": "7484a082-882d-4c7a-a59b-d2714282ec55",
+    "playlists": [
+      "exitos-de-hoy"
+    ],
     "cover": "/covers/ariana-grande-hate-that-i-made-you-love-me-2.jpg"
   },
   {
@@ -2228,7 +2746,10 @@
       "Gabriel Jacoby"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "the-046-downtown-dreamin-prod-sefru",
@@ -2239,7 +2760,10 @@
       "The 046"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "lil-don-young-boss-move-lil-don-young-boss",
@@ -2250,7 +2774,10 @@
       "Lil Don Young Boss"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "kids-that-fly-too-many-people",
@@ -2261,7 +2788,10 @@
       "Kids That Fly"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "diamond-man-n-the-m-n",
@@ -2272,7 +2802,10 @@
       "diamond*"
     ],
     "year": 2026,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "diamond-f-urs-feat-young-thug",
@@ -2283,7 +2816,10 @@
       "diamond*"
     ],
     "year": 2026,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "exitos-de-hoy"
+    ]
   },
   {
     "id": "zapato-3-entrada-de-bala",
@@ -2294,7 +2830,10 @@
       "Zapato 3"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "pablo-dagnino-dejo-las-llaves-1996",
@@ -2305,7 +2844,10 @@
       "Pablo Dagnino"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "la-nave-astronauta",
@@ -2316,7 +2858,10 @@
       "La Nave"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "los-amigos-invisibles-la-vecina",
@@ -2327,7 +2872,10 @@
       "Los Amigos Invisibles"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "caramelos-de-cianuro-secreto",
@@ -2338,7 +2886,10 @@
       "Caramelos de Cianuro"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "dermis-tatu-zorra",
@@ -2349,7 +2900,10 @@
       "Dermis Tatú"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "pacifica-sutil-sonido-amor",
@@ -2360,7 +2914,10 @@
       "Pacifica"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "fauna-crepuscular-silicon-valley-2001",
@@ -2371,7 +2928,10 @@
       "Fauna Crepuscular"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "king-chango-sin-ti",
@@ -2382,7 +2942,10 @@
       "King Changó"
     ],
     "year": 2000,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "sentimiento-muerto-cabeza",
@@ -2393,7 +2956,10 @@
       "Sentimiento Muerto"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "desorden-publico-tiembla",
@@ -2404,7 +2970,10 @@
       "Desorden Público"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "cangrejo-y-dermis-tatu-dime-que-si",
@@ -2415,7 +2984,10 @@
       "Cangrejo y Dermis tatu"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "candy-66-solo-caracas-pop-festival-2002",
@@ -2426,7 +2998,10 @@
       "Candy66"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "franco-video-la-leche-frank-black-punk-venezuela",
@@ -2437,7 +3012,10 @@
       "FRANCO VIDEO"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "sentimiento-muerto-resiste",
@@ -2448,7 +3026,10 @@
       "Sentimiento Muerto"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "los-amigos-invisibles-nada-que-decir-1995",
@@ -2459,7 +3040,10 @@
       "Los Amigos Invisibles"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "dermis-tatu-terrenal",
@@ -2470,7 +3054,10 @@
       "Dermis Tatú"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "chucknorris-taj-mahal",
@@ -2481,7 +3068,10 @@
       "Chucknorris"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "los-amigos-invisibles-vivire-para-ti-natalia-lafourcade",
@@ -2492,7 +3082,10 @@
       "Los Amigos Invisibles"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "la-puta-electrica-big-times",
@@ -2503,7 +3096,10 @@
       "La Puta Eléctrica"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "yatu-unas-asesinas",
@@ -2514,7 +3110,10 @@
       "Yatu"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "yatu-la-luna",
@@ -2525,7 +3124,10 @@
       "Yatu"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "la-leche-carnaval-version-original",
@@ -2536,7 +3138,10 @@
       "La Leche"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "pienso-perdonarte-zapato-3",
@@ -2547,7 +3152,10 @@
       "Pienso Perdonarte"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "caramelos-de-cianuro-rubia-sol-morena-luna",
@@ -2558,7 +3166,10 @@
       "Caramelos de Cianuro"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "fauna-crepuscular-verdad",
@@ -2569,7 +3180,10 @@
       "Fauna Crepuscular"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "solares-tu-silencio",
@@ -2580,7 +3194,10 @@
       "Solares"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "caramelos-de-cianuro-veronica",
@@ -2591,7 +3208,10 @@
       "Caramelos de Cianuro"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "caramelos-de-cianuro-cancion-suave-despecho-2",
@@ -2602,7 +3222,10 @@
       "Caramelos de Cianuro"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "chucknorris-malabares-album-incandescente",
@@ -2613,7 +3236,10 @@
       "Chucknorris"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "sentimiento-muerto-culebron",
@@ -2624,7 +3250,10 @@
       "Sentimiento Muerto"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "zapato-3-azul-azul",
@@ -2635,7 +3264,10 @@
       "Zapato 3"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "geiler-cesar-melendez-daza-solares-hermana-y-como-un-fantasmas-en-vivo",
@@ -2646,7 +3278,10 @@
       "geiler cesar melendez daza"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "solares-cascabel",
@@ -2657,7 +3292,10 @@
       "Solares"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "luz-verde-luz-verde-sin-sombra-no-hay-luz-version-de-sentimiento-muerto",
@@ -2668,7 +3306,10 @@
       "Luz Verde"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "sur-carabela-lejos-de-aqui",
@@ -2679,7 +3320,10 @@
       "Sur Carabela"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "fernando-batoni-zapato3-la-razon-de-estar-aqui-video-oficial-2016",
@@ -2690,7 +3334,10 @@
       "Fernando Batoni"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "gabriel-maldonado-01-separacion-zapato-3-ultima-cruzada",
@@ -2701,7 +3348,10 @@
       "Gabriel Maldonado"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "oswaldo-grillet-tv-cayayo-dermis-tatu-direccion-opuesta-fotografias-de-ivan-gabaldon",
@@ -2712,7 +3362,10 @@
       "Oswaldo Grillet TV"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "dermis-tatu-el-chillido-de-los-taxis",
@@ -2723,7 +3376,10 @@
       "Dermis Tatú"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "sentimiento-muerto-transparente",
@@ -2734,7 +3390,10 @@
       "Sentimiento Muerto"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "un-agradable-calor-sentimiento-muerto",
@@ -2745,7 +3404,10 @@
       "Un Agradable Calor"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "candy66-antisocial-single",
@@ -2756,7 +3418,10 @@
       "Candy66"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "sonica-el-nino",
@@ -2767,7 +3432,10 @@
       "SONICA"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "sonica-porque",
@@ -2778,7 +3446,10 @@
       "SONICA"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "franklin-prieto-candy-66-madre",
@@ -2789,7 +3460,10 @@
       "Franklin Prieto"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "caramelos-de-cianuro-plataforma-de-despegue-electrobotic",
@@ -2800,7 +3474,10 @@
       "Caramelos de Cianuro"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "tjmapex-solares-antonin-artaud",
@@ -2811,7 +3488,10 @@
       "tjmapex"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "sentimiento-muerto-eus-31-nada-sigue-igual",
@@ -2822,7 +3502,10 @@
       "Sentimiento Muerto (EUS 31)"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "caramelos-de-cianuro-las-estrellas",
@@ -2833,7 +3516,10 @@
       "Caramelos de Cianuro"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "daniel-velez-desorden-publico-politicos-paraliticos",
@@ -2844,7 +3530,10 @@
       "daniel velez"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "skapate-desorden-publico",
@@ -2855,7 +3544,10 @@
       "Skápate"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "caramelos-de-cianuro-verano",
@@ -2866,7 +3558,10 @@
       "Caramelos de Cianuro"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "caramelos-de-cianuro-sanitarios",
@@ -2877,7 +3572,10 @@
       "Caramelos de Cianuro"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "caramelos-de-cianuro-tu-eres-de-esas",
@@ -2888,7 +3586,10 @@
       "Caramelos de Cianuro"
     ],
     "year": 2015,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "sentimiento-muerto-miraflores",
@@ -2899,7 +3600,10 @@
       "Sentimiento Muerto"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "sentimiento-muerto-a-la-hora-justa",
@@ -2910,7 +3614,10 @@
       "Sentimiento Muerto"
     ],
     "year": 1995,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "sentimiento-muerto-estirame-el-tiempo-1991",
@@ -2921,7 +3628,10 @@
       "Sentimiento Muerto"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "estudioplay1-sentimiento-muerto-tema-tropiezos",
@@ -2932,7 +3642,10 @@
       "ESTUDIOPLAY1"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "sentimiento-muerto-eva",
@@ -2943,7 +3656,10 @@
       "Sentimiento Muerto"
     ],
     "year": 1991,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "los-pixel-quien-moriria",
@@ -2954,7 +3670,10 @@
       "Los Pixel"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "david-reveron-pixel-imaginate",
@@ -2965,7 +3684,10 @@
       "david reveron"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "rosas-cortan-tu-destino-los-pixel",
@@ -2976,7 +3698,10 @@
       "Rosas cortan tu destino"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "imaginate-los-pixel",
@@ -2987,7 +3712,10 @@
       "Imagínate"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "musica-norton-la-puta-electrica-tren",
@@ -2998,7 +3726,10 @@
       "Musica Norton"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "la-puta-electrica-juan-pope",
@@ -3009,7 +3740,10 @@
       "La Puta Eléctrica"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "la-puta-electrica-suet-en-vivo-en-coro",
@@ -3020,7 +3754,10 @@
       "La Puta Eléctrica"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "musica-norton-la-puta-electrica-el-surf-de-los-mares-de-jupiter",
@@ -3031,7 +3768,10 @@
       "Musica Norton"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "musica-norton-la-puta-electrica-blind",
@@ -3042,7 +3782,10 @@
       "Musica Norton"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "la-puta-electrica-dada-re-master",
@@ -3053,7 +3796,10 @@
       "La Puta Eléctrica"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "musica-norton-la-puta-electrica-mision",
@@ -3064,7 +3810,10 @@
       "Musica Norton"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "musica-norton-la-puta-electrica-cero-cero",
@@ -3075,7 +3824,10 @@
       "Musica Norton"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "musica-norton-la-puta-electrica-maquina-en-vivo-bar-spacio-2003",
@@ -3086,7 +3838,10 @@
       "Musica Norton"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "zapato-3-mariposas-de-plata",
@@ -3097,7 +3852,10 @@
       "Zapato 3"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "gurrufiogurrufio-sentimiento-muerto-me-duele-la-cabeza",
@@ -3108,7 +3866,10 @@
       "gurrufiogurrufio"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "zapato-3-hermana",
@@ -3119,7 +3880,10 @@
       "Zapato 3"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "juan-m-acacio-d-caramelos-de-cianuro-veterana",
@@ -3130,7 +3894,10 @@
       "Juan M Acacio D."
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "kuyatazito-wo-no-noo-papashanty-version-completa",
@@ -3141,7 +3908,10 @@
       "kuyatazito"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "sirkaliru44-caramelos-de-cianuro-la-terraza",
@@ -3152,7 +3922,10 @@
       "sirkaliru44"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "juan-bustamante-tus-manos-son-frias",
@@ -3163,7 +3936,10 @@
       "Juan Bustamante"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "desorden-publico-valle-de-balas",
@@ -3174,7 +3950,10 @@
       "Desorden Público"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "tan-cerca-de-ti-zapato-3",
@@ -3185,7 +3964,10 @@
       "Tan Cerca De Ti"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "caramelos-de-cianuro-baby-cohete",
@@ -3196,7 +3978,10 @@
       "Caramelos de Cianuro"
     ],
     "year": 2006,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "jxk25-combate-desorden-publico",
@@ -3207,7 +3992,10 @@
       "jxk25"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "zapato-3-muriendo-por-ti",
@@ -3218,7 +4006,10 @@
       "Zapato 3"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "morokobuska-danza-de-los-esqueletos-cumbia-desorden-publico",
@@ -3229,7 +4020,10 @@
       "morokobuska"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "caramelos-de-cianuro-adios-amor",
@@ -3240,7 +4034,10 @@
       "Caramelos de Cianuro"
     ],
     "year": 2010,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "king-chango-venezuelan-in-new-york",
@@ -3251,7 +4048,10 @@
       "King Changó"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "caramelos-de-cianuro-veneno-kyle-xy",
@@ -3262,7 +4062,10 @@
       "Caramelos de Cianuro"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "caramelos-de-cianuro-las-notas",
@@ -3273,7 +4076,10 @@
       "Caramelos de Cianuro"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "solracxkun-caramelos-de-cianuro-misteriosa-kopitox",
@@ -3284,7 +4090,10 @@
       "SolracxKun"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "caramelos-de-cianuro-cloroformo",
@@ -3295,7 +4104,10 @@
       "Caramelos de Cianuro"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "caramelos-de-cianuro-perra-infiel",
@@ -3306,7 +4118,10 @@
       "Caramelos de Cianuro"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "caramelos-de-cianuro-la-llama",
@@ -3317,7 +4132,10 @@
       "Caramelos de Cianuro"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "caramelos-de-cianuro-adios-a-las-armas",
@@ -3328,7 +4146,10 @@
       "Caramelos de Cianuro"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "caramelos-de-cianuro-el-instante-paso",
@@ -3339,7 +4160,10 @@
       "Caramelos de Cianuro"
     ],
     "year": 2015,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "caramelos-de-cianuro-euforia",
@@ -3350,7 +4174,10 @@
       "Caramelos de Cianuro"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "channel-dividido-official-lyric-video",
@@ -3361,7 +4188,10 @@
       "Channel"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "sonica-que-bello",
@@ -3372,7 +4202,10 @@
       "SONICA"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "zapato-3-gira-capsula-para-volar-1996",
@@ -3383,7 +4216,10 @@
       "Zapato 3"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "amaranto-nuevo-single-2017-zapato-3",
@@ -3394,7 +4230,10 @@
       "Amaranto (Nuevo Single) 2017"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "zapato-3-unas-asesinas",
@@ -3405,7 +4244,10 @@
       "Zapato 3"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "un-strider-zapato-3-pienso-perdonarte-en-vivo",
@@ -3416,7 +4258,10 @@
       "Un Strider"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "elmisionario-sentimiento-muerto-mi-bemol",
@@ -3427,7 +4272,10 @@
       "elmisionario"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "candy66-no-mas-violencia",
@@ -3438,7 +4286,10 @@
       "Candy66"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "susan-atrapados-en-el-mar-acustico",
@@ -3449,7 +4300,10 @@
       "Susan"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "diego-marquez-amaranto-new-single-zapato3-2017",
@@ -3460,7 +4314,10 @@
       "Diego Marquez"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "in73rzon4-premisa-alienacion-videoclip-oficial-hd",
@@ -3471,7 +4328,10 @@
       "IN73RZON4"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "zapato-3-te-prendo-como-mirra",
@@ -3482,7 +4342,10 @@
       "Zapato 3"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "juan-jose-avellaneda-zapato-3-mariposas-de-plata",
@@ -3493,7 +4356,10 @@
       "Juan Jose Avellaneda"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "jc-zapato-3-pide-mas",
@@ -3504,7 +4370,10 @@
       "JC"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "zapato3-elefantes-marinos",
@@ -3515,7 +4384,10 @@
       "Zapato 3"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "los-pixel-los-pixel-corazon-espichado",
@@ -3526,7 +4398,10 @@
       "Los Pixel"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "the-mad-spoilers-the-mad-spoilers-vulpes-fraga",
@@ -3537,7 +4412,10 @@
       "The Mad Spoilers"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "sonido-directo-tv-dorian-la-tormenta-de-arena-sonido-directo-tv",
@@ -3548,7 +4426,10 @@
       "Sonido Directo.tv"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "dorian-duele-ft-leon-larregui",
@@ -3559,7 +4440,10 @@
       "Dorian"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "dorian-ara-diez-anos-y-un-dia",
@@ -3570,7 +4454,10 @@
       "Dorian"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "jean-de-oliveira-candy66-ceniza-acustico-en-bits-session",
@@ -3581,7 +4468,10 @@
       "Jean De Oliveira"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "jonathan-leal-banda-platonico-tema-fin-eterno",
@@ -3592,7 +4482,10 @@
       "Jonathan Leal"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "richard-coleman-heroes-dvd-actual",
@@ -3603,7 +4496,10 @@
       "Richard Coleman"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "musica-norton-jackturbo-sexy-sue",
@@ -3614,7 +4510,10 @@
       "Musica Norton"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "altaveu-2010-jackturbo",
@@ -3625,7 +4524,10 @@
       "Altaveu 2010"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "equilibrio-net-carretera",
@@ -3636,7 +4538,10 @@
       "Equilibrio .Net"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "yatu-union-y-separacion",
@@ -3647,7 +4552,10 @@
       "Yatu"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "caramelos-de-cianuro-feat-los-enanitos-verdes-el-instante-paso",
@@ -3658,7 +4566,10 @@
       "Caramelos de Cianuro (feat. Los Enanitos Verdes)"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "lcarolina29-zapato-3-unas-asesinas-salt-lake-city-mayo-11asfalto-tour",
@@ -3669,7 +4580,10 @@
       "Lcarolina29"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "zapato-3-buenos-aires-elefantes-marinos",
@@ -3680,7 +4594,10 @@
       "Zapato 3 Buenos Aires"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "octaviosune-octavio-sune-alguna-vez",
@@ -3691,7 +4608,10 @@
       "Octavio Suñé"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "octavio-sune-esto-ya-lo-toque-manana",
@@ -3702,7 +4622,10 @@
       "Octavio Suñé"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "gustavo-cerati-pulsar-en-vivo-en-monterrey",
@@ -3713,7 +4636,10 @@
       "Gustavo Cerati"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "gustavo-cerati-sal-en-vivo-en-monterrey",
@@ -3724,7 +4650,10 @@
       "Gustavo Cerati"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "solares-tirado-en-el-suelo-en-vivo-caracas-2007",
@@ -3735,7 +4664,10 @@
       "Solares"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "zapato-3-el-sol-y-la-luna-santiago-2019",
@@ -3746,7 +4678,10 @@
       "Zapato 3"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "leudobik-tv-zapato-3-separacion-asfalto-tour-2019-barcelona-espana",
@@ -3757,7 +4692,10 @@
       "Leudobik Tv"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "octaviosune-octavio-sune-en-vivo-premios-pepsi-music-2015-dia-2",
@@ -3768,7 +4706,10 @@
       "Octavio Suñé"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "octavio-sune-girasol-el-teatro-bar",
@@ -3779,7 +4720,10 @@
       "Octavio Suñé"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "leudobik-tv-zapato-3-muriendo-por-ti-asfalto-tour-2019",
@@ -3790,7 +4734,10 @@
       "Leudobik Tv"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "leudobik-tv-zapato-3-amor-de-hierro-asfalto-tour-2019-barcelona-espana",
@@ -3801,7 +4748,10 @@
       "Leudobik Tv"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "sentimiento-muerto-un-agradable-calor-rm",
@@ -3812,7 +4762,10 @@
       "Sentimiento Muerto"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "dermis-tatu-error-por-cometer",
@@ -3823,7 +4776,10 @@
       "Dermis Tatú"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "sentimiento-muerto-un-agradable-calor-1988",
@@ -3834,7 +4790,10 @@
       "Sentimiento Muerto"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "candy66-vivimos-por-vivir-en-vivo-live-rock-crepuscular-hd-720p",
@@ -3845,7 +4804,10 @@
       "Candy66 Vivimos por Vivir en vivo (live)"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "candy66-somos-otros-entrevista-en-vivo-live-rock-crepuscular-hd-720p",
@@ -3856,7 +4818,10 @@
       "Candy66 Somos Otros + Entrevista en vivo (live)"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "los-pixel-sin-miedo",
@@ -3867,7 +4832,10 @@
       "Los Pixel"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "mana-huele-a-tristeza-mi-casa-tu-casa",
@@ -3878,7 +4846,10 @@
       "Maná"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "siddhartha-camuflaje",
@@ -3889,7 +4860,10 @@
       "Siddhartha"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "siddhartha-me-hace-falta-cap-2-cap-2",
@@ -3900,7 +4874,10 @@
       "Siddhartha"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "la-leche-muy-drunk-tu-punk",
@@ -3911,7 +4888,10 @@
       "La Leche"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "dermis-tatu-artificial",
@@ -3922,7 +4902,10 @@
       "Dermis Tatú"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "musica-norton-la-puta-electrica-suet-programa-especial-televen-el-sonido-de-la-tormenta",
@@ -3933,7 +4916,10 @@
       "Musica Norton"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "reckless-necronomisurf",
@@ -3944,7 +4930,10 @@
       "RECKLESS"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "vh-music-xperience-ep-3-setting-guitarras-y-voces-victor-hugo-mendoza-latinwmg",
@@ -3955,7 +4944,10 @@
       "VH Music Xperience"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "caramelos-de-cianuro-booty-call",
@@ -3966,7 +4958,10 @@
       "Caramelos de Cianuro"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "paulina-rubio-ni-una-sola-palabra-totalmente-en-vivo-con-jay-leno-hq",
@@ -3977,7 +4972,10 @@
       "Paulina Rubio"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "los-pixel-los-pixel-ahora-lo-sabes-todo-showcase-bod-2018",
@@ -3988,7 +4986,10 @@
       "Los Pixel"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   },
   {
     "id": "gran-radio-riviera-victoria-live-improsession",
@@ -3999,6 +5000,9 @@
       "Gran Radio Riviera"
     ],
     "year": 0,
-    "startSeconds": 30
+    "startSeconds": 30,
+    "playlists": [
+      "rock-venezolano"
+    ]
   }
 ]

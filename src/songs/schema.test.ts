@@ -83,4 +83,16 @@ describe('parseSongs', () => {
   test('rejects an empty genre list rather than storing "we looked and found none" twice', () => {
     expect(() => parseSongs([{ ...enriched, genres: [] }])).toThrow(/genres/i)
   })
+
+  test('keeps the playlists a song came from, in the order it was given them', () => {
+    const shared = { ...valid, playlists: ['billboard-2026', 'exitos-de-hoy'] }
+    expect(parseSongs([shared])).toEqual([shared])
+  })
+
+  test('a song from no playlist says so by absence, never by an empty list', () => {
+    expect(parseSongs([valid])[0].playlists).toBeUndefined()
+    expect(() => parseSongs([{ ...valid, playlists: [] }])).toThrow(/playlists/i)
+    expect(() => parseSongs([{ ...valid, playlists: ['billboard-2026', ''] }])).toThrow(/playlists/i)
+    expect(() => parseSongs([{ ...valid, playlists: 'billboard-2026' }])).toThrow(/playlists/i)
+  })
 })

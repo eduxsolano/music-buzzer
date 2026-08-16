@@ -12,6 +12,7 @@
     "test:watch": "vitest",
     "check-songs": "tsx --env-file-if-exists=.env.local scripts/check-songs.ts",
     "import-playlist": "tsx --env-file-if-exists=.env.local scripts/import-playlist.ts",
+    "recover-playlists": "tsx --env-file-if-exists=.env.local scripts/recover-playlists.ts",
     "reaudit-years": "tsx --env-file-if-exists=.env.local scripts/reaudit-years.ts",
     "enrich-songs": "tsx scripts/enrich-songs.ts"
   },

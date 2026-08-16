@@ -1,8 +1,16 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { DEFAULT_ROUNDS, HISTORY_LIMIT } from '@/game/config'
+import { DEFAULT_ROUNDS, HISTORY_LIMIT, MIN_DECK_OPTION_SONGS } from '@/game/config'
 import { buildDeck, recordRoundIfDecided } from '@/game/deck'
+import {
+  deckLabel,
+  filterSongs,
+  isOfferableSelection,
+  offerableDeckAxes,
+  type DeckSelection,
+} from '@/game/deckFilters'
+import { playlistNames } from '@/songs/playlists'
 import { currentSong, initialState } from '@/game/reducer'
 import { toPublicState, withCountdown } from '@/game/publicState'
 import { createRoomCode } from '@/game/random'
@@ -26,6 +34,9 @@ const CHANNEL_ERROR_MESSAGE = 'No hay conexión con Supabase. Revisa las variabl
 /** How long the room stays green or red before the game moves on. */
 const JUDGEMENT_FLASH_MS = 900
 
+/** Resolved once: the registry is a module constant, not something that varies. */
+const PLAYLIST_NAMES = playlistNames()
+
 export function useHostGame(songs: Song[]) {
   const [room, setRoom] = useState<string | null>(null)
   // The pairing secret for the host's own phone. Minted on the television and
@@ -48,8 +59,27 @@ export function useHostGame(songs: Song[]) {
   // of any one game, it survives a brand-new room code, and it must never
   // reach toPublicState or the control channel, unlike everything in `state`.
   const [history, setHistory] = useState<string[]>([])
+  // What the host picked on their phone before the game started; null is the
+  // whole deck. Kept raw here and validated into `deckSelection` below, so a
+  // choice restored from a save — or one made against an older song list —
+  // can never survive as a deck that no longer exists.
+  const [chosenDeck, setChosenDeck] = useState<DeckSelection | null>(null)
   const audioRef = useRef<AudioPlayer | null>(null)
   const channelRef = useRef<Channel | null>(null)
+
+  // Which themed decks this song list can actually fill a game from. Constant
+  // for a given `songs`, and deliberately computed from the same pure function
+  // the tests exercise: as the deck's years and artists get curated, more
+  // options appear here with no change to this file.
+  const deckAxes = useMemo(
+    () => offerableDeckAxes(songs, MIN_DECK_OPTION_SONGS, PLAYLIST_NAMES),
+    [songs],
+  )
+  const deckSelection = useMemo(
+    () => (isOfferableSelection(deckAxes, chosenDeck) ? chosenDeck : null),
+    [deckAxes, chosenDeck],
+  )
+  const deckSongs = useMemo(() => filterSongs(songs, deckSelection), [songs, deckSelection])
 
   // Restore after a reload, or mint a fresh room. localStorage and
   // Math.random are only meaningful client-side, so this has to run in an
@@ -64,6 +94,9 @@ export function useHostGame(songs: Song[]) {
       // A save written before pairing existed has no token; mint one rather
       // than leaving the host with no way to reach their own phone.
       setControlToken(saved.controlToken ?? createControlToken())
+      // Restored so a reload mid-game keeps naming the deck the room is
+      // playing, and a reload in the lobby keeps the host's choice.
+      setChosenDeck(saved.deckSelection)
     } else {
       setRoom(createRoomCode(Math.random))
       setControlToken(createControlToken())
@@ -80,11 +113,19 @@ export function useHostGame(songs: Song[]) {
   // `history` above) sort to the back, so a second game the same evening
   // deals fresh songs first and only reaches into recent memory once those
   // run out.
+  //
+  // `deckSongs` — not `songs` — is what is shuffled: the host's deck choice
+  // narrows the pool the game is dealt from. The room's memory is NOT narrowed
+  // with it (it is the browser's memory of the evening, not of one deck), so a
+  // filtered pool can find more of itself already remembered. `buildDeck`
+  // handles that on its own: it always returns every id it was given, fresh
+  // ones first, so even the narrowest offerable deck — exactly one game's
+  // worth — still deals a full game. See `src/game/deck.test.ts`.
   useEffect(() => {
     if (!room || state.phase.kind !== 'lobby' || pendingDeck) return
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setPendingDeck(buildDeck(songs.map((s) => s.id), history, Math.random))
-  }, [room, state.phase.kind, songs, pendingDeck, history])
+    setPendingDeck(buildDeck(deckSongs.map((s) => s.id), history, Math.random))
+  }, [room, state.phase.kind, deckSongs, pendingDeck, history])
 
   // Every event goes through `step`, which is `reduce` plus the one thing the
   // reducer must not know about: whether the last judgement can still be taken
@@ -153,7 +194,7 @@ export function useHostGame(songs: Song[]) {
   const forceNextPublishRef = useRef(false)
   useEffect(() => {
     if (!room) return
-    saveGame(window.localStorage, { room, controlToken, state })
+    saveGame(window.localStorage, { room, controlToken, state, deckSelection })
 
     // Effects run in declaration order, and the channel-creation effect below
     // is declared after this one. On the very first render where `room`
@@ -174,7 +215,12 @@ export function useHostGame(songs: Song[]) {
     lastPublishedRef.current = serialized
     forceNextPublishRef.current = false
     void channel.publish({ type: 'STATE', state: withCountdown(publicState, state.phase) })
-  }, [room, controlToken, state])
+    // `deckSelection` is in the dependency list only so `saveGame` above keeps
+    // up with it. It cannot weaken the throttle: `toPublicState` has no room
+    // for it — nor may it ever gain one, see the anti-cheat note on
+    // `ControlDeck` — so a deck change leaves the serialized projection
+    // byte-identical and the equality check above still swallows the publish.
+  }, [room, controlToken, state, deckSelection])
 
   // Grows the room's memory the moment a round is genuinely decided, so a
   // reload mid-game does not lose credit for songs already heard. The actual
@@ -339,6 +385,28 @@ export function useHostGame(songs: Song[]) {
     setPendingDeck(null)
   }, [dispatch])
 
+  // The host's deck choice, arriving from their phone.
+  //
+  // Two guards, both of which have to be here rather than on the panel. Only
+  // the lobby may change it: mid-game the deck has already been dealt and
+  // swapping the pool underneath it would leave the preloaded song and the
+  // played song from different decks. And only an option the television
+  // itself offers is honoured — a panel on an older build could name one that
+  // no longer holds a full game, and a message does not get to shorten a game.
+  //
+  // `pendingDeck` is cleared so the shuffle effect above reshuffles from the
+  // new pool; without that it would find the previous deck already sitting
+  // there and keep it, exactly as `newSession` has to.
+  const selectDeck = useCallback(
+    (selection: DeckSelection | null) => {
+      if (state.phase.kind !== 'lobby') return
+      if (!isOfferableSelection(deckAxes, selection)) return
+      setChosenDeck(selection)
+      setPendingDeck(null)
+    },
+    [state.phase.kind, deckAxes],
+  )
+
   const startGameWithSound = useCallback(() => {
     // The one guaranteed user gesture on this page. Web Audio refuses to make
     // a sound before one, so the context is created here rather than on load.
@@ -350,9 +418,21 @@ export function useHostGame(songs: Song[]) {
   // projection, and like it, holding nothing that changes on a tick — so the
   // equality throttle inside `useControlChannel` sends one message per real
   // change, not twenty a second.
+  const chosenDeckLabel = useMemo(() => deckLabel(deckSelection, PLAYLIST_NAMES), [deckSelection])
+  const controlDeck = useMemo(
+    () => ({
+      axes: deckAxes,
+      selection: deckSelection,
+      label: chosenDeckLabel,
+      size: deckSongs.length,
+      total: songs.length,
+    }),
+    [deckAxes, deckSelection, chosenDeckLabel, deckSongs, songs],
+  )
+
   const controlState = useMemo(
-    () => (room ? toControlState(state, song, room, canUndo) : null),
-    [room, state, song, canUndo],
+    () => (room ? toControlState(state, song, room, canUndo, controlDeck) : null),
+    [room, state, song, canUndo, controlDeck],
   )
 
   const onControlAction = useCallback(
@@ -370,13 +450,16 @@ export function useHostGame(songs: Song[]) {
         case 'NEW_SESSION':
           newSession()
           return
+        case 'SELECT_DECK':
+          selectDeck(action.selection)
+          return
         case 'LAUNCH_TIER':
         case 'SKIP_SONG':
         case 'NEXT_ROUND':
           dispatch({ type: action.type })
       }
     },
-    [judge, undo, newSession, dispatch],
+    [judge, undo, newSession, selectDeck, dispatch],
   )
 
   const { paired } = useControlChannel(controlToken, controlState, onControlAction)
@@ -391,6 +474,10 @@ export function useHostGame(songs: Song[]) {
     channelError,
     judgement,
     canUndo,
+    // What the television tells the room it is playing. Null for the whole
+    // deck: there is nothing to announce about "all of it", and a chip that
+    // is always there stops being read.
+    deckLabel: deckSelection ? chosenDeckLabel : null,
     dispatch,
     judge,
     undo,

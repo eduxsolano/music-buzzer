@@ -22,6 +22,7 @@ const base: ControlState = {
   winnerName: null,
   canUndo: false,
   players: [],
+  deck: { axes: [], selection: null, label: 'Todo el mazo', size: 328, total: 328 },
 }
 
 describe('controlMood', () => {

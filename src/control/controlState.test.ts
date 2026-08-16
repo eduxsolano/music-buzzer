@@ -1,8 +1,26 @@
 import { describe, expect, test } from 'vitest'
 import { initialState, reduce } from '@/game/reducer'
 import { toPublicState } from '@/game/publicState'
-import { toControlState } from '@/control/controlState'
+import { toControlState, type ControlDeck } from '@/control/controlState'
+import { WHOLE_DECK_LABEL } from '@/game/deckFilters'
 import type { GameEvent, GameState, Song } from '@/game/types'
+
+/** The default the host never had to choose: the whole deck, nothing filtered. */
+const deck: ControlDeck = {
+  axes: [
+    {
+      id: 'playlist',
+      label: 'Listas',
+      options: [
+        { axis: 'playlist', value: 'rock-venezolano', label: 'Rock venezolano', count: 156 },
+      ],
+    },
+  ],
+  selection: null,
+  label: WHOLE_DECK_LABEL,
+  size: 328,
+  total: 328,
+}
 
 const song: Song = {
   id: 's1',
@@ -29,14 +47,14 @@ function play(events: GameEvent[]): GameState {
 
 describe('what the host phone is told', () => {
   test('the answer, which is the whole reason the panel exists', () => {
-    const control = toControlState(play(start), song, 'KZTR', false)
+    const control = toControlState(play(start), song, 'KZTR', false, deck)
     expect(control.song).toEqual({ title: 'Smells Like Teen Spirit', artist: 'Nirvana', year: 1991 })
     expect(control.room).toBe('KZTR')
   })
 
   test('who is being judged and what their answer is worth', () => {
     const state = play([...start, { type: 'LAUNCH_TIER' }, { type: 'BUZZ', playerId: 'p2' }])
-    const control = toControlState(state, song, 'KZTR', false)
+    const control = toControlState(state, song, 'KZTR', false, deck)
 
     expect(control.buzzedName).toBe('Beto')
     expect(control.buzzedPoints).toBe(5)
@@ -51,7 +69,7 @@ describe('what the host phone is told', () => {
       { type: 'BUZZ', playerId: 'p1' },
       { type: 'JUDGE', correct: false },
     ])
-    const control = toControlState(state, song, 'KZTR', true)
+    const control = toControlState(state, song, 'KZTR', true, deck)
 
     expect(control.phase).toBe('waiting')
     expect(control.launchTier).toBe(1)
@@ -67,7 +85,7 @@ describe('what the host phone is told', () => {
       { type: 'BUZZ', playerId: 'p1' },
       { type: 'JUDGE', correct: false },
     ])
-    const control = toControlState(state, song, 'KZTR', true)
+    const control = toControlState(state, song, 'KZTR', true, deck)
 
     expect(control.players).toEqual([
       { id: 'p1', name: 'Ana', score: -1, out: true },
@@ -82,22 +100,22 @@ describe('what the host phone is told', () => {
       { type: 'BUZZ', playerId: 'p2' },
       { type: 'JUDGE', correct: true },
     ])
-    const control = toControlState(state, song, 'KZTR', true)
+    const control = toControlState(state, song, 'KZTR', true, deck)
 
     expect(control.outcome).toBe('correct')
     expect(control.winnerName).toBe('Beto')
   })
 
   test('no song dealt means no card', () => {
-    expect(toControlState(initialState(), null, 'KZTR', false).song).toBeNull()
+    expect(toControlState(initialState(), null, 'KZTR', false, deck).song).toBeNull()
   })
 
   test('nothing in it changes on a tick, so the private channel stays quiet too', () => {
     const running = play([...start, { type: 'LAUNCH_TIER' }])
     const later = reduce(reduce(running, { type: 'TICK', deltaMs: 50 }), { type: 'TICK', deltaMs: 50 })
 
-    expect(toControlState(later, song, 'KZTR', false)).toEqual(
-      toControlState(running, song, 'KZTR', false),
+    expect(toControlState(later, song, 'KZTR', false, deck)).toEqual(
+      toControlState(running, song, 'KZTR', false, deck),
     )
   })
 })
@@ -137,7 +155,35 @@ describe('the anti-cheat boundary', () => {
 
   test('the host phone is told exactly what the players are not', () => {
     const state = play([...start, { type: 'LAUNCH_TIER' }])
-    expect(JSON.stringify(toControlState(state, song, 'KZTR', false))).toContain(song.title)
+    expect(JSON.stringify(toControlState(state, song, 'KZTR', false, deck))).toContain(song.title)
+  })
+
+  /**
+   * A chosen deck is a hint, and a big one: "todo esto es de los 2020"
+   * narrows twenty guesses at once, and "Caramelos de Cianuro" narrows them
+   * to nothing. It is deliberately a fact of the ROOM — the television names
+   * it, the host announces it — and never a fact on the wire the players'
+   * browsers can read. The room hearing it is a choice; a phone learning it
+   * from a message is a leak, and the two are not the same thing.
+   */
+  test('the deck the host chose never reaches the players', () => {
+    const filtered = {
+      ...deck,
+      selection: { axis: 'decade' as const, value: '2020' },
+      label: 'Años 2020',
+      size: 105,
+    }
+    const state = play([...start, { type: 'LAUNCH_TIER' }])
+
+    const published = JSON.stringify(toPublicState(state))
+    expect(published).not.toContain('2020')
+    expect(published).not.toContain('Años')
+    expect(published).not.toContain('decade')
+    expect(published).not.toContain('deck')
+    expect(published).not.toContain('rock-venezolano')
+
+    // And the host's own phone is told all of it, on the private channel.
+    expect(JSON.stringify(toControlState(state, song, 'KZTR', false, filtered))).toContain('Años 2020')
   })
 
   test('not even the host phone carries the sleeve — it belongs to the television alone', () => {
@@ -145,7 +191,7 @@ describe('the anti-cheat boundary', () => {
     // one: the cover exists to be seen from the sofa, the panel is held at
     // arm's length, and the private channel stays as small as it started.
     const state = play([...start, { type: 'LAUNCH_TIER' }])
-    const control = JSON.stringify(toControlState(state, song, 'KZTR', false))
+    const control = JSON.stringify(toControlState(state, song, 'KZTR', false, deck))
     expect(control).not.toContain('covers')
     expect(control).not.toContain(song.releaseGroupId as string)
   })

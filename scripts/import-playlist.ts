@@ -31,49 +31,22 @@ import { readFileSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 import { parseSongs } from '../src/songs/schema'
 import { playlistIdFromInput, slugify, splitArtistAndTitle } from '../src/songs/import'
+import {
+  playlistKeyFor,
+  playlistKeyFromTitle,
+  playlistNames,
+  withPlaylistKey,
+} from '../src/songs/playlists'
 import { artistNames } from '../src/songs/musicbrainz'
 import { parseVerifiedYears, verifiedYearsById } from '../src/songs/verified-years'
 import { lookupYear, sleep, MUSICBRAINZ_DELAY_MS } from './musicbrainz-client'
+import { fetchPlaylistItems, fetchPlaylistTitle, videoIdsOf, type PlaylistItem } from './youtube-playlist'
 import type { Song } from '../src/game/types'
-
-const PAGE_SIZE = 50
 
 /** Past most intros for popular music; imperfect, but far better than 0 (dead air). */
 const DEFAULT_START_SECONDS = 30
 
-interface PlaylistItem {
-  snippet?: {
-    title?: string
-    videoOwnerChannelTitle?: string
-    resourceId?: { videoId?: string }
-  }
-}
-
-async function fetchPlaylistItems(playlistId: string, apiKey: string): Promise<PlaylistItem[]> {
-  const items: PlaylistItem[] = []
-  let pageToken: string | undefined
-
-  do {
-    const url = new URL('https://www.googleapis.com/youtube/v3/playlistItems')
-    url.searchParams.set('part', 'snippet')
-    url.searchParams.set('playlistId', playlistId)
-    url.searchParams.set('maxResults', String(PAGE_SIZE))
-    url.searchParams.set('key', apiKey)
-    if (pageToken) url.searchParams.set('pageToken', pageToken)
-
-    const response = await fetch(url)
-    if (!response.ok) {
-      throw new Error(`YouTube API ${response.status}: ${await response.text()}`)
-    }
-    const body = (await response.json()) as { items?: PlaylistItem[]; nextPageToken?: string }
-    items.push(...(body.items ?? []))
-    pageToken = body.nextPageToken
-  } while (pageToken)
-
-  return items
-}
-
-function toSong(item: PlaylistItem, takenIds: Set<string>): Song | null {
+function toSong(item: PlaylistItem, takenIds: Set<string>, playlistKey: string): Song | null {
   const videoId = item.snippet?.resourceId?.videoId
   const rawTitle = item.snippet?.title ?? ''
   if (!videoId) return null
@@ -95,7 +68,16 @@ function toSong(item: PlaylistItem, takenIds: Set<string>): Song | null {
   // One entry, the whole credit: a YouTube-derived string split on punctuation
   // would invent artists that do not exist ("Earth, Wind & Fire"). Only a
   // MusicBrainz match may fill a real list — see scripts/enrich-songs.ts.
-  return { id, videoId, title, artist, artists: [artist], year: 0, startSeconds: DEFAULT_START_SECONDS }
+  return {
+    id,
+    videoId,
+    title,
+    artist,
+    artists: [artist],
+    year: 0,
+    startSeconds: DEFAULT_START_SECONDS,
+    playlists: [playlistKey],
+  }
 }
 
 async function main(): Promise<void> {
@@ -116,11 +98,25 @@ async function main(): Promise<void> {
   const verifiedFile = path.join(process.cwd(), 'src/songs/verified-years.json')
   const verifiedById = verifiedYearsById(parseVerifiedYears(JSON.parse(readFileSync(verifiedFile, 'utf8'))))
 
+  // Which playlist a song came from is the one axis of the deck that does not
+  // depend on MusicBrainz having heard of it, so it is recorded here rather
+  // than recovered later — see src/songs/playlists.ts. A playlist nobody has
+  // named yet still gets a key, slugified from its own YouTube title, so no
+  // import can ever add to the set of songs of unknown origin.
+  const registeredKey = playlistKeyFor(playlistId)
+  const playlistKey = registeredKey ?? playlistKeyFromTitle(await fetchPlaylistTitle(playlistId, apiKey), playlistId)
+  if (!registeredKey) {
+    console.warn(
+      `aviso: esta playlist no está en src/songs/playlists.ts. Se guarda como "${playlistKey}"; ` +
+        'añádela ahí con un nombre corto para que el selector de mazo lo muestre bien.',
+    )
+  }
+
   const items = await fetchPlaylistItems(playlistId, apiKey)
   const added: Song[] = []
   for (const item of items) {
     if (knownVideoIds.has(item.snippet?.resourceId?.videoId ?? '')) continue
-    const song = toSong(item, takenIds)
+    const song = toSong(item, takenIds, playlistKey)
     if (!song) continue
     added.push(song)
     // A video repeated later in the same playlist must not be added twice.
@@ -130,6 +126,23 @@ async function main(): Promise<void> {
   console.log(`${items.length} elementos en la playlist, ${added.length} canciones nuevas.`)
 
   const merged = [...existing, ...added]
+
+  // Songs already in the deck that this playlist also holds. The two chart
+  // playlists share 35 songs, so an origin is a set and not a single value:
+  // whichever list was imported first must not be the only one that can find
+  // them. This also repairs an origin lost or never recorded, which is what
+  // makes rerunning the importer — rather than a one-off script — the way the
+  // deck's origins stay true.
+  const inThisPlaylist = videoIdsOf(items)
+  let alsoStamped = 0
+  for (const song of merged) {
+    if (!inThisPlaylist.has(song.videoId)) continue
+    const keys = withPlaylistKey(song.playlists, playlistKey)
+    if (keys.length !== (song.playlists?.length ?? 0)) alsoStamped += 1
+    song.playlists = keys
+  }
+  const shownName = playlistNames()[playlistKey] ?? playlistKey
+  console.log(`${alsoStamped} canciones ya en el mazo se marcaron también como "${shownName}".`)
 
   // A song on the verified-years list is read-only for this script: its
   // year is a human's hand-verified fact, never a matcher guess, so it is
@@ -194,8 +207,12 @@ async function main(): Promise<void> {
     await sleep(MUSICBRAINZ_DELAY_MS)
   }
 
-  parseSongs(merged) // fail loudly rather than write a broken file
-  writeFileSync(file, `${JSON.stringify(merged, null, 2)}\n`)
+  // Reparsed rather than written straight back: parseSongs rebuilds every
+  // entry in the schema's field order, so a `playlists` assigned onto an
+  // existing object lands where the schema says it belongs instead of after
+  // whatever field happened to be last. It also fails loudly rather than
+  // writing a broken file.
+  writeFileSync(file, `${JSON.stringify(parseSongs(merged), null, 2)}\n`)
 
   console.log(`\n${merged.length} canciones en total.`)
   console.log(

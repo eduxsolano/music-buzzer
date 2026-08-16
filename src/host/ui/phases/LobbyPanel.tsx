@@ -9,7 +9,14 @@ import { playersConnectedLabel } from '@/host/ui/stagePresentation'
 
 /** Before the music: the room code and the QR are the only two things to do. */
 export function LobbyPanel({ view }: { view: HostView }) {
-  const { room, state, audioReady, startGame, origin, pairingOpen } = view
+  const { room, state, audioReady, startGame, origin, pairingOpen, deckLabel } = view
+
+  // The header chip carries the deck all game; here it is said in words too,
+  // because the lobby is the one moment the room is looking at the television
+  // with nothing else happening on it, and "vamos a jugar el mazo de rock
+  // venezolano" is worth landing before the first song.
+  const players = playersConnectedLabel(state.players.length)
+  const note = deckLabel ? `${players} · Mazo: ${deckLabel}` : players
 
   return (
     <StagePanel
@@ -42,7 +49,7 @@ export function LobbyPanel({ view }: { view: HostView }) {
           </div>
         </div>
       }
-      note={playersConnectedLabel(state.players.length)}
+      note={note}
       actions={
         <button
           onClick={startGame}

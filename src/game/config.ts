@@ -23,6 +23,17 @@ export const WRONG_ANSWER_PENALTY = 1
 export const DEFAULT_ROUNDS = 20
 
 /**
+ * How many songs a themed deck must hold before the host is offered it.
+ *
+ * A full game, exactly — an option that cannot deal 20 songs is not a deck,
+ * it is a shortened game nobody asked for. Tied to `DEFAULT_ROUNDS` rather
+ * than written as 20 so the relationship (a deck is worth offering when it
+ * can fill a game) survives a change to the game's length. See
+ * `offerableDeckAxes` in `src/game/deckFilters.ts` for the rule itself.
+ */
+export const MIN_DECK_OPTION_SONGS = DEFAULT_ROUNDS
+
+/**
  * How many recently-played songs the host remembers when shuffling the next
  * game, so the second game of an evening does not replay the first.
  *

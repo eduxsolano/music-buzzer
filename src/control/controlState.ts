@@ -1,4 +1,5 @@
 import { pointsForTier } from '@/game/tiers'
+import type { DeckAxis, DeckSelection } from '@/game/deckFilters'
 import type { GameState, Phase, PlayerId, RevealOutcome, Song } from '@/game/types'
 
 /**
@@ -30,6 +31,34 @@ export interface ControlSong {
   year: number
 }
 
+/**
+ * The deck the room is about to play, and everything the host needs to change
+ * it.
+ *
+ * It lives on the private channel and nowhere else. A chosen deck is a real
+ * hint about what is playing — "todo esto es de los 2020" narrows twenty
+ * guesses at once — so the players' phones are never told, exactly as they are
+ * never told the song. See `toPublicState`, which has no room for this and
+ * must not gain one.
+ *
+ * `axes` is constant for a given song list, which is what lets it ride along
+ * in every message for free: the host only publishes when the projection
+ * actually changes, and a field that never changes can never be the reason it
+ * does.
+ */
+export interface ControlDeck {
+  /** The axes and options this deck can fill a whole game from. Possibly empty. */
+  axes: DeckAxis[]
+  /** What the host picked. Null is the whole deck — the default, always available. */
+  selection: DeckSelection | null
+  /** Resolved name of that choice, so the panel never has to look one up. */
+  label: string
+  /** How many songs the choice holds. */
+  size: number
+  /** How many songs the whole deck holds, so "Todo el mazo" can say so too. */
+  total: number
+}
+
 export interface ControlState {
   /** So the panel can offer the join link without it being in its own URL. */
   room: string
@@ -51,6 +80,8 @@ export interface ControlState {
   /** True while the last judgement can still be taken back. */
   canUndo: boolean
   players: ControlPlayer[]
+  /** Which deck is about to be played, and what else could be. */
+  deck: ControlDeck
 }
 
 function nameOf(state: GameState, playerId: PlayerId | null): string | null {
@@ -70,6 +101,7 @@ export function toControlState(
   song: Song | null,
   room: string,
   canUndo: boolean,
+  deck: ControlDeck,
 ): ControlState {
   const phase = state.phase
   return {
@@ -94,6 +126,7 @@ export function toControlState(
     outcome: phase.kind === 'revealed' ? phase.outcome : null,
     winnerName: phase.kind === 'revealed' ? nameOf(state, phase.winnerId) : null,
     canUndo,
+    deck,
     players: state.players.map((player) => ({
       id: player.id,
       name: player.name,

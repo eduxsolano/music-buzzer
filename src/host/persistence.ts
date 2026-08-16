@@ -1,4 +1,5 @@
 import type { Tier } from '@/game/tiers'
+import type { DeckAxisId, DeckSelection } from '@/game/deckFilters'
 import type { GameState, Phase, Player, RevealOutcome, Stakes } from '@/game/types'
 import { isControlToken } from '@/host/pairing'
 
@@ -13,6 +14,15 @@ export interface SavedGame {
    */
   controlToken: string | null
   state: GameState
+  /**
+   * The deck the host chose before starting, or null for the whole deck.
+   * Persisted so a reload does not leave the television unable to name what
+   * the room is playing, and so a reload in the lobby does not silently undo
+   * the host's choice. Only the choice is stored, never the songs it resolves
+   * to: the deck actually in play already lives in `state.deck`, and storing
+   * both would be two records of the same fact free to disagree.
+   */
+  deckSelection: DeckSelection | null
 }
 
 /**
@@ -100,6 +110,17 @@ function parsePhase(raw: unknown): Phase | null {
   }
 }
 
+const DECK_AXES = new Set<DeckAxisId>(['playlist', 'decade', 'genre', 'artist'])
+
+/** Anything unreadable means "the whole deck", which is the safe answer and the default. */
+function parseDeckSelection(raw: unknown): DeckSelection | null {
+  const selection = asRecord(raw)
+  if (!selection) return null
+  if (typeof selection.axis !== 'string' || !DECK_AXES.has(selection.axis as DeckAxisId)) return null
+  if (!nonEmptyString(selection.value)) return null
+  return { axis: selection.axis as DeckAxisId, value: selection.value }
+}
+
 function parsePlayer(raw: unknown): Player | null {
   const player = asRecord(raw)
   if (!player) return null
@@ -165,7 +186,12 @@ export function loadGame(storage: Storage): SavedGame | null {
     // costs nobody their game, and no version bump is needed to discard a save
     // that is otherwise perfectly readable.
     const controlToken = isControlToken(parsed.controlToken) ? parsed.controlToken : null
-    return { room: parsed.room, controlToken, state }
+    // Additive in exactly the same way, and for the same reason no version
+    // bump is needed: a save without it is a game played on the whole deck.
+    // Whether the stored choice is still one the deck can fill is not decided
+    // here — that is `isOfferableSelection`'s job in `useHostGame`, against a
+    // song list this module knows nothing about.
+    return { room: parsed.room, controlToken, state, deckSelection: parseDeckSelection(parsed.deckSelection) }
   } catch {
     return null
   }

@@ -1,4 +1,5 @@
-import type { ControlPlayer, ControlSong, ControlState } from '@/control/controlState'
+import type { ControlDeck, ControlPlayer, ControlSong, ControlState } from '@/control/controlState'
+import type { DeckAxis, DeckAxisId, DeckOption, DeckSelection } from '@/game/deckFilters'
 
 /**
  * The two directions of the private channel.
@@ -17,6 +18,15 @@ export type ControlCommand =
   | { type: 'SKIP_SONG' }
   | { type: 'NEXT_ROUND' }
   | { type: 'UNDO' }
+  /**
+   * Picks which songs the next game is dealt from. `null` is the whole deck.
+   *
+   * The television checks the selection against its own offer before honouring
+   * it (see `isOfferableSelection`): a panel on an older build could name an
+   * option that no longer holds a full game, and a deck too small to play is
+   * not something a message gets to impose.
+   */
+  | { type: 'SELECT_DECK'; selection: DeckSelection | null }
   /**
    * Abandons the game in progress and starts a fresh one in the same room.
    * The panel only ever sends this after its own confirmation step — see
@@ -82,6 +92,70 @@ function isTierOrNull(value: unknown): value is 1 | 2 | 3 | null {
   return value === null || value === 1 || value === 2 || value === 3
 }
 
+const DECK_AXES = new Set<DeckAxisId>(['playlist', 'decade', 'genre', 'artist'])
+
+function isDeckAxisId(value: unknown): value is DeckAxisId {
+  return typeof value === 'string' && DECK_AXES.has(value as DeckAxisId)
+}
+
+/**
+ * `null` is a valid selection — the whole deck — so "absent" and "invalid"
+ * cannot both be reported as null. `'invalid'` is the third answer, exactly as
+ * `parseSong` above does it.
+ */
+function parseDeckSelection(raw: unknown): DeckSelection | null | 'invalid' {
+  if (raw === null) return null
+  const selection = asRecord(raw)
+  if (!selection) return 'invalid'
+  if (!isDeckAxisId(selection.axis) || !nonEmptyString(selection.value)) return 'invalid'
+  return { axis: selection.axis, value: selection.value }
+}
+
+function parseDeckOption(raw: unknown, axis: DeckAxisId): DeckOption | null {
+  const option = asRecord(raw)
+  if (!option) return null
+  // An option claiming to belong to another axis than the one holding it is a
+  // broken payload, not a quirk: the panel sends back `{axis, value}` straight
+  // from here, and a mismatched pair would ask for a deck nobody offered.
+  if (option.axis !== axis || !nonEmptyString(option.value)) return null
+  if (typeof option.label !== 'string' || !isFiniteNumber(option.count)) return null
+  return { axis, value: option.value, label: option.label, count: option.count }
+}
+
+function parseDeckAxis(raw: unknown): DeckAxis | null {
+  const axis = asRecord(raw)
+  if (!axis) return null
+  if (!isDeckAxisId(axis.id) || typeof axis.label !== 'string') return null
+  if (!Array.isArray(axis.options) || axis.options.length === 0) return null
+
+  const options: DeckOption[] = []
+  for (const rawOption of axis.options) {
+    const option = parseDeckOption(rawOption, axis.id)
+    if (!option) return null
+    options.push(option)
+  }
+  return { id: axis.id, label: axis.label, options }
+}
+
+function parseDeck(raw: unknown): ControlDeck | null {
+  const deck = asRecord(raw)
+  if (!deck) return null
+  if (typeof deck.label !== 'string') return null
+  if (!isFiniteNumber(deck.size) || !isFiniteNumber(deck.total)) return null
+
+  const selection = parseDeckSelection(deck.selection)
+  if (selection === 'invalid') return null
+
+  if (!Array.isArray(deck.axes)) return null
+  const axes: DeckAxis[] = []
+  for (const rawAxis of deck.axes) {
+    const axis = parseDeckAxis(rawAxis)
+    if (!axis) return null
+    axes.push(axis)
+  }
+  return { axes, selection, label: deck.label, size: deck.size, total: deck.total }
+}
+
 /** Validates the whole shape, so the panel can render it without defending itself. */
 export function parseControlMessage(raw: unknown): ControlMessage | null {
   const message = asRecord(raw)
@@ -103,6 +177,10 @@ export function parseControlMessage(raw: unknown): ControlMessage | null {
     return null
   }
   if (typeof state.canUndo !== 'boolean') return null
+
+  const deck = parseDeck(state.deck)
+  if (!deck) return null
+
   if (!Array.isArray(state.players)) return null
 
   const players: ControlPlayer[] = []
@@ -129,6 +207,7 @@ export function parseControlMessage(raw: unknown): ControlMessage | null {
       winnerName: state.winnerName,
       canUndo: state.canUndo,
       players,
+      deck,
     },
   }
 }
@@ -156,6 +235,14 @@ export function parseControlCommand(raw: unknown): ControlCommand | null {
       return { type: 'NEXT_ROUND' }
     case 'UNDO':
       return { type: 'UNDO' }
+    case 'SELECT_DECK': {
+      // `null` and "the field never arrived" are different things, and only
+      // the first means "the whole deck": a payload that lost its `selection`
+      // must be dropped, not read as a silent reset to the full deck.
+      if (!('selection' in message)) return null
+      const selection = parseDeckSelection(message.selection)
+      return selection === 'invalid' ? null : { type: 'SELECT_DECK', selection }
+    }
     case 'NEW_SESSION':
       return { type: 'NEW_SESSION' }
     default:

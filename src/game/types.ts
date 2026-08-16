@@ -40,6 +40,16 @@ export interface Song {
   /** MusicBrainz's most-voted genres, absent when it has none. Most-voted first. */
   genres?: string[]
   /**
+   * Keys of the imported YouTube playlists this song came from — see
+   * `src/songs/playlists.ts`. A list, not a single value, because the two
+   * chart playlists genuinely share 35 songs and a song in both belongs to
+   * both: filtering by either must find it. Absent, never empty, for the
+   * handful of songs that predate the imports and came from no playlist at
+   * all; those are honestly of unknown origin rather than assigned to a
+   * bucket, so they only ever play as part of the whole deck.
+   */
+  playlists?: string[]
+  /**
    * Path to the cover downloaded into `public/covers`, absent when there is
    * none. The television shows it at reveal time; it never crosses into the
    * public channel or a player page, because a sleeve names a song instantly.

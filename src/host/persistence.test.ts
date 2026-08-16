@@ -42,15 +42,15 @@ describe('host persistence', () => {
     state = reduce(state, { type: 'BUZZ', playerId: 'p1' })
     state = reduce(state, { type: 'JUDGE', correct: true })
 
-    saveGame(storage, { room: 'KZTR', controlToken: null, state })
+    saveGame(storage, { room: 'KZTR', controlToken: null, state, deckSelection: null })
 
-    expect(loadGame(storage)).toEqual({ room: 'KZTR', controlToken: null, state })
+    expect(loadGame(storage)).toEqual({ room: 'KZTR', controlToken: null, state, deckSelection: null })
   })
 
   test('a reload keeps the host paired to their own phone', () => {
     const storage = new MemoryStorage()
     const controlToken = createControlToken()
-    saveGame(storage, { room: 'KZTR', controlToken, state: initialState() })
+    saveGame(storage, { room: 'KZTR', controlToken, state: initialState(), deckSelection: null })
 
     expect(loadGame(storage)?.controlToken).toBe(controlToken)
   })
@@ -65,6 +65,37 @@ describe('host persistence', () => {
     const loaded = loadGame(storage)
     expect(loaded?.state).toEqual(initialState())
     expect(loaded?.controlToken).toBeNull()
+    // Same additive story as the token: a save written before the deck
+    // selector existed is a game played on the whole deck, not a broken save.
+    expect(loaded?.deckSelection).toBeNull()
+  })
+
+  test('a reload keeps the deck the host chose, so the television can still name it', () => {
+    const storage = new MemoryStorage()
+    const deckSelection = { axis: 'playlist' as const, value: 'rock-venezolano' }
+    saveGame(storage, { room: 'KZTR', controlToken: null, state: initialState(), deckSelection })
+
+    expect(loadGame(storage)?.deckSelection).toEqual(deckSelection)
+  })
+
+  test('a deck choice that is not a shape this build understands loads as the whole deck', () => {
+    // Never a crash and never a guess: the whole deck is the default and the
+    // only safe answer. Whether a well-shaped choice still HOLDS a full game
+    // is a different question, answered against the song list in useHostGame.
+    for (const deckSelection of [
+      { axis: 'mood', value: 'triste' },
+      { axis: 'playlist' },
+      { axis: 'playlist', value: '' },
+      'rock-venezolano',
+      [],
+    ]) {
+      const storage = new MemoryStorage()
+      storage.setItem(
+        'hitster:host',
+        JSON.stringify({ version: SAVE_VERSION, room: 'KZTR', state: initialState(), deckSelection }),
+      )
+      expect(loadGame(storage)?.deckSelection).toBeNull()
+    }
   })
 
   test('refuses a pairing token that is not one this build could have minted', () => {
@@ -94,7 +125,7 @@ describe('host persistence', () => {
 
   test('clearing wipes the saved game, so a new party starts fresh', () => {
     const storage = new MemoryStorage()
-    saveGame(storage, { room: 'KZTR', controlToken: null, state: initialState() })
+    saveGame(storage, { room: 'KZTR', controlToken: null, state: initialState(), deckSelection: null })
     clearGame(storage)
     expect(loadGame(storage)).toBeNull()
   })
@@ -103,7 +134,7 @@ describe('host persistence', () => {
     const storage = new MemoryStorage()
     storage.setItem(
       'hitster:host',
-      JSON.stringify({ room: 'KZTR', state: initialState() }),
+      JSON.stringify({ room: 'KZTR', state: initialState(), deckSelection: null }),
     )
     expect(loadGame(storage)).toBeNull()
   })
@@ -112,7 +143,7 @@ describe('host persistence', () => {
     const storage = new MemoryStorage()
     storage.setItem(
       'hitster:host',
-      JSON.stringify({ version: 999, room: 'KZTR', state: initialState() }),
+      JSON.stringify({ version: 999, room: 'KZTR', state: initialState(), deckSelection: null }),
     )
     expect(loadGame(storage)).toBeNull()
   })
@@ -169,7 +200,7 @@ describe('song history', () => {
 
   test('is separate from the game save: clearing the game keeps the history', () => {
     const storage = new MemoryStorage()
-    saveGame(storage, { room: 'KZTR', controlToken: null, state: initialState() })
+    saveGame(storage, { room: 'KZTR', controlToken: null, state: initialState(), deckSelection: null })
     saveHistory(storage, ['s1', 's2'])
 
     clearGame(storage)
@@ -180,7 +211,7 @@ describe('song history', () => {
 
   test('clearing the history keeps the game save', () => {
     const storage = new MemoryStorage()
-    saveGame(storage, { room: 'KZTR', controlToken: null, state: initialState() })
+    saveGame(storage, { room: 'KZTR', controlToken: null, state: initialState(), deckSelection: null })
     saveHistory(storage, ['s1', 's2'])
 
     clearHistory(storage)

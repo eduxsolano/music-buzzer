@@ -1,8 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import type { ControlState } from '@/control/controlState'
+import type { ControlDeck, ControlState } from '@/control/controlState'
 import type { ControlAction } from '@/control/controlMessages'
+import { WHOLE_DECK_LABEL, type DeckSelection } from '@/game/deckFilters'
 import {
   controlLaunchLabel,
   controlMood,
@@ -47,10 +48,17 @@ export function ControlPanel({
   // local UI state derived from a prop, not a subscription to anything
   // external, so there is nothing here for an effect to synchronize with.
   const [confirmingReset, setConfirmingReset] = useState(false)
+  // The deck picker takes over the body the same way, for the same reason:
+  // the lobby's only other control is "Empezar partida", and a list of decks
+  // floating over it is a list of decks one stray tap away from starting a
+  // game on the wrong one. Closed on every phase change, which is also how it
+  // gets out of the way the instant the game starts.
+  const [choosingDeck, setChoosingDeck] = useState(false)
   const [phaseSeen, setPhaseSeen] = useState(state.phase)
   if (state.phase !== phaseSeen) {
     setPhaseSeen(state.phase)
     setConfirmingReset(false)
+    setChoosingDeck(false)
   }
 
   return (
@@ -103,8 +111,24 @@ export function ControlPanel({
           onCancel={() => setConfirmingReset(false)}
           onConfirm={() => send({ type: 'NEW_SESSION' })}
         />
+      ) : choosingDeck ? (
+        <DeckPicker
+          deck={state.deck}
+          onPick={(selection) => {
+            send({ type: 'SELECT_DECK', selection })
+            setChoosingDeck(false)
+          }}
+          onClose={() => setChoosingDeck(false)}
+        />
       ) : (
-        <ControlBody state={state} send={send} origin={origin} launch={launch} stakes={stakes} />
+        <ControlBody
+          state={state}
+          send={send}
+          origin={origin}
+          launch={launch}
+          stakes={stakes}
+          onChooseDeck={() => setChoosingDeck(true)}
+        />
       )}
     </main>
   )
@@ -161,6 +185,126 @@ function ResetConfirm({
   )
 }
 
+function songsLabel(count: number): string {
+  return count === 1 ? '1 canción' : `${count} canciones`
+}
+
+/**
+ * Which songs the next game is dealt from.
+ *
+ * This is the host's decision and it lives on the host's phone — the
+ * television is what the room looks at, and the room does not choose. It is
+ * only reachable from the lobby, because a deck is dealt at Start and
+ * changing the pool underneath a game in progress would mean nothing good.
+ *
+ * The list is not written here and cannot be: the television sends the axes
+ * and options it can actually fill a full game from, and this screen renders
+ * exactly those. An axis with no qualifying option never arrives, so it never
+ * appears — which is the whole reason this is one selector and not three, two
+ * of which would today offer a single choice each. As the deck's years and
+ * artists get curated, more rows show up here on their own.
+ */
+function DeckPicker({
+  deck,
+  onPick,
+  onClose,
+}: {
+  deck: ControlDeck
+  onPick: (selection: DeckSelection | null) => void
+  onClose: () => void
+}) {
+  const chosen = deck.selection
+
+  return (
+    <section className="flex min-h-0 flex-1 flex-col gap-4">
+      <header className="flex items-baseline justify-between gap-3">
+        <p className="kicker">Elegir mazo</p>
+        <button onClick={onClose} className="btn btn-ghost shrink-0 px-4 py-2 text-xs">
+          Cerrar
+        </button>
+      </header>
+
+      {/* Scrolls on its own rather than growing the page: the phone's own
+          footer controls stay where the thumb left them. */}
+      <div className="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto">
+        <DeckGroup label="Siempre">
+          {/* `total`, never `size`: `size` is what the CURRENT choice holds,
+              and printing it beside "Todo el mazo" while a filter is on would
+              be a plain lie about the deck the host is being offered. */}
+          <DeckRow
+            label={WHOLE_DECK_LABEL}
+            count={deck.total}
+            chosen={!chosen}
+            onPick={() => onPick(null)}
+          />
+        </DeckGroup>
+
+        {deck.axes.map((axis) => (
+          <DeckGroup key={axis.id} label={axis.label}>
+            {axis.options.map((option) => (
+              <DeckRow
+                key={`${option.axis}:${option.value}`}
+                label={option.label}
+                count={option.count}
+                chosen={chosen?.axis === option.axis && chosen.value === option.value}
+                onPick={() => onPick({ axis: option.axis, value: option.value })}
+              />
+            ))}
+          </DeckGroup>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+function DeckGroup({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div className="flex flex-col gap-2">
+      <p className="text-xs" style={{ color: 'var(--text-low)', letterSpacing: '0.28em', textTransform: 'uppercase' }}>
+        {label}
+      </p>
+      {children}
+    </div>
+  )
+}
+
+/**
+ * One deck. The count is beside the name on purpose: "20 canciones" is the
+ * difference between a themed deck and a themed deck that is the whole game,
+ * and the host is the only person who gets to know it before choosing.
+ */
+function DeckRow({
+  label,
+  count,
+  chosen,
+  onPick,
+}: {
+  label: string
+  count: number
+  chosen: boolean
+  onPick: () => void
+}) {
+  return (
+    <button
+      onClick={onPick}
+      aria-pressed={chosen}
+      className="btn btn-ghost w-full px-5 py-4 text-sm"
+      // `space-between` inline rather than as a utility class: `.btn` centres
+      // its content and wins the cascade, and a name and its count pushed to
+      // opposite ends is what makes a column of these scannable.
+      style={{
+        justifyContent: 'space-between',
+        ...(chosen ? { borderColor: 'var(--stage-accent)', color: 'var(--text-hi)' } : {}),
+      }}
+    >
+      <span className="truncate text-left normal-case tracking-normal">{label}</span>
+      <span className="shrink-0 tabular-nums normal-case tracking-normal" style={{ color: 'var(--text-low)' }}>
+        {songsLabel(count)}
+      </span>
+    </button>
+  )
+}
+
 /**
  * Everything the panel shows outside the confirmation, unchanged from before
  * this control existed. Split out only so `confirmingReset` can swap the
@@ -174,12 +318,14 @@ function ControlBody({
   origin,
   launch,
   stakes,
+  onChooseDeck,
 }: {
   state: ControlState
   send: (action: ControlAction) => void
   origin: string
   launch: string | null
   stakes: string | null
+  onChooseDeck: () => void
 }) {
   return (
     <>
@@ -234,6 +380,16 @@ function ControlBody({
         {state.phase === 'revealed' ? (
           <button onClick={() => send({ type: 'NEXT_ROUND' })} className="btn btn-primary py-6 text-lg">
             Siguiente canción
+          </button>
+        ) : null}
+
+        {/* Only in the lobby, and only when there is more than one deck to
+            choose from: the rule that decides that lives on the television
+            (see `offerableDeckAxes`), and an empty offer means this button
+            would open a screen with a single, already-chosen row on it. */}
+        {state.phase === 'lobby' && state.deck.axes.length > 0 ? (
+          <button onClick={onChooseDeck} className="btn btn-ghost w-full py-4 text-sm">
+            Mazo · {state.deck.label}
           </button>
         ) : null}
 

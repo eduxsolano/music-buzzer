@@ -28,6 +28,11 @@ export interface HostGameApi {
   /** The green or red beat the room is being shown, if any. */
   judgement: Judgement | null
   canUndo: boolean
+  /**
+   * The name of the themed deck in play, or null when it is the whole deck.
+   * The room is told what it is playing; it is never told what is playing.
+   */
+  deckLabel: string | null
   dispatch: (event: GameEvent) => void
   judge: (correct: boolean) => void
   undo: () => void
@@ -57,6 +62,7 @@ export function HostStage({ game }: { game: HostGameApi }) {
     channelError,
     judgement,
     canUndo,
+    deckLabel,
     dispatch,
     judge,
     undo,
@@ -98,6 +104,7 @@ export function HostStage({ game }: { game: HostGameApi }) {
     audioReady,
     scoreboard,
     canUndo,
+    deckLabel,
     pairingOpen,
     dispatch,
     startGame,
@@ -118,9 +125,22 @@ export function HostStage({ game }: { game: HostGameApi }) {
         <TierMeter tier={tierClock.tier} elapsedMs={tierClock.elapsedMs} />
 
         <header className="flex items-center justify-between gap-4 p-[clamp(1rem,1.6vw,2rem)]">
-          <span className="chip">
-            Sala <strong style={{ letterSpacing: '0.18em', color: 'var(--text-hi)' }}>{room}</strong>
-          </span>
+          <div className="flex items-center gap-3">
+            <span className="chip">
+              Sala <strong style={{ letterSpacing: '0.18em', color: 'var(--text-hi)' }}>{room}</strong>
+            </span>
+            {/* What the room is playing, never what is playing. Only present
+                when the host narrowed the deck — a chip that is always there
+                stops being read, and "all of it" is not news. It is also the
+                only place this fact appears outside the host's own phone: it
+                is deliberately absent from the public projection, because a
+                themed deck narrows twenty guesses at once. */}
+            {deckLabel ? (
+              <span className="chip">
+                Mazo <strong style={{ color: 'var(--text-hi)' }}>{deckLabel}</strong>
+              </span>
+            ) : null}
+          </div>
           <div className="flex items-center gap-3">
             {channelError ? (
               <span className="chip" style={{ borderColor: 'var(--red)', color: 'var(--red)' }}>
