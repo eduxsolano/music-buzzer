@@ -2814,17 +2814,6 @@
     "startSeconds": 30
   },
   {
-    "id": "zapato-3-entrada-de-bala-unas-asesinas-pantaletas-negras",
-    "videoId": "0LraeAhbIcA",
-    "title": "Entrada de bala/Uñas asesinas/Pantaletas Negras",
-    "artist": "Zapato 3",
-    "artists": [
-      "Zapato 3"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
     "id": "sentimiento-muerto-eus-31-nada-sigue-igual",
     "videoId": "CmSsB-Sg4EI",
     "title": "Nada Sigue Igual",
@@ -3386,61 +3375,6 @@
     "startSeconds": 30
   },
   {
-    "id": "un-strider-zapato-3-gira-separacion-pto-ordaz-1993",
-    "videoId": "p8xmiKNrgKM",
-    "title": "Zapato 3 Gira Separacion Pto Ordaz 1993",
-    "artist": "Un Strider",
-    "artists": [
-      "Un Strider"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
-    "id": "various-artists-miercoles-insolitos-1998-full-album",
-    "videoId": "qGmp5LVapoI",
-    "title": "Miércoles Insólitos (1998)",
-    "artist": "Various Artists",
-    "artists": [
-      "Various Artists"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
-    "id": "pablo-dagnino-eus31-el-ultimo-sentimiento-electrico-2004-full-album",
-    "videoId": "WUmBW6qZcd0",
-    "title": "EÚS31: El Último Sentimiento Eléctrico (2004)",
-    "artist": "Pablo Dagnino",
-    "artists": [
-      "Pablo Dagnino"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
-    "id": "gatoslashccs-zapato-3-gira-amor-furia-y-languidez",
-    "videoId": "RA0pVzi-yJs",
-    "title": "Zapato 3 Gira Amor furia y languidez",
-    "artist": "gatoslashccs",
-    "artists": [
-      "gatoslashccs"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
-    "id": "gatoslashccs-zapato-3-gira-amor-furia-y-languidez-segunda-parte",
-    "videoId": "DC7gNk5Y5T8",
-    "title": "Zapato 3 Gira Amor furia y languidez Segunda Parte",
-    "artist": "gatoslashccs",
-    "artists": [
-      "gatoslashccs"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
     "id": "zapato-3-gira-capsula-para-volar-1996",
     "videoId": "eHqrW0NxBOU",
     "title": "Gira Capsula para volar 1996",
@@ -3463,122 +3397,12 @@
     "startSeconds": 30
   },
   {
-    "id": "krishnan-das-sentimiento-muerto-en-vivo-mata-de-coco",
-    "videoId": "xSQcq-ZZDxg",
-    "title": "Sentimiento Muerto en vivo Mata de Coco",
-    "artist": "Krishnan Das",
-    "artists": [
-      "Krishnan Das"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
-    "id": "dermis-tatu-iv-festival-nuevas-bandas-1994-full-album",
-    "videoId": "NG16eDpo5Uo",
-    "title": "IV Festival Nuevas Bandas (1994)",
-    "artist": "Dermis Tatú",
-    "artists": [
-      "Dermis Tatú"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
-    "id": "sentimiento-muerto-ii-festival-nuevas-bandas-1992-full-album",
-    "videoId": "dUhu4tmRQoI",
-    "title": "II Festival Nuevas Bandas (1992)",
-    "artist": "Sentimiento Muerto",
-    "artists": [
-      "Sentimiento Muerto"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
-    "id": "various-artists-tributo-lo-fi-a-sentimiento-muerto-2002-full-album",
-    "videoId": "UaMVMhOyH40",
-    "title": "Tributo Lo-Fi A Sentimiento Muerto (2002)",
-    "artist": "Various Artists",
-    "artists": [
-      "Various Artists"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
-    "id": "krishnan-das-sentimiento-muerto-en-vivo-caracas",
-    "videoId": "wZvzaCnYP1w",
-    "title": "Sentimiento Muerto en vivo Caracas",
-    "artist": "Krishnan Das",
-    "artists": [
-      "Krishnan Das"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
-    "id": "elektra-transformer-ep-2004-full-album",
-    "videoId": "6Of_zn6pbL8",
-    "title": "Transformer [EP] (2004)",
-    "artist": "Elektra",
-    "artists": [
-      "Elektra"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
-    "id": "dioslepague-venus-mixes-2001-full-album",
-    "videoId": "mhviPP1JoP4",
-    "title": "Venus Mixes (2001)",
-    "artist": "Dioslepague",
-    "artists": [
-      "Dioslepague"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
-    "id": "submarino-demos-2000-full-album",
-    "videoId": "lYXEpBaPiTo",
-    "title": "Demos (2000)",
-    "artist": "Submarino",
-    "artists": [
-      "Submarino"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
-    "id": "submarino-submarino-2001-full-album",
-    "videoId": "6h4a0zRDE3o",
-    "title": "Submarino (2001)",
-    "artist": "Submarino",
-    "artists": [
-      "Submarino"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
     "id": "zapato-3-unas-asesinas",
     "videoId": "Rmj-gHuxjS0",
     "title": "Uñas Asesinas",
     "artist": "Zapato 3",
     "artists": [
       "Zapato 3"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
-    "id": "los-cafres-25-anos-dvd-full-2012",
-    "videoId": "-gR-ZzzBhJs",
-    "title": "25 años",
-    "artist": "Los Cafres",
-    "artists": [
-      "Los Cafres"
     ],
     "year": 0,
     "startSeconds": 30
@@ -3601,17 +3425,6 @@
     "artist": "elmisionario",
     "artists": [
       "elmisionario"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
-    "id": "augusto-asidu-festival-rock-a-parque-2009-bogota-colombia-candy-66-venezuela",
-    "videoId": "sLxfyp5dD0I",
-    "title": "Festival rock a parque 2009 Bogota Colombia candy 66 venezuela",
-    "artist": "augusto@asidu",
-    "artists": [
-      "augusto@asidu"
     ],
     "year": 0,
     "startSeconds": 30
@@ -3661,56 +3474,12 @@
     "startSeconds": 30
   },
   {
-    "id": "la-hermandad-jai-1999-full-album",
-    "videoId": "Y2ZRCKt1as8",
-    "title": "Jai (1999)",
-    "artist": "La Hermandad",
-    "artists": [
-      "La Hermandad"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
     "id": "zapato-3-te-prendo-como-mirra",
     "videoId": "uhVjixEZLgw",
     "title": "Te Prendo Como Mirra",
     "artist": "Zapato 3",
     "artists": [
       "Zapato 3"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
-    "id": "malditos-hippies-amigos-invisibles-ver-2",
-    "videoId": "BjzbQpvcRYA",
-    "title": "amigos invisibles ver 2",
-    "artist": "Malditos Hippies",
-    "artists": [
-      "Malditos Hippies"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
-    "id": "roken-cerati-etcheto-leandro-festival-mutek-completo-inedito-2016",
-    "videoId": "ZWIXmPwnns0",
-    "title": "Festival Mutek (Completo Inédito 2016)",
-    "artist": "ROKEN (Cerati Etcheto Leandro)",
-    "artists": [
-      "ROKEN (Cerati Etcheto Leandro)"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
-    "id": "soda-stereo-en-vivo-en-la-av-9-de-julio-14-de-diciembre-de-1991",
-    "videoId": "zosXS8F2Je4",
-    "title": "En vivo en la Av. 9 de Julio (14 de Diciembre de 1991)",
-    "artist": "Soda Stereo",
-    "artists": [
-      "Soda Stereo"
     ],
     "year": 0,
     "startSeconds": 30
@@ -3826,17 +3595,6 @@
     "startSeconds": 30
   },
   {
-    "id": "guillermo-cristian-ariel-justiniano-mega-rock-nacional-el-mejor-del-mundo-djsuper",
-    "videoId": "npJQovPLYXI",
-    "title": "MEGA ROCK NACIONAL EL MEJOR DEL MUNDO DJSUPER",
-    "artist": "Guillermo Cristian Ariel justiniano",
-    "artists": [
-      "Guillermo Cristian Ariel justiniano"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
     "id": "richard-coleman-heroes-dvd-actual",
     "videoId": "KlCv4LtvrIA",
     "title": "Héroes (DVD Actual)",
@@ -3870,17 +3628,6 @@
     "startSeconds": 30
   },
   {
-    "id": "dorian-contempopranea-2018",
-    "videoId": "Af8TCxn5pYk",
-    "title": "Contempopranea 2018",
-    "artist": "Dorian",
-    "artists": [
-      "Dorian"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
     "id": "equilibrio-net-carretera",
     "videoId": "J_Re3cH-BI0",
     "title": "Carretera",
@@ -3903,56 +3650,12 @@
     "startSeconds": 30
   },
   {
-    "id": "luis-chataing-entrevista-al-grupo-zapato-3",
-    "videoId": "ZPtNBH_nzfA",
-    "title": "Entrevista al grupo Zapato 3",
-    "artist": "Luis Chataing",
-    "artists": [
-      "Luis Chataing"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
-    "id": "el-george-harris-el-show-de-gh-11-de-oct-2018-parte-7-ft-karina-pedro-castillo",
-    "videoId": "Fbx-4FtG-lk",
-    "title": "El Show de GH 11 de Oct 2018 Parte 7 Ft Karina & Pedro Castillo",
-    "artist": "El George Harris",
-    "artists": [
-      "El George Harris"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
-    "id": "sentimiento-muerto-en-mata-de-coco-en-vivo",
-    "videoId": "kfr7su7rx5U",
-    "title": "En Mata de Coco (En Vivo)",
-    "artist": "Sentimiento Muerto",
-    "artists": [
-      "Sentimiento Muerto"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
     "id": "caramelos-de-cianuro-feat-los-enanitos-verdes-el-instante-paso",
     "videoId": "zudvLMZk9w8",
     "title": "El Instante Pasó",
     "artist": "Caramelos de Cianuro (feat. Los Enanitos Verdes)",
     "artists": [
       "Caramelos de Cianuro (feat. Los Enanitos Verdes)"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
-    "id": "various-artists-encuentro-en-el-ruedo-1989-full-album",
-    "videoId": "Kujn4yGpVRA",
-    "title": "Encuentro En El Ruedo (1989)",
-    "artist": "Various Artists",
-    "artists": [
-      "Various Artists"
     ],
     "year": 0,
     "startSeconds": 30
@@ -4046,78 +3749,12 @@
     "startSeconds": 30
   },
   {
-    "id": "albertonegron-asv-yatu-2-7",
-    "videoId": "8qMQLum40T4",
-    "title": "ASV Yatu 2/7",
-    "artist": "albertonegron",
-    "artists": [
-      "albertonegron"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
     "id": "leudobik-tv-zapato-3-separacion-asfalto-tour-2019-barcelona-espana",
     "videoId": "krxuek7y--U",
     "title": "Zapato 3 Separación, Asfalto Tour 2019 Barcelona España.",
     "artist": "Leudobik Tv",
     "artists": [
       "Leudobik Tv"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
-    "id": "leudobik-tv-zapato-3-te-prendo-como-mirra-si-no-estas-conmigo-intro-vuelo-sobre-ti",
-    "videoId": "IMj8I2iKYy0",
-    "title": "Zapato 3.. Te prendo como mirra, Si no estás conmigo, intro Vuelo sobre ti.",
-    "artist": "Leudobik Tv",
-    "artists": [
-      "Leudobik Tv"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
-    "id": "octaviosune-octavio-sune-en-vivo-en-trasnocho-parte-1",
-    "videoId": "hJFhMAF0ApI",
-    "title": "Octavio Suñé en vivo en Trasnocho Parte 1",
-    "artist": "Octavio Suñé",
-    "artists": [
-      "Octavio Suñé"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
-    "id": "octaviosune-octavio-sune-en-vivo-en-trasnocho-parte-2",
-    "videoId": "pgBG2YcXE58",
-    "title": "Octavio Suñé en vivo en Trasnocho Parte 2",
-    "artist": "Octavio Suñé",
-    "artists": [
-      "Octavio Suñé"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
-    "id": "kurrent-music-latam-kurrent-live-sessions-octavio-sune",
-    "videoId": "zcm2Y3e0gwI",
-    "title": "Kurrent Live Sessions... Octavio Suñé",
-    "artist": "KURRENT MUSIC LATAM",
-    "artists": [
-      "KURRENT MUSIC LATAM"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
-    "id": "octaviosune-la-nave-en-vivo-01-10-1995-abriendo-el-show-de-soda-stereo",
-    "videoId": "t7w0YwZBRvs",
-    "title": "La Nave en vivo 01-10-1995 abriendo el show de Soda Stereo",
-    "artist": "Octavio Suñé",
-    "artists": [
-      "Octavio Suñé"
     ],
     "year": 0,
     "startSeconds": 30
@@ -4162,50 +3799,6 @@
     "artist": "Leudobik Tv",
     "artists": [
       "Leudobik Tv"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
-    "id": "rubisel-lopez-alfaro-soda-estereo-unplugged",
-    "videoId": "odZKbfRUiyc",
-    "title": "Soda estéreo unplugged",
-    "artist": "Rubisel Lopez Alfaro",
-    "artists": [
-      "Rubisel Lopez Alfaro"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
-    "id": "gustavo-cerati-pinamar-2001-recital-completo",
-    "videoId": "I1-UqJdVeD0",
-    "title": "Pinamar 2001 (Recital Completo).",
-    "artist": "Gustavo Cerati",
-    "artists": [
-      "Gustavo Cerati"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
-    "id": "gustavo-cerati-estadio-victor-jara-chile-11-05-2003-gira-siempre-es-hoy",
-    "videoId": "9rz4R3wzgEs",
-    "title": "Estadio Víctor Jara, Chile [11/05/2003] | Gira Siempre es Hoy",
-    "artist": "Gustavo Cerati",
-    "artists": [
-      "Gustavo Cerati"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
-    "id": "adrian-s-gustavo-cerati-club-ciudad-de-bs-as-20-12-09-fuerza-natural",
-    "videoId": "ZynFWkNfH5Y",
-    "title": "Gustavo Cerati @ Club Ciudad de Bs. As. (20-12-09) (Fuerza Natural)",
-    "artist": "Adrián S",
-    "artists": [
-      "Adrián S"
     ],
     "year": 0,
     "startSeconds": 30
@@ -4310,17 +3903,6 @@
     "startSeconds": 30
   },
   {
-    "id": "caramelos-de-cianuro-anfiteatro-sambil-en-vivo-caracas-2013",
-    "videoId": "cWaGnCNT3Ks",
-    "title": "Anfiteatro Sambil (En Vivo / Caracas / 2013)",
-    "artist": "Caramelos de Cianuro",
-    "artists": [
-      "Caramelos de Cianuro"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
     "id": "la-leche-muy-drunk-tu-punk",
     "videoId": "Qq4xH7gaFTI",
     "title": "Muy Drunk Tu Punk",
@@ -4343,39 +3925,6 @@
     "startSeconds": 30
   },
   {
-    "id": "provea-ong-musica-x-medicinas-en-solidaridad-con-los-jubilados-y-pensionados-venezolanos",
-    "videoId": "6_vVpb02r7U",
-    "title": "Música x Medicinas en solidaridad con los jubilados y pensionados venezolanos",
-    "artist": "PROVEA ONG",
-    "artists": [
-      "PROVEA ONG"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
-    "id": "un-strider-la-leche-grabaciones-en-vivo-2000",
-    "videoId": "a7Y0qOLy0zk",
-    "title": "La Leche Grabaciones En Vivo 2000",
-    "artist": "Un Strider",
-    "artists": [
-      "Un Strider"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
-    "id": "various-artists-festival-nuevas-bandas-20-anos-en-vivo-2010-full-album",
-    "videoId": "PqJdaDy57n0",
-    "title": "Festival Nuevas Bandas 20 Años En Vivo (2010)",
-    "artist": "Various Artists",
-    "artists": [
-      "Various Artists"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
     "id": "musica-norton-la-puta-electrica-suet-programa-especial-televen-el-sonido-de-la-tormenta",
     "videoId": "1xO0bRe5DZ4",
     "title": "La Puta Eléctrica : Suet Programa especial Televen (El Sonido de la Tormenta)",
@@ -4393,17 +3942,6 @@
     "artist": "RECKLESS",
     "artists": [
       "RECKLESS"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
-    "id": "pedro-flores-grupo-tempano-grandes-exitos-mix",
-    "videoId": "haAa6AmC8XE",
-    "title": "GRUPO TEMPANO GRANDES EXITOS MIX",
-    "artist": "pedro flores",
-    "artists": [
-      "pedro flores"
     ],
     "year": 0,
     "startSeconds": 30
@@ -4453,78 +3991,12 @@
     "startSeconds": 30
   },
   {
-    "id": "top-bachata-sodastereo-grandes-exitos-enganchados-sodastereo-sus-mejores-exitos-2020",
-    "videoId": "OvKGqmY1ZNQ",
-    "title": "SodaStereo Grandes Exitos Enganchados | SodaStereo Sus Mejores Éxitos 2020",
-    "artist": "Top Bachata",
-    "artists": [
-      "Top Bachata"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
-    "id": "los-mesoneros-live-desde-pangea",
-    "videoId": "aUv23P4Ul6E",
-    "title": "Live Desde Pangea",
-    "artist": "Los Mesoneros",
-    "artists": [
-      "Los Mesoneros"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
     "id": "gran-radio-riviera-victoria-live-improsession",
     "videoId": "Qxfj8BMWfc0",
     "title": "Victoria / Live @ iMPROSESSiON",
     "artist": "Gran Radio Riviera",
     "artists": [
       "Gran Radio Riviera"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
-    "id": "los-javelin-surfabilly-roll-disco",
-    "videoId": "ZlccbRnlfcs",
-    "title": "Surfabilly & Roll (Disco)",
-    "artist": "Los Javelin",
-    "artists": [
-      "Los Javelin"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
-    "id": "mix-rock-en-espanol-lo-mejor-de-caramelos-de-cianuro-2021-rock-venezuela",
-    "videoId": "UfzXnjmzq5c",
-    "title": "LO MEJOR DE CARAMELOS DE CIANURO 2021 - ROCK VENEZUELA",
-    "artist": "MIX ROCK EN ESPAÑOL",
-    "artists": [
-      "MIX ROCK EN ESPAÑOL"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
-    "id": "diego-marquez-zapato-3-pacifica-trance-nuance-1970-2022",
-    "videoId": "4X2Y96LZG7c",
-    "title": "Zapato 3 - Pacifica - Trance Nuance (1970 - 2022)",
-    "artist": "Diego Marquez",
-    "artists": [
-      "Diego Marquez"
-    ],
-    "year": 0,
-    "startSeconds": 30
-  },
-  {
-    "id": "clases-guitarra-online-aprende-a-tocar-blues-en-guitarra-desde-cero-curso-completo-paso-a-paso",
-    "videoId": "qRTNp4InSPc",
-    "title": "Aprende a Tocar BLUES en Guitarra desde CERO | Curso Completo Paso a Paso",
-    "artist": "Clases Guitarra Online",
-    "artists": [
-      "Clases Guitarra Online"
     ],
     "year": 0,
     "startSeconds": 30
