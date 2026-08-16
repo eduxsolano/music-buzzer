@@ -11,18 +11,31 @@ import { launchLabel, revealHeadline, type Mood } from '@/host/ui/stagePresentat
  */
 
 /**
- * The panel's colour, from the phase alone.
+ * The panel's colour, from the phase and (for `waiting`) the stakes.
  *
  * A hand-held screen in a dark room reads colour before it reads words, so a
  * host glancing down knows whether they owe the room a judgement before they
  * have focused on anything.
+ *
+ * `waiting` alone is not enough to pick a colour: the round's opening wait,
+ * before the host has launched tier 1 even once, is a `waiting` phase where
+ * nothing is at stake, and colouring it the same tense `hold` as a real
+ * between-tier pause would tell the host something false. `pointsAtStake` is
+ * exactly what already distinguishes the two — see `ControlState` — so this
+ * takes it as a parameter rather than re-deriving the distinction from the
+ * phase kind alone, which is the mistake that let the panel and the
+ * television disagree in the first place.
  */
-export function controlMood(phase: ControlState['phase'], outcome: ControlState['outcome']): Mood {
+export function controlMood(
+  phase: ControlState['phase'],
+  outcome: ControlState['outcome'],
+  pointsAtStake: ControlState['pointsAtStake'],
+): Mood {
   switch (phase) {
     case 'lobby':
       return 'idle'
     case 'waiting':
-      return 'hold'
+      return pointsAtStake !== null ? 'hold' : 'idle'
     case 'playing':
       return 'live'
     case 'buzzed':

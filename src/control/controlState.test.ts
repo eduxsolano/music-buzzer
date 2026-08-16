@@ -61,6 +61,26 @@ describe('what the host phone is told', () => {
     expect(control.pointsAtStake).toBe(5)
   })
 
+  // Regression: `pointsAtStake` used to be computed twice — once here, once
+  // in `toPublicState` — and the two drifted apart the moment the engine
+  // learned that the round's opening wait (before the host has launched tier
+  // 1 even once) cannot score. This asserts the panel and the television are
+  // told the same number from the same state, not just that each looks right
+  // in isolation.
+  test('pointsAtStake agrees with what the television is told, including during the opening wait', () => {
+    const dealt = play(start)
+    const control = toControlState(dealt, song, 'KZTR', false, deck)
+    expect(control.phase).toBe('waiting')
+    expect(control.pointsAtStake).toBeNull()
+    expect(control.pointsAtStake).toBe(toPublicState(dealt).pointsAtStake)
+
+    const launched = play([...start, { type: 'LAUNCH_TIER' }, { type: 'TICK', deltaMs: 5_000 }])
+    const controlAfter = toControlState(launched, song, 'KZTR', false, deck)
+    expect(controlAfter.phase).toBe('waiting')
+    expect(controlAfter.pointsAtStake).toBe(5)
+    expect(controlAfter.pointsAtStake).toBe(toPublicState(launched).pointsAtStake)
+  })
+
   test('the pause reports the tier the launch button will sound and where it resumes', () => {
     const state = play([
       ...start,

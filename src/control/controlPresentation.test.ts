@@ -27,18 +27,28 @@ const base: ControlState = {
 
 describe('controlMood', () => {
   test('the phone is coloured exactly like the television', () => {
-    expect(controlMood('lobby', null)).toBe('idle')
-    expect(controlMood('waiting', null)).toBe('hold')
-    expect(controlMood('playing', null)).toBe('live')
-    expect(controlMood('buzzed', null)).toBe('buzzed')
-    expect(controlMood('finished', null)).toBe('over')
+    expect(controlMood('lobby', null, null)).toBe('idle')
+    expect(controlMood('waiting', null, 5)).toBe('hold')
+    expect(controlMood('playing', null, 5)).toBe('live')
+    expect(controlMood('buzzed', null, 5)).toBe('buzzed')
+    expect(controlMood('finished', null, null)).toBe('over')
+  })
+
+  // The bug this guards against: the panel used to colour every `waiting`
+  // phase `hold`, including the round's opening wait — before the host has
+  // launched tier 1 even once — where a press cannot score. The television
+  // reads that wait as `idle` (see `moodFor` in stagePresentation.ts); the
+  // host's own phone must agree, or the one person judging the room is shown
+  // a tense colour for a press that does nothing.
+  test('the opening wait, where a press cannot score, reads idle like the television — not hold', () => {
+    expect(controlMood('waiting', null, null)).toBe('idle')
   })
 
   test('a reveal is coloured by what happened, not by the fact it happened', () => {
-    expect(controlMood('revealed', 'correct')).toBe('correct')
-    expect(controlMood('revealed', 'allWrong')).toBe('wrong')
-    expect(controlMood('revealed', 'timeout')).toBe('idle')
-    expect(controlMood('revealed', 'skipped')).toBe('idle')
+    expect(controlMood('revealed', 'correct', null)).toBe('correct')
+    expect(controlMood('revealed', 'allWrong', null)).toBe('wrong')
+    expect(controlMood('revealed', 'timeout', null)).toBe('idle')
+    expect(controlMood('revealed', 'skipped', null)).toBe('idle')
   })
 })
 

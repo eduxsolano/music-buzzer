@@ -1,4 +1,5 @@
 import { pointsForTier } from '@/game/tiers'
+import { pointsAtStake } from '@/game/publicState'
 import type { DeckAxis, DeckSelection } from '@/game/deckFilters'
 import type { GameState, Phase, PlayerId, RevealOutcome, Song } from '@/game/types'
 
@@ -73,7 +74,15 @@ export interface ControlState {
   /** The tier the launch button will sound, and whether it resumes a cut one. */
   launchTier: 1 | 2 | 3 | null
   launchResumesAtMs: number | null
-  /** What a press is worth during the pause, so the host knows the stakes. */
+  /**
+   * What a press is worth right now, or null where a press cannot score.
+   *
+   * Computed by the engine's own `pointsAtStake` (`src/game/publicState.ts`)
+   * rather than a second implementation here — that function already knows
+   * the round's opening wait (before the host has launched tier 1 even once)
+   * is worth nothing, and keeping one computation is what keeps this panel
+   * and the television from disagreeing about it.
+   */
   pointsAtStake: number | null
   outcome: RevealOutcome | null
   winnerName: string | null
@@ -117,12 +126,7 @@ export function toControlState(
     buzzedPoints: phase.kind === 'buzzed' ? pointsForTier(phase.worthTier) : null,
     launchTier: phase.kind === 'waiting' ? phase.launchTier : null,
     launchResumesAtMs: phase.kind === 'waiting' ? phase.resumeAtMs : null,
-    pointsAtStake:
-      phase.kind === 'waiting' || phase.kind === 'buzzed'
-        ? pointsForTier(phase.worthTier)
-        : phase.kind === 'playing'
-          ? pointsForTier(phase.tier)
-          : null,
+    pointsAtStake: pointsAtStake(phase),
     outcome: phase.kind === 'revealed' ? phase.outcome : null,
     winnerName: phase.kind === 'revealed' ? nameOf(state, phase.winnerId) : null,
     canUndo,

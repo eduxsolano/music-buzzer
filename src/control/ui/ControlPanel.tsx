@@ -63,7 +63,7 @@ export function ControlPanel({
 
   return (
     <main
-      data-mood={controlMood(state.phase, state.outcome)}
+      data-mood={controlMood(state.phase, state.outcome, state.pointsAtStake)}
       className="stage flex min-h-dvh flex-col justify-between gap-4 p-5"
     >
       <header
