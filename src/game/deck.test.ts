@@ -1,6 +1,8 @@
 import { describe, expect, test } from 'vitest'
-import { buildDeck, recordPlayed } from '@/game/deck'
+import { buildDeck, recordPlayed, recordRoundIfDecided } from '@/game/deck'
 import { HISTORY_LIMIT } from '@/game/config'
+import { initialState } from '@/game/reducer'
+import { initialSession, step, undoJudgement } from '@/host/undo'
 
 /** Deterministic stand-in for Math.random, cycling through fixed values. */
 function fakeRandom(values: number[]): () => number {
@@ -164,8 +166,9 @@ describe('across several consecutive games', () => {
   })
 
   test('HISTORY_LIMIT eventually lets old songs become fresh again', () => {
-    // With a 376-song-sized deck and HISTORY_LIMIT = 60, four games (80
-    // songs) push the first game's earliest songs out of memory.
+    // With a 100-song deck and HISTORY_LIMIT = 60, four games' worth of
+    // plays (80 songs) push the first game's earliest songs out of the
+    // 60-deep memory, so they are fresh again once the fifth game shuffles.
     const bigIds = Array.from({ length: 100 }, (_, i) => `song-${i}`)
     const random = seededRandom(7)
     let history: string[] = []
@@ -184,5 +187,54 @@ describe('across several consecutive games', () => {
     const stillRemembered = firstGameDealt.filter((id) => history.includes(id))
     expect(stillRemembered.length).toBeLessThan(firstGameDealt.length)
     expect(history.length).toBeLessThanOrEqual(HISTORY_LIMIT)
+  })
+})
+
+describe('recordRoundIfDecided', () => {
+  // Regression: an earlier version of the host's recording effect was keyed
+  // on the `revealed` phase object's identity rather than `currentSongId`.
+  // Undo-then-rejudge produces two DISTINCT `revealed` objects for the same
+  // round (the reducer builds a fresh object literal every time), so that
+  // guard recorded the song twice — burning two of HISTORY_LIMIT's slots for
+  // one play. This drives the real `reduce`/`step`/`undoJudgement` sequence a
+  // mis-tapped ❌ followed by Undo followed by ✅ actually produces, calling
+  // `recordRoundIfDecided` exactly where the host's effect would fire —
+  // after the wrong judgement, after the undo, and after the right one — and
+  // asserts the song lands in history exactly once.
+  test('judge wrong, undo, judge right: the song is recorded exactly once', () => {
+    let session = initialSession(initialState())
+    session = step(session, { type: 'JOIN', playerId: 'ana', name: 'Ana' })
+    session = step(session, { type: 'START_GAME', deck: ['s1', 's2'], roundsTotal: 2 })
+    session = step(session, { type: 'LAUNCH_TIER' })
+    session = step(session, { type: 'BUZZ', playerId: 'ana' })
+
+    let history: string[] = []
+    let lastRecordedSongId: string | null = null
+    let recordedCount = 0
+
+    // The mis-tap: ❌. With one player this immediately closes the round
+    // (`allWrong`), which is exactly the case that offers an undo.
+    session = step(session, { type: 'JUDGE', correct: false })
+    expect(session.game.phase).toMatchObject({ kind: 'revealed', outcome: 'allWrong' })
+    let result = recordRoundIfDecided(session.game.phase, session.game.currentSongId, lastRecordedSongId, history, HISTORY_LIMIT)
+    if (result.recorded) recordedCount += 1
+    ;({ history, lastRecordedSongId } = result)
+
+    // Deshacer: back to the `buzzed` phase from just before the judgement.
+    session = undoJudgement(session)
+    expect(session.game.phase).toMatchObject({ kind: 'buzzed' })
+    result = recordRoundIfDecided(session.game.phase, session.game.currentSongId, lastRecordedSongId, history, HISTORY_LIMIT)
+    if (result.recorded) recordedCount += 1
+    ;({ history, lastRecordedSongId } = result)
+
+    // The corrected judgement: ✅. A brand-new `revealed` object, same round.
+    session = step(session, { type: 'JUDGE', correct: true })
+    expect(session.game.phase).toMatchObject({ kind: 'revealed', outcome: 'correct' })
+    result = recordRoundIfDecided(session.game.phase, session.game.currentSongId, lastRecordedSongId, history, HISTORY_LIMIT)
+    if (result.recorded) recordedCount += 1
+    ;({ history, lastRecordedSongId } = result)
+
+    expect(recordedCount).toBe(1)
+    expect(history).toEqual(['s1'])
   })
 })

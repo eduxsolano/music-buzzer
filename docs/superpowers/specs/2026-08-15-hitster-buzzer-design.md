@@ -21,6 +21,13 @@ Estas cosas quedan explícitamente fuera de esta versión:
   única fuente de sonido en la sala.
 - Corrección automática de respuestas por texto. Juzga una persona.
 - Cuentas de usuario, historial de partidas o estadísticas persistentes.
+  Esto se refiere a historial *de cara al jugador*: no hay pantalla de
+  partidas pasadas, ni marcador entre noches, ni nada que un jugador pueda
+  consultar. La memoria interna que el anfitrión guarda en `localStorage`
+  para no repetir canciones entre partidas de la misma noche (qué ids de
+  canción sonaron recientemente) no es esto: no se muestra en ninguna
+  pantalla, no identifica partidas ni fechas, y solo existe para decidir qué
+  mazo mezclar la próxima vez que se pulsa "Nueva partida".
 - Edición de la lista de canciones desde la interfaz.
 
 ## 2. Decisiones tomadas

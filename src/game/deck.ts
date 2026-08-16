@@ -1,4 +1,5 @@
 import { shuffle } from '@/game/random'
+import type { Phase } from '@/game/types'
 
 /**
  * Orders every song id for a fresh game.
@@ -52,4 +53,53 @@ export function buildDeck(
 export function recordPlayed(history: readonly string[], playedIds: readonly string[], limit: number): string[] {
   const combined = [...history, ...playedIds]
   return combined.length > limit ? combined.slice(combined.length - limit) : combined
+}
+
+/** What `recordRoundIfDecided` did, so the caller knows whether to persist. */
+export interface RecordRoundResult {
+  recorded: boolean
+  /** The song id recorded, or the caller's `lastRecordedSongId` unchanged when nothing was recorded. */
+  lastRecordedSongId: string | null
+  /** The room's memory after this call — identical to the input when `recorded` is false. */
+  history: string[]
+}
+
+/**
+ * Decides whether the round currently sitting in `phase` should be recorded
+ * as played, and returns the (possibly updated) history alongside that
+ * decision.
+ *
+ * A round counts once its phase is `revealed` with anything but `skipped` —
+ * see `recordPlayed`'s caller in `src/host/useHostGame.ts` for why a skip
+ * does not count.
+ *
+ * The tricky part is staying idempotent across undo. Ratifying a judgement
+ * with ❌ then taking it back with Undo then re-judging ✅ (an ordinary
+ * mis-tap recovery, see `src/host/undo.ts`) produces TWO distinct `revealed`
+ * phase objects for the very same round — the reducer builds a fresh object
+ * literal every time, so object identity cannot tell "the same round judged
+ * twice" apart from "a new round". `currentSongId` can: it stays identical
+ * across that undo/rejudge pair (nothing but `dealRound` ever changes it),
+ * and always changes the moment the next round is actually dealt. Comparing
+ * `currentSongId` against `lastRecordedSongId` is therefore exactly "have I
+ * already recorded THIS round" — it can neither double-record within a round
+ * nor skip a genuinely new one.
+ */
+export function recordRoundIfDecided(
+  phase: Phase,
+  currentSongId: string | null,
+  lastRecordedSongId: string | null,
+  history: readonly string[],
+  limit: number,
+): RecordRoundResult {
+  const unchanged: RecordRoundResult = { recorded: false, lastRecordedSongId, history: [...history] }
+
+  if (phase.kind !== 'revealed' || phase.outcome === 'skipped') return unchanged
+  if (!currentSongId || currentSongId === lastRecordedSongId) return unchanged
+
+  return {
+    recorded: true,
+    lastRecordedSongId: currentSongId,
+    history: recordPlayed(history, [currentSongId], limit),
+  }
 }

@@ -2,11 +2,11 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { DEFAULT_ROUNDS, HISTORY_LIMIT } from '@/game/config'
-import { buildDeck, recordPlayed } from '@/game/deck'
+import { buildDeck, recordRoundIfDecided } from '@/game/deck'
 import { currentSong, initialState } from '@/game/reducer'
 import { toPublicState, withCountdown } from '@/game/publicState'
 import { createRoomCode } from '@/game/random'
-import type { GameEvent, GameState, Song } from '@/game/types'
+import type { GameEvent, Song } from '@/game/types'
 import type { AudioPlayer } from '@/audio/audioPlayer'
 import type { Channel } from '@/realtime/channel'
 import { parsePlayerMessage } from '@/realtime/messages'
@@ -177,33 +177,34 @@ export function useHostGame(songs: Song[]) {
   }, [room, controlToken, state])
 
   // Grows the room's memory the moment a round is genuinely decided, so a
-  // reload mid-game does not lose credit for songs already heard. A song
-  // counts once its round reaches `revealed` with anything but `skipped`:
-  // correct, allWrong and timeout all mean the room heard it and judged it,
-  // while a skip (see the design doc — it exists for a video that fails to
-  // play) means the room never really heard this one, so it should still be
-  // free to come up again next time. Keyed on `state.phase` itself, not its
-  // `kind`: the reducer hands out a brand-new phase object every time a round
-  // enters `revealed`, even if an unrelated JOIN re-renders this component
-  // while still in that phase, so the object identity is exactly "did a round
-  // just end" — including across React's dev-only double-invoke of effects,
-  // which the ref below guards against recording twice.
-  const lastRecordedPhaseRef = useRef<GameState['phase'] | null>(null)
+  // reload mid-game does not lose credit for songs already heard. The actual
+  // decision — what counts as "decided", and staying idempotent across an
+  // undo-then-rejudge that produces two distinct `revealed` phase objects
+  // for the same round — lives in `recordRoundIfDecided` (`src/game/deck.ts`)
+  // so it can be tested against the real reducer sequence rather than only
+  // through this hook. `lastRecordedSongIdRef` is this call's memory of what
+  // it last recorded, carried across renders and across React's dev-only
+  // double-invoke of effects.
+  const lastRecordedSongIdRef = useRef<string | null>(null)
   useEffect(() => {
-    if (state.phase.kind !== 'revealed' || state.phase.outcome === 'skipped') return
-    if (!state.currentSongId) return
-    if (lastRecordedPhaseRef.current === state.phase) return
-    lastRecordedPhaseRef.current = state.phase
     // `history` is deliberately left out of the dependency array: this effect
-    // is keyed on the phase object identity (see above), and including
-    // `history` here would re-run it every time `setHistory` below fires —
-    // appending the very same song again, forever. The closure's `history` is
-    // still the value from the render that scheduled this effect, which is
-    // current precisely because nothing else changes it between that render
-    // and this effect running.
-    const next = recordPlayed(history, [state.currentSongId], HISTORY_LIMIT)
-    saveHistory(window.localStorage, next)
-    setHistory(next)
+    // is keyed on `currentSongId` via `recordRoundIfDecided` (see above), and
+    // including `history` here would re-run it every time `setHistory` below
+    // fires — appending the very same song again, forever. The closure's
+    // `history` is still the value from the render that scheduled this
+    // effect, which is current precisely because nothing else changes it
+    // between that render and this effect running.
+    const result = recordRoundIfDecided(
+      state.phase,
+      state.currentSongId,
+      lastRecordedSongIdRef.current,
+      history,
+      HISTORY_LIMIT,
+    )
+    if (!result.recorded) return
+    lastRecordedSongIdRef.current = result.lastRecordedSongId
+    saveHistory(window.localStorage, result.history)
+    setHistory(result.history)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.phase, state.currentSongId])
 

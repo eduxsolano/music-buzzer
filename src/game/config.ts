@@ -28,7 +28,8 @@ export const DEFAULT_ROUNDS = 20
  *
  * Three games' worth: long enough that a room playing back-to-back rounds
  * all evening keeps hearing new songs, short enough that the deck recovers
- * on its own — by the fourth game, the first game's songs are fresh again.
+ * on its own — the first game's songs are only evicted from memory once the
+ * fourth game has been recorded, so they are fresh again by the fifth game.
  * Kept as a multiple of `DEFAULT_ROUNDS` rather than a bare number so the
  * relationship (how many games of memory) survives if the game length ever
  * changes. It is deliberately independent of the deck's actual size:
